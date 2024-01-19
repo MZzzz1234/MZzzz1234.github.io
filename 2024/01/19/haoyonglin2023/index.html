@@ -115,22 +115,21 @@
       <span id="busuanzi_value_page_pv"></span> 点击
     </span>
       <span class="slash">/</span>
-      <span class="read">阅读耗时 7 分钟</span>
+      <span class="read">阅读耗时 6 分钟</span>
     </header>
 
     <div class="post-content">
       <h2 id="Key-Filtering-in-Cube-Attacks-from-the-Implementation-Aspect"><a href="#Key-Filtering-in-Cube-Attacks-from-the-Implementation-Aspect" class="headerlink" title="Key Filtering in Cube Attacks from the  Implementation Aspect"></a>Key Filtering in Cube Attacks from the  Implementation Aspect</h2><p>从实现角度的cube攻击中的密钥筛选</p>
 <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>郝泳霖等人发表在 CANS2023：<a target="_blank" rel="noopener" href="https://link.springer.com/content/pdf/10.1007/978-981-99-7563-1_14.pdf?pdf=inline%20link">原文</a></p>
 <ul>
-<li>cube攻击：超多项式恢复 $\to$ cube求和 $\to$ 密钥筛选 $\to$ 穷搜</li>
+<li>cube攻击：超多项式恢复 -&gt; cube求和 -&gt; 密钥筛选 -&gt; 穷搜</li>
 <li>较高轮数使用的超多项式<strong>几乎包含所有秘密变量</strong></li>
-<li>密钥筛选阶段的复杂度$\approx2^𝑛$</li>
-<li>整体攻击的复杂度可能$&gt;2^𝑛$，可能高于暴力攻击的复杂度</li>
+<li>密钥筛选阶段<script type="math/tex">复杂度\approx2^𝑛</script></li>
+<li>整体攻击可能高于暴力攻击的复杂度<script type="math/tex">复杂度可能>2^𝑛</script></li>
 </ul>
-<h3 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h3><p><strong>（一）什么是可行的攻击</strong>：</p>
+<h3 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h3><p><strong>（一）什么是可行的攻击</strong>：<br>对应：cube求和，穷搜，密钥恢复查表，建立真值表，暴力搜索界</p>
 <script type="math/tex; mode=display">
-C_{new}=\sum_{j=1}^{l-1}2^{|I_j|}+2^{n-l}+\frac{2}{\alpha}\sum_{j=1}^{l-1}2^{|J_j|}+\frac{\beta}{\alpha} < 2^n</script><p>对应：cube求和，穷搜，密钥恢复查表，建立真值表，暴力搜索界<br>$\alpha$ ：一次加密oracle查询的复杂度 </p>
-<ol>
+C_{new}=\sum_{j=1}^{l-1}2^{|I_j|}+2^{n-l}+\frac{2}{\alpha}\sum_{j=1}^{l-1}2^{|J_j|}+\frac{\beta}{\alpha} < 2^n</script><script type="math/tex; mode=display">\alpha ：一次加密oracle查询的复杂度</script><ol>
 <li>在之前的攻击中，认为 $\alpha$ 很大，忽略后半部分的时间复杂度！</li>
 <li>实际上如果使用了大规模超多项式，这部分不应该被忽略</li>
 <li>对于可以快速实现加密的流密码，即 $\alpha$ 比较小时，<strong>攻击不可行</strong></li>
@@ -159,7 +158,7 @@ C_{new}=\sum_{j=1}^{l-1}2^{|I_j|}+2^{n-l}+\frac{2}{\alpha}\sum_{j=1}^{l-1}2^{|J_
 </ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在使用大规模超多项式的cube攻击中，超多项式几乎包含所有秘密变量，密钥筛选阶段的时间复杂度接近2^𝑛，因此作者发现密钥筛选阶段的时间复杂度不应该被忽略，并从实现角度将所有cube攻击分为两类。依赖于实现的cube攻击只有当一次加密oracle查询远比一次查表更复杂时才是可行的，而与实现无关的cube攻击在一次加密oracle查询相当于一次查表的极端情况下仍然可行，现有的高轮数下的cube攻击大多都是依赖于实现的cube攻击。cube攻击中的传统策略是使用超多项式较复杂的低维cube，相反的，基于上述观察作者使用了超多项式次数低、包含秘密变量少的高维cube，首次给出了对Kreyvium的898、899和900轮的攻击结果且这些攻击与实现无关。本文从实现角度严格计算了整体攻击的时间复杂度，指出了之前攻击中忽略的问题，对判断攻击是否成立具有实际意义。</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#105;&#108;&#116;&#x6f;&#x3a;&#x7a;&#104;&#97;&#x6e;&#103;&#x6d;&#x69;&#x6e;&#x32;&#x30;&#50;&#x32;&#x40;&#x69;&#105;&#101;&#x2e;&#x61;&#99;&#x2e;&#99;&#x6e;">&#x7a;&#104;&#97;&#x6e;&#103;&#x6d;&#x69;&#x6e;&#x32;&#x30;&#50;&#x32;&#x40;&#x69;&#105;&#101;&#x2e;&#x61;&#99;&#x2e;&#99;&#x6e;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#58;&#x7a;&#x68;&#97;&#110;&#x67;&#109;&#x69;&#110;&#50;&#x30;&#50;&#x32;&#64;&#105;&#x69;&#101;&#46;&#97;&#x63;&#x2e;&#x63;&#x6e;">&#x7a;&#x68;&#97;&#110;&#x67;&#109;&#x69;&#110;&#50;&#x30;&#50;&#x32;&#64;&#105;&#x69;&#101;&#46;&#97;&#x63;&#x2e;&#x63;&#x6e;</a>.</p>
 
     </div>
 
