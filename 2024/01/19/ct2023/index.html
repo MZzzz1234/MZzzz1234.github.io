@@ -15,13 +15,13 @@
   
 
   
-    <meta name="description" content="Hello World" />
+    <meta name="description" content="A New Correlation Cube Attack Based on Division Property" />
   
   
   
   <link rel="icon" type="image/x-icon" href="/images/footer-logo.png">
   
-  <title>Hello World [ Hexo ]</title>
+  <title>A New Correlation Cube Attack Based on Division Property [ Hexo ]</title>
   
     <!-- stylesheets list from config.yml -->
     
@@ -108,7 +108,7 @@
   <article class="post" id="post">
     <header class="post-header text-center">
       <h1 class="title">
-        Hello World
+        A New Correlation Cube Attack Based on Division Property
       </h1>
       <span>
         
@@ -128,23 +128,34 @@
       <span id="busuanzi_value_page_pv"></span> 点击
     </span>
       <span class="slash">/</span>
-      <span class="read">阅读耗时 1 分钟</span>
+      <span class="read">阅读耗时 5 分钟</span>
     </header>
 
     <div class="post-content">
-      <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+      <p>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="mailto:&#122;&#x68;&#x61;&#110;&#103;&#109;&#105;&#110;&#50;&#48;&#50;&#50;&#x40;&#105;&#x69;&#x65;&#46;&#97;&#99;&#x2e;&#99;&#110;">&#122;&#x68;&#x61;&#110;&#103;&#109;&#105;&#110;&#50;&#48;&#50;&#50;&#x40;&#105;&#x69;&#x65;&#46;&#97;&#99;&#x2e;&#99;&#110;</a>.<br>下述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示</p>
+<h2 id="A-New-Correlation-Cube-Attack-Based-on-Division-Property"><a href="#A-New-Correlation-Cube-Attack-Based-on-Division-Property" class="headerlink" title="A New Correlation Cube Attack Based on Division Property"></a>A New Correlation Cube Attack Based on Division Property</h2><p>基于可分性的一种新相关cube攻击</p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>田甜等人发表在ACISP2023：<a target="_blank" rel="noopener" href="https://link.springer.com/content/pdf/10.1007/978-3-031-35486-1_3.pdf?pdf=inline%20link">原文</a></p>
+<ul>
+<li>随着Trivium初始化轮数 ↑ ，超多项式的规模 ↑  </li>
+<li>即使目前可以恢复这样的超多项式，如何利用大规模超多项式进行攻击？</li>
+<li>与立方攻击相比，相关立方攻击利用<strong>超多项式和一组特定的低次多项式（基）的条件相关性</strong>，可以实现较大规模的超多项式用于密钥恢复攻击</li>
+</ul>
+<h3 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h3><p><strong>一种新的相关立方攻击方法</strong></p>
+<ol>
+<li>将超多项式 𝑝 表示为 𝑓𝑔⊕ℎ ， 𝑓 只包含秘密变量</li>
+<li>寻找 ℎ 有偏差的cube，则在一定条件下，𝑝&#x3D;𝑓𝑔</li>
+<li>计算所有可能的 𝑓 和 𝑝 的相关概率，然后利用 𝑝 和 𝑓 之间的相关性获得密钥信息</li>
+</ol>
+<p><strong>改进一：</strong> 寻找 ℎ 有偏差的cube，简化超多项式的ANF<br><strong>改进二：</strong> 所有可能的 𝒇：在低轮出现的所有可能低次多项式（基的非唯一确定性）<br><img src="/image-1.png" alt="Alt text"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">偏差：在公共变量一些条件下，对于大部分秘密变量的取值， ℎ 的取值为常数</span><br></pre></td></tr></table></figure>
+<p><strong>问题关键</strong> – 寻找好的cube</p>
+<ol>
+<li>基测试：通过可分性，基于MILP模型寻找，加一些条件后（基&#x3D;0）超多项式为零常数的cube</li>
+<li>进一步筛选h有偏差的cube</li>
+</ol>
+<p><strong>改进三：</strong> 可分性在相关cube攻击中的首次应用</p>
+<h3 id="论文主要结果"><a href="#论文主要结果" class="headerlink" title="论文主要结果"></a>论文主要结果</h3><p>对于844轮Trivium，可以恢复4比特密钥信息，平均时间复杂度为2^45<br><img src="/image-2.png" alt="Alt text"><br>可以看到文中方法是有成功率的<br><img src="/image-3.png" alt="Alt text"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在cube攻击中，随着Trivium初始轮数的增加，超多项式的规模逐渐增大。即使目前可以恢复大规模超多项式的ANF，但如何利用这些超多项式进行攻击是待解决的问题。与cube攻击相比，相关cube攻击利用超多项式和一组特定的低次多项式（基）之间的条件相关性，可以将大规模超多项式用于密钥恢复攻击。作者提出了一种新的相关cube攻击方法。如果超多项式 𝑝 可以表示为 𝑓𝑔⊕ℎ （ 𝑓 只包含秘密变量），则作者通过寻找超多项式包含 𝑓且 ℎ 有偏差的cube，利用 𝑝 和 𝑓 之间的相关性获取密钥信息。对于844轮的Trivium，该方法可以恢复4比特密钥信息，平均时间复杂度为2^45。这篇文章提供了一种利用复杂超多项式进行攻击的思路，基于相关性的cube攻击变体值得进一步研究。</p>
 
     </div>
 
@@ -153,7 +164,7 @@
     
   <div id="toc" class="toc-article">
     <strong class="toc-title">Posts</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#A-New-Correlation-Cube-Attack-Based-on-Division-Property"><span class="toc-text">A New Correlation Cube Attack Based on Division Property</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E8%B4%A1%E7%8C%AE"><span class="toc-text">主要贡献</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BA%E6%96%87%E4%B8%BB%E8%A6%81%E7%BB%93%E6%9E%9C"><span class="toc-text">论文主要结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol>
   </div>
 
 
@@ -170,15 +181,15 @@
     <div class="post-nav">
       <div class="post-nav-item post-nav-next">
         
-          <span>〈 </span>
-          <a href="/2024/01/19/hello-world_%E5%89%AF%E6%9C%AC/" rel="next" title="Hello World">
-          Hello World
-          </a>
-        
       </div>
   
       <div class="post-nav-item post-nav-prev">
           
+          <a href="/2024/01/19/hello-world_%E5%89%AF%E6%9C%AC2/" rel="prev" title="Hello World">
+            Hello World
+          </a>
+          <span>〉</span>
+        
       </div>
     </div>
   
