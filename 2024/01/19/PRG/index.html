@@ -15,13 +15,13 @@
   
 
   
-    <meta name="description" content="ZhangMin," />
+    <meta name="description" content="Stream ciphers:encryption with a PRG" />
   
   
   
   <link rel="icon" type="image/x-icon" href="/images/footer-logo.png">
   
-  <title>archives: 1/2024: 2024 [ ZhangMin ]</title>
+  <title>Stream ciphers:encryption with a PRG [ ZhangMin ]</title>
   
     <!-- stylesheets list from config.yml -->
     
@@ -56,7 +56,7 @@
       
           
             
-              <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover actived">
+              <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
             
               <a href="#" id="post" class="pure-menu-link">文章</a>
               <ul class="pure-menu-children">
@@ -66,7 +66,7 @@
                   
               
                   
-                    <li class="pure-menu-item"><a href="/archives" class="pure-menu-link">Archives</a></li>
+                    <li class="pure-menu-item"><a href="/archives" style="color:#202020;" class="pure-menu-link">Archives</a></li>
                   
               
                   
@@ -91,96 +91,96 @@
 
   <div class="container" id="content-outer">
     <div class="inner" id="content-inner">
-      
+      <div class="post-container">
+  <article class="post" id="post">
+    <header class="post-header text-center">
+      <h1 class="title">
+        Stream ciphers:encryption with a PRG
+      </h1>
+      <span>
+        
+        <time class="time" datetime="2024-01-19T03:01:56.396Z">
+        2024-01-19
+      </time>
+        
+      </span>
+      <span class="slash">/</span>
+      <span class="post-meta">
+      <span class="post-tags">
+        
+      </span>
+    </span>
+      <span class="slash">/</span>
+      <span class="read">
+      <span id="busuanzi_value_page_pv"></span> 点击
+    </span>
+      <span class="slash">/</span>
+      <span class="read">阅读耗时 1 分钟</span>
+    </header>
 
-  
-  
+    <div class="post-content">
+      <h2 id="PRG（Pseudo-random-generators）"><a href="#PRG（Pseudo-random-generators）" class="headerlink" title="PRG（Pseudo-random generators）"></a>PRG（Pseudo-random generators）</h2><p>伪随机数生成器G是在(S,R)上的一个高效的确定性算法<br>它以一个密钥s作为输入，输出一个比特串r，密钥空间和输出空间分别为<script type="math/tex">S={\{0,1\}}^l,R={\{0,1\}}^L</script></p>
+<h3 id="PRG的安全性"><a href="#PRG的安全性" class="headerlink" title="PRG的安全性"></a>PRG的安全性</h3><p>通过攻击游戏来定义的<br><strong>攻击游戏1</strong><br>一个在(𝑆,𝑅)上的PRG G，有一个挑战者和一个敌手𝒜，设计了实验0和实验1<br><img src="https://zmspace-1319095927.cos.ap-beijing.myqcloud.com/WechatIMG1831.jpg" alt="game1"></p>
+<script type="math/tex; mode=display">𝑊_0:敌手在实验0中输出1，𝑊_1: 敌手在实验1中输出1</script><ul>
+<li>敌手无法分辨收到来源</li>
+<li>在G上敌手𝒜的优势:<script type="math/tex">PRGadv[𝒜,𝐺]=|𝑃(𝑊_0 )−𝑃(𝑊_1 )|</script></li>
+</ul>
+<hr>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x7a;&#x68;&#97;&#x6e;&#103;&#109;&#x69;&#x6e;&#50;&#x30;&#x32;&#50;&#x40;&#105;&#105;&#101;&#x2e;&#x61;&#x63;&#46;&#x63;&#x6e;">&#x7a;&#x68;&#97;&#x6e;&#103;&#109;&#x69;&#x6e;&#50;&#x30;&#x32;&#50;&#x40;&#105;&#105;&#101;&#x2e;&#x61;&#x63;&#46;&#x63;&#x6e;</a>.</p>
+
+    </div>
+
+  </article>
+  <div class="toc-container">
     
-    
-    <section class="post page archives">
-      <h3 class="archive-year-wrap">
-        <a href="/archives/2024" class="archive-year">
-          2024
-        </a>
-      </h3>
-      <div class="archives">
-  
-  <div class="archive" >
-  <a class="post-go" href="/2024/01/19/PRG/">
-    <div>
-      <span class="date">
-        01-19
-      </span>
-      <span class="slash">/</span>
-      Stream ciphers:encryption with a PRG
-    </div>
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">Posts</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#PRG%EF%BC%88Pseudo-random-generators%EF%BC%89"><span class="toc-text">PRG（Pseudo-random generators）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PRG%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-text">PRG的安全性</span></a></li></ol></li></ol>
+  </div>
 
-    <!--<div class="excerpt">-->
-      <!---->
-    <!--</div>-->
-  </a>
 
+  </div>
 </div>
-
-  
-  
-  <div class="archive" >
-  <a class="post-go" href="/2024/01/19/ct2023/">
-    <div>
-      <span class="date">
-        01-19
-      </span>
-      <span class="slash">/</span>
-      A New Correlation Cube Attack Based on Division Property
-    </div>
-
-    <!--<div class="excerpt">-->
-      <!---->
-    <!--</div>-->
-  </a>
-
-</div>
-
-  
-  
-  <div class="archive" >
-  <a class="post-go" href="/2024/01/19/cube/">
-    <div>
-      <span class="date">
-        01-19
-      </span>
-      <span class="slash">/</span>
-      Cube attack related
-    </div>
-
-    <!--<div class="excerpt">-->
-      <!---->
-    <!--</div>-->
-  </a>
-
-</div>
-
-  
-  
-  <div class="archive" >
-  <a class="post-go" href="/2024/01/19/haoyonglin2023/">
-    <div>
-      <span class="date">
-        01-19
-      </span>
-      <span class="slash">/</span>
-      Key Filtering in Cube Attacks from the  Implementation Aspect
-    </div>
-
-    <!--<div class="excerpt">-->
-      <!---->
-    <!--</div>-->
-  </a>
-
+<div class="copyright">
+    <span>本作品采用</span>
+    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/">知识共享署名 4.0 国际许可协议</a>
+    <span>进行许可。 转载时请注明原文链接。</span>
 </div>
 
 
-  </div></section>
+  
+    <div class="post-nav">
+      <div class="post-nav-item post-nav-next">
+        
+          <span>〈 </span>
+          <a href="/2024/01/19/ct2023/" rel="next" title="A New Correlation Cube Attack Based on Division Property">
+          A New Correlation Cube Attack Based on Division Property
+          </a>
+        
+      </div>
+  
+      <div class="post-nav-item post-nav-prev">
+          
+      </div>
+    </div>
+  
+
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <div id="gitalk-container"></div>
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+            clientID: 'xxx',
+            clientSecret: 'xxx',
+            id: window.location.pathname,
+            repo: 'issue repo name',
+            owner: 'Github username',
+            admin: 'github username'
+        })
+        gitalk.render('gitalk-container')
+    </script>
+
+
 
     </div>
 
