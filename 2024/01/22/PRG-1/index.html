@@ -15,13 +15,13 @@
   
 
   
-    <meta name="description" content="PRG" />
+    <meta name="description" content="PRG的安全性与流密码的语义安全性" />
   
   
   
   <link rel="icon" type="image/x-icon" href="/images/footer-logo.png">
   
-  <title>PRG [ ZhangMin ]</title>
+  <title>PRG的安全性与流密码的语义安全性 [ ZhangMin ]</title>
   
     <!-- stylesheets list from config.yml -->
     
@@ -95,7 +95,7 @@
   <article class="post" id="post">
     <header class="post-header text-center">
       <h1 class="title">
-        PRG
+        PRG的安全性与流密码的语义安全性
       </h1>
       <span>
         
@@ -115,18 +115,34 @@
       <span id="busuanzi_value_page_pv"></span> 点击
     </span>
       <span class="slash">/</span>
-      <span class="read">阅读耗时 1 分钟</span>
+      <span class="read">阅读耗时 2 分钟</span>
     </header>
 
     <div class="post-content">
-      <h2 id="PRG（Pseudo-random-generators）"><a href="#PRG（Pseudo-random-generators）" class="headerlink" title="PRG（Pseudo-random generators）"></a>PRG（Pseudo-random generators）</h2><p>伪随机数生成器G是在(S,R)上的一个高效的确定性算法<br>它以一个密钥s作为输入，输出一个比特串r，密钥空间和输出空间分别为<script type="math/tex">S={\{0,1\}}^l,R={\{0,1\}}^L</script></p>
-<h3 id="PRG的安全性"><a href="#PRG的安全性" class="headerlink" title="PRG的安全性"></a>PRG的安全性</h3><p>通过攻击游戏来定义的<br><strong>攻击游戏1</strong><br>一个在(𝑆,𝑅)上的PRG G，有一个挑战者和一个敌手𝒜，设计了实验0和实验1<br><img src="WechatIMG1831.jpg" alt="game1"></p>
+      <h2 id="PRG（Pseudo-random-generators）"><a href="#PRG（Pseudo-random-generators）" class="headerlink" title="PRG（Pseudo-random generators）"></a>PRG（Pseudo-random generators）</h2><p>伪随机数生成器G是在(S,R)上的一个高效的确定性算法<br>它以一个密钥s作为输入，输出一个比特串r，密钥空间和输出空间分别为</p>
+<script type="math/tex; mode=display">
+S={\{0,1\}}^l,R={\{0,1\}}^L</script><h3 id="PRG的安全性"><a href="#PRG的安全性" class="headerlink" title="PRG的安全性"></a>PRG的安全性</h3><p><font color="red"><strong>攻击游戏1</strong></font><br>一个在(𝑆,𝑅)上的PRG G，有一个挑战者和一个敌手𝒜，设计了实验0和实验1<br><img src="WechatIMG1831.jpg" alt="game1"></p>
 <script type="math/tex; mode=display">𝑊_0:敌手在实验0中输出1，𝑊_1: 敌手在实验1中输出1</script><ul>
-<li>敌手无法分辨收到来源</li>
 <li>在G上敌手𝒜的优势:<script type="math/tex">PRGadv[𝒜,𝐺]=|𝑃(𝑊_0 )−𝑃(𝑊_1 )|</script></li>
+<li>敌手无法分辨收到的来源</li>
 </ul>
+<p>PRG的安全性是通过攻击游戏来定义的：</p>
+<blockquote>
+<p><strong>定义（安全的PRG）：</strong><br>如果PRG G对于所有有效敌手𝒜的PRGadv[𝒜,𝐺]是可忽略的，则G是安全的</p>
+</blockquote>
+<p><font color="red"><strong>攻击游戏1（比特猜测）</strong></font></p>
+<div align="center">
+<img src="WechatIMG1833.jpg" width="65%">
+</div>
+
+<ul>
+<li>敌手𝒜优势：<script type="math/tex; mode=display">
+PRGadv^∗ [𝒜,𝐺]=|𝑃(𝑏=𝑏^′ )−1/2|=|1/2 (𝑃(𝑏^′=0│𝑏=0)+𝑃(𝑏^′=1│𝑏=1))−1/2|\\
+=1/2 |𝑃(𝑊_0 )−𝑃(𝑊_1 )|=1/2 PRGadv[𝒜,𝐺]</script></li>
+</ul>
+<p>比特猜测是将两个不同的实验     ⟹     一个单独的实验，可以看到两个版本的安全性定义是一致的</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#58;&#122;&#104;&#97;&#x6e;&#103;&#109;&#x69;&#x6e;&#50;&#x30;&#50;&#x32;&#64;&#105;&#x69;&#101;&#46;&#97;&#99;&#46;&#99;&#110;">&#122;&#104;&#97;&#x6e;&#103;&#109;&#x69;&#x6e;&#50;&#x30;&#50;&#x32;&#64;&#105;&#x69;&#101;&#46;&#97;&#99;&#46;&#99;&#110;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#x7a;&#x68;&#97;&#x6e;&#103;&#x6d;&#105;&#x6e;&#50;&#48;&#x32;&#50;&#x40;&#105;&#105;&#101;&#46;&#97;&#99;&#x2e;&#x63;&#110;">&#x7a;&#x68;&#97;&#x6e;&#103;&#x6d;&#105;&#x6e;&#50;&#48;&#x32;&#50;&#x40;&#105;&#105;&#101;&#46;&#97;&#99;&#x2e;&#x63;&#110;</a>.</p>
 
     </div>
 
@@ -328,5 +344,20 @@
 
   
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
