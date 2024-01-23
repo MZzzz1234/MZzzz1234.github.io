@@ -1,125 +1,264 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#202020"/>
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
-  
-  
-    <meta name="keywords" content="PRG," />
-  
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  
-    <meta name="description" content="PRG的安全性与流密码的语义安全性" />
-  
-  
-  
-  <link rel="icon" type="image/x-icon" href="/images/footer-logo.png">
-  
-  <title>PRG的安全性与流密码的语义安全性 [ ZhangMin ]</title>
-  
-    <!-- stylesheets list from config.yml -->
-    
-      <link rel="stylesheet" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css">
-    
-      <link rel="stylesheet" href="/css/xoxo.css">
-    
-  
+    <meta name="author" content="ZhangMin">
 
-  <!-- MathJax script -->
-  <script type="text/javascript" async
-    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-  </script>
+
+
+
+
+<title>PRG的安全性与流密码的语义安全性 | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
 <meta name="generator" content="Hexo 7.0.0"></head>
 
-
 <body>
-  <div class="nav-container">
-    <nav class="home-menu pure-menu pure-menu-horizontal">
-  <a class="pure-menu-heading" href="/">
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
     
-    <span class="title" style="text-transform:none">ZhangMin</span>
-  </a>
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
 
-  <ul class="pure-menu-list clearfix">
-      
-          
-            
-              <li class="pure-menu-item"><a href="/" class="pure-menu-link">Home</a></li>
-            
-          
-      
-          
-            
-              <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
-            
-              <a href="#" id="post" class="pure-menu-link">文章</a>
-              <ul class="pure-menu-children">
-              
-                  
-                    <li class="pure-menu-item"><a href="/categories" style="color:#202020;" class="pure-menu-link">Categories</a></li>
-                  
-              
-                  
-                    <li class="pure-menu-item"><a href="/archives" style="color:#202020;" class="pure-menu-link">Archives</a></li>
-                  
-              
-                  
-                    <li class="pure-menu-item"><a href="/tags" style="color:#202020;" class="pure-menu-link">Tags</a></li>
-                  
-              
-              </ul>
-            </li>
-          
-      
-          
-            
-              <li class="pure-menu-item"><a href="/search" class="pure-menu-link">Search</a></li>
-            
-          
-      
-  </ul>
-   
-</nav>
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
 
-  </div>
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
 
-  <div class="container" id="content-outer">
-    <div class="inner" id="content-inner">
-      <div class="post-container">
-  <article class="post" id="post">
-    <header class="post-header text-center">
-      <h1 class="title">
-        PRG的安全性与流密码的语义安全性
-      </h1>
-      <span>
-        
-        <time class="time" datetime="2024-01-22T15:00:52.000Z">
-        2024-01-22
-      </time>
-        
-      </span>
-      <span class="slash">/</span>
-      <span class="post-meta">
-      <span class="post-tags">
-        <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PRG/" rel="tag">PRG</a></li></ul>
-      </span>
-    </span>
-      <span class="slash">/</span>
-      <span class="read">
-      <span id="busuanzi_value_page_pv"></span> 点击
-    </span>
-      <span class="slash">/</span>
-      <span class="read">阅读耗时 2 分钟</span>
-    </header>
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
 
-    <div class="post-content">
-      <h2 id="PRG（Pseudo-random-generators）"><a href="#PRG（Pseudo-random-generators）" class="headerlink" title="PRG（Pseudo-random generators）"></a>PRG（Pseudo-random generators）</h2><p>伪随机数生成器G是在(S,R)上的一个高效的确定性算法<br>它以一个密钥s作为输入，输出一个比特串r，密钥空间和输出空间分别为</p>
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">PRG的安全性与流密码的语义安全性</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 22, 2024&nbsp;&nbsp;23:00:52</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/PRG/">PRG</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="PRG（Pseudo-random-generators）"><a href="#PRG（Pseudo-random-generators）" class="headerlink" title="PRG（Pseudo-random generators）"></a>PRG（Pseudo-random generators）</h2><p>伪随机数生成器G是在(S,R)上的一个高效的确定性算法<br>它以一个密钥s作为输入，输出一个比特串r，密钥空间和输出空间分别为</p>
 <script type="math/tex; mode=display">
 S={\{0,1\}}^l,R={\{0,1\}}^L</script><h3 id="PRG的安全性"><a href="#PRG的安全性" class="headerlink" title="PRG的安全性"></a>PRG的安全性</h3><p><font color="red"><strong>攻击游戏1</strong></font><br>一个在(𝑆,𝑅)上的PRG G，有一个挑战者和一个敌手𝒜，设计了实验0和实验1<br><img src="WechatIMG1831.jpg" alt="game1"></p>
 <script type="math/tex; mode=display">𝑊_0:敌手在实验0中输出1，𝑊_1: 敌手在实验1中输出1</script><ul>
@@ -142,208 +281,59 @@ PRGadv^∗ [𝒜,𝐺]=|𝑃(𝑏=𝑏^′ )−1/2|=|1/2 (𝑃(𝑏^′=0│𝑏
 </ul>
 <p>比特猜测是将两个不同的实验     ⟹     一个单独的实验，可以看到两个版本的安全性定义是一致的</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#x7a;&#x68;&#97;&#x6e;&#103;&#x6d;&#105;&#x6e;&#50;&#48;&#x32;&#50;&#x40;&#105;&#105;&#101;&#46;&#97;&#99;&#x2e;&#x63;&#110;">&#x7a;&#x68;&#97;&#x6e;&#103;&#x6d;&#105;&#x6e;&#50;&#48;&#x32;&#50;&#x40;&#105;&#105;&#101;&#46;&#97;&#99;&#x2e;&#x63;&#110;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#x7a;&#x68;&#97;&#x6e;&#x67;&#x6d;&#x69;&#110;&#x32;&#48;&#50;&#x32;&#x40;&#105;&#x69;&#101;&#46;&#97;&#99;&#46;&#99;&#110;">&#x7a;&#x68;&#97;&#x6e;&#x67;&#x6d;&#x69;&#110;&#x32;&#48;&#50;&#x32;&#x40;&#105;&#x69;&#101;&#46;&#97;&#99;&#46;&#99;&#110;</a>.</p>
 
-    </div>
+        </div>
 
-  </article>
-  <div class="toc-container">
-    
-  <div id="toc" class="toc-article">
-    <strong class="toc-title">Posts</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#PRG%EF%BC%88Pseudo-random-generators%EF%BC%89"><span class="toc-text">PRG（Pseudo-random generators）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PRG%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-text">PRG的安全性</span></a></li></ol></li></ol>
-  </div>
-
-
-  </div>
-</div>
-<div class="copyright">
-    <span>本作品采用</span>
-    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/">知识共享署名 4.0 国际许可协议</a>
-    <span>进行许可。 转载时请注明原文链接。</span>
-</div>
-
-
-  
-    <div class="post-nav">
-      <div class="post-nav-item post-nav-next">
         
-          <span>〈 </span>
-          <a href="/2024/01/19/ct2023/" rel="next" title="A New Correlation Cube Attack Based on Division Property">
-          A New Correlation Cube Attack Based on Division Property
-          </a>
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
         
-      </div>
-  
-      <div class="post-nav-item post-nav-prev">
-          
-      </div>
-    </div>
-  
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/PRG/"># PRG</a>
+                    
+                        <a href="/tags/stream-cipher/"># stream cipher</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/01/23/test/">test</a>
+            
+            
+            <a class="next" rel="next" href="/2024/01/19/ct2023/">A New Correlation Cube Attack Based on Division Property</a>
+            
+        </section>
 
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-    <div id="gitalk-container"></div>
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script type="text/javascript">
-        var gitalk = new Gitalk({
-            clientID: 'xxx',
-            clientSecret: 'xxx',
-            id: window.location.pathname,
-            repo: 'issue repo name',
-            owner: 'Github username',
-            admin: 'github username'
-        })
-        gitalk.render('gitalk-container')
-    </script>
 
+    </article>
+</div>
 
-
-    </div>
-
-    
-
-  </div>
-  <footer class="footer text-center">
-    <div id="bottom-inner">
-        <a class="bottom-item" href="https://github.com/MZzzz1234" target="_blank">GitHub</a> |
-        <a class="bottom-item" target="_blank" rel="noopener" href="https://eprint.iacr.org">友情链接</a> |
-        <a class="bottom-item" href="/atom.xml">Copyright © 2024 Zhang Min</a>
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min | Carpe diem</span>
     </div>
 </footer>
 
-  
-
-<script>
-  (function(window, document, undefined) {
-
-    var timer = null;
-
-    function returnTop() {
-      cancelAnimationFrame(timer);
-      timer = requestAnimationFrame(function fn() {
-        var oTop = document.body.scrollTop || document.documentElement.scrollTop;
-        if (oTop > 0) {
-          document.body.scrollTop = document.documentElement.scrollTop = oTop - 50;
-          timer = requestAnimationFrame(fn);
-        } else {
-          cancelAnimationFrame(timer);
-        }
-      });
-    }
-
-    var hearts = [];
-    window.requestAnimationFrame = (function() {
-      return window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        function(callback) {
-          setTimeout(callback, 1000 / 60);
-        }
-    })();
-    init();
-
-    function init() {
-      css(".heart{z-index:9999;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: absolute;}.heart:after{top: -5px;}.heart:before{left: -5px;}");
-      attachEvent();
-      gameloop();
-      addMenuEvent();
-    }
-
-    function gameloop() {
-      for (var i = 0; i < hearts.length; i++) {
-        if (hearts[i].alpha <= 0) {
-          document.body.removeChild(hearts[i].el);
-          hearts.splice(i, 1);
-          continue;
-        }
-        hearts[i].y--;
-        hearts[i].scale += 0.004;
-        hearts[i].alpha -= 0.013;
-        hearts[i].el.style.cssText = "left:" + hearts[i].x + "px;top:" + hearts[i].y + "px;opacity:" + hearts[i].alpha + ";transform:scale(" + hearts[i].scale + "," + hearts[i].scale + ") rotate(45deg);background:" + hearts[i].color;
-      }
-      requestAnimationFrame(gameloop);
-    }
-
-    /**
-     * 给logo设置点击事件
-     * 
-     * - 回到顶部
-     * - 出现爱心
-     */
-    function attachEvent() {
-      var old = typeof window.onclick === "function" && window.onclick;
-      var logo = document.getElementById("logo");
-      if (logo) {
-        logo.onclick = function(event) {
-          returnTop();
-          old && old();
-          createHeart(event);
-        }
-      }
-      
-    }
-
-    function createHeart(event) {
-      var d = document.createElement("div");
-      d.className = "heart";
-      hearts.push({
-        el: d,
-        x: event.clientX - 5,
-        y: event.clientY - 5,
-        scale: 1,
-        alpha: 1,
-        color: randomColor()
-      });
-      document.body.appendChild(d);
-    }
-
-    function css(css) {
-      var style = document.createElement("style");
-      style.type = "text/css";
-      try {
-        style.appendChild(document.createTextNode(css));
-      } catch (ex) {
-        style.styleSheet.cssText = css;
-      }
-      document.getElementsByTagName('head')[0].appendChild(style);
-    }
-
-    function randomColor() {
-      // return "rgb(" + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + ")";
-      return "#F44336";
-    }
-
-    function addMenuEvent() {
-      var menu = document.getElementById('menu-main-post');
-      if (menu) {
-        var toc = document.getElementById('toc');
-        if (toc) {
-          menu.onclick = function() {
-            if (toc) {
-              if (toc.style.display == 'block') {
-                toc.style.display = 'none';
-              } else {
-                toc.style.display = 'block';
-              }
-            }
-          };
-        } else {
-          menu.style.display = 'none';
-        }
-      }
-    }
-
-  })(window, document);
-</script>
-
-  
-
-
-
-  
-
+    </div>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         tex2jax: {
@@ -360,4 +350,5 @@ PRGadv^∗ [𝒜,𝐺]=|𝑃(𝑏=𝑏^′ )−1/2|=|1/2 (𝑃(𝑏^′=0│𝑏
 </script>
 <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
+
 </html>
