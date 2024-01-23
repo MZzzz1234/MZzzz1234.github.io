@@ -246,6 +246,13 @@
                         </span>
                     
                     
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/cube-attack/">cube attack</a>
+                            
+                        </span>
+                    
                 </div>
             
         </header>
@@ -290,7 +297,7 @@ C_{new}=\sum_{j=1}^{l-1}2^{|I_j|}+2^{n-l}+\frac{2}{\alpha}\sum_{j=1}^{l-1}2^{|J_
 </ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在使用大规模超多项式的cube攻击中，超多项式几乎包含所有秘密变量，密钥筛选阶段的时间复杂度接近2^𝑛，因此作者发现密钥筛选阶段的时间复杂度不应该被忽略，并从实现角度将所有cube攻击分为两类。依赖于实现的cube攻击只有当一次加密oracle查询远比一次查表更复杂时才是可行的，而与实现无关的cube攻击在一次加密oracle查询相当于一次查表的极端情况下仍然可行，现有的高轮数下的cube攻击大多都是依赖于实现的cube攻击。cube攻击中的传统策略是使用超多项式较复杂的低维cube，相反的，基于上述观察作者使用了超多项式次数低、包含秘密变量少的高维cube，首次给出了对Kreyvium的898、899和900轮的攻击结果且这些攻击与实现无关。本文从实现角度严格计算了整体攻击的时间复杂度，指出了之前攻击中忽略的问题，对判断攻击是否成立具有实际意义。</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#x3a;&#122;&#104;&#97;&#x6e;&#x67;&#109;&#x69;&#x6e;&#x32;&#x30;&#50;&#50;&#64;&#105;&#105;&#101;&#46;&#97;&#99;&#x2e;&#99;&#x6e;">&#122;&#104;&#97;&#x6e;&#x67;&#109;&#x69;&#x6e;&#x32;&#x30;&#50;&#50;&#64;&#105;&#105;&#101;&#46;&#97;&#99;&#x2e;&#99;&#x6e;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x7a;&#x68;&#97;&#110;&#x67;&#x6d;&#x69;&#110;&#x32;&#x30;&#50;&#x32;&#64;&#x69;&#x69;&#101;&#x2e;&#x61;&#x63;&#x2e;&#99;&#110;">&#x7a;&#x68;&#97;&#110;&#x67;&#x6d;&#x69;&#110;&#x32;&#x30;&#50;&#x32;&#64;&#x69;&#x69;&#101;&#x2e;&#x61;&#x63;&#x2e;&#99;&#110;</a>.</p>
 
         </div>
 
@@ -308,6 +315,10 @@ C_{new}=\sum_{j=1}^{l-1}2^{|I_j|}+2^{n-l}+\frac{2}{\alpha}\sum_{j=1}^{l-1}2^{|J_
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/Division-Property/"># Division Property</a>
+                    
+                        
                 </span>
             </div>
             <div>
@@ -318,8 +329,10 @@ C_{new}=\sum_{j=1}^{l-1}2^{|I_j|}+2^{n-l}+\frac{2}{\alpha}\sum_{j=1}^{l-1}2^{|J_
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2024/01/19/cube/">Cube attack related</a>
+                <a class="prev" rel="prev" href="/2024/01/19/ct2023/">A New Correlation Cube Attack Based on Division Property</a>
             
+            
+            <a class="next" rel="next" href="/2024/01/19/cube/">Cube attack related</a>
             
         </section>
 
