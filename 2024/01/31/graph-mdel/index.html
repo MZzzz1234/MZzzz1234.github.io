@@ -13,7 +13,7 @@
 
 
 
-<title>A New Correlation Cube Attack Based on Division Property | ZhangMin</title>
+<title>A Simpler Model for Recovering Superpoly on Trivium | ZhangMin</title>
 
 
 
@@ -233,14 +233,14 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">A New Correlation Cube Attack Based on Division Property</h1>
+            <h1 class="post-title">A Simpler Model for Recovering Superpoly on Trivium</h1>
             
                 <div class="post-meta">
                     
 
                     
                         <span class="post-time">
-                        Date: <a href="#">January 19, 2024&nbsp;&nbsp;11:01:56</a>
+                        Date: <a href="#">January 31, 2024&nbsp;&nbsp;22:22:30</a>
                         </span>
                     
                     
@@ -256,60 +256,58 @@
         </header>
 
         <div class="post-content">
-            <h2 id="A-New-Correlation-Cube-Attack-Based-on-Division-Property"><a href="#A-New-Correlation-Cube-Attack-Based-on-Division-Property" class="headerlink" title="A New Correlation Cube Attack Based on Division Property"></a>A New Correlation Cube Attack Based on Division Property</h2><p>基于可分性的一种新相关cube攻击</p>
-<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>田甜等人发表在ACISP2023：<a target="_blank" rel="noopener" href="https://link.springer.com/content/pdf/10.1007/978-3-031-35486-1_3.pdf?pdf=inline%20link">原文</a></p>
-<ul>
-<li>随着Trivium初始化轮数 ↑ ，超多项式的规模 ↑  </li>
-<li>即使目前可以恢复这样的超多项式，如何利用大规模超多项式进行攻击？</li>
-<li>与立方攻击相比，相关立方攻击利用<strong>超多项式和一组特定的低次多项式（基）的条件相关性</strong>，可以实现较大规模的超多项式用于密钥恢复攻击 </li>
+            <h2 id="A-Simpler-Model-for-Recovering-Superpoly-on-Trivium"><a href="#A-Simpler-Model-for-Recovering-Superpoly-on-Trivium" class="headerlink" title="A Simpler Model for Recovering Superpoly on Trivium"></a>A Simpler Model for Recovering Superpoly on Trivium</h2><p>Trivium中恢复超多项式的一个更简单的模型</p>
+<blockquote>
+<p>虽然题目中提到了Trivium，但该论文中提出的方法也可以用于其他的流密码中</p>
+</blockquote>
+<p>Stéphanie Delaune, Patrick Derbez等人发在SAC2021：<a target="_blank" rel="noopener" href="https://eprint.iacr.org/2021/1191.pdf">原文</a></p>
+<h3 id="研究意义"><a href="#研究意义" class="headerlink" title="研究意义"></a>研究意义</h3><ul>
+<li><p>cube攻击是一种有效的密码分析方法，恢复超多项式是该攻击中的一个关键步骤。</p>
+</li>
+<li><p>对于一个密码问题，确定最佳的MILP建模方法是困难的</p>
+</li>
 </ul>
-<h3 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h3><p><strong>一种新的相关立方攻击方法</strong></p>
-<ol>
-<li>将超多项式 𝑝 表示为 𝑓𝑔⊕ℎ ， 𝑓 只包含秘密变量</li>
-<li>寻找 ℎ 有偏差的cube，则在一定条件下，𝑝=𝑓𝑔</li>
-<li>计算所有可能的 𝑓 和 𝑝 的相关概率，然后利用 𝑝 和 𝑓 之间的相关性获得密钥信息</li>
-</ol>
-<p><strong>改进一：</strong> 寻找 ℎ 有偏差的cube，简化超多项式的ANF<br><strong>改进二：</strong> 所有可能的 𝒇：在低轮出现的所有可能低次多项式（基的非唯一确定性）</p>
-<script type="math/tex; mode=display">\Omega={\{k_i ,0\leq i\leq 79\}} \cup {\{k_{i+25}k_{i+26} \oplus k_i \oplus k_{i+27} ,0\leq i\leq 52\}}
-\cup {\{k_{i-44}k_{i-43} \oplus k_i \oplus k_{i-42} ,44\leq i\leq 79\}}</script><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">偏差：在公共变量一些条件下，对于大部分秘密变量的取值， ℎ 的取值为常数</span><br></pre></td></tr></table></figure>
-<p><strong>问题关键</strong> — 寻找好的cube</p>
-<ol>
-<li>基测试：通过可分性，基于MILP模型寻找，加一些条件后（基=0）超多项式为零常数的cube</li>
-<li>进一步筛选h有偏差的cube</li>
-</ol>
-<p><strong>改进三：</strong> 可分性在相关cube攻击中的首次应用</p>
-<h3 id="论文主要结果"><a href="#论文主要结果" class="headerlink" title="论文主要结果"></a>论文主要结果</h3><p>对于844轮Trivium，可以恢复4比特密钥信息，平均时间复杂度为2^45</p>
-<ul>
-<li>使用了28个cube,cube大小为37-38，总时间复杂度2^76，优于之前的2^78</li>
+<h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><ul>
+<li>大部分情况下实验表明，模型越小求解速度越快</li>
+<li>作者在恢复超多项式的建模方面，关注于可以减少约束数量的建模方法。</li>
+<li>基于Trivium的自身特点，找到了<strong>有向图</strong>的结构来建模</li>
 </ul>
-<p>可以看到文中方法是有成功率的</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:left">密钥比特</th>
-<th style="text-align:center">4.06</th>
-<th style="text-align:right">3.88</th>
-<th style="text-align:center">3.61</th>
-<th style="text-align:center">3.18</th>
-<th style="text-align:center">2.83</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">成功率</td>
-<td style="text-align:center">71.1%</td>
-<td style="text-align:right">77.3%</td>
-<td style="text-align:center">89.1%</td>
-<td style="text-align:center">93.0%</td>
-<td style="text-align:center">97.7%</td>
-</tr>
-</tbody>
-</table>
+<h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><ul>
+<li><p>涉及多项式建模为一个有向图，使用<strong>更少的约束和变量</strong>。</p>
+</li>
+<li><p>提出了两个策略来加速模型求解</p>
+<ol>
+<li>通过寻找“加倍路径”来去除部分偶数单项式路径，</li>
+<li>设置Gurobi的求解选项和使用次数估计来剪枝。</li>
+</ol>
+</li>
+<li><p>可以去除50%～80%的偶数单项式路径</p>
+</li>
+<li>总体求解效率相比单项式预测模型有30～60倍提升。</li>
+</ul>
+<p>下图中为Trivium的结构，有288个内部状态s，分布在3个寄存器ABC上 。每一轮产生3个新比特，替换掉每个寄存器的最后面的比特，然后288个状态变量的值全部循环右移1位。最终产生的3个新比特，放在寄存器的第一个位置， 其他位都是循环右移。</p>
+<div align="center">
+<img src="pic2.png" width="100%">
 </div>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在cube攻击中，随着Trivium初始轮数的增加，超多项式的规模逐渐增大。即使目前可以恢复大规模超多项式的ANF，但如何利用这些超多项式进行攻击是待解决的问题。与cube攻击相比，相关cube攻击利用超多项式和一组特定的低次多项式（基）之间的条件相关性，可以将大规模超多项式用于密钥恢复攻击。作者提出了一种新的相关cube攻击方法。如果超多项式 𝑝 可以表示为 𝑓𝑔⊕ℎ （ 𝑓 只包含秘密变量），则作者通过寻找超多项式包含 𝑓且 ℎ 有偏差的cube，利用 𝑝 和 𝑓 之间的相关性获取密钥信息。对于844轮的Trivium，该方法可以恢复4比特密钥信息，平均时间复杂度为2^45。这篇文章提供了一种利用复杂超多项式进行攻击的思路，基于相关性的cube攻击变体值得进一步研究。</p>
+
+<p>下图是完整描述的Trivium生成过程，包含了所有的转换关系</p>
+<div align="center">
+<img src="pic1.png" width="80%">
+</div>
+
+<p>根据刚才的转换的表示，这里给出一条路径的例子，顶部节点是606轮的点C，由该点可以追溯到523轮和524轮的点B，最终可以发现，这个图其实是一条单项式路径，表示的是K16这个单项式</p>
+<blockquote>
+<p>Trivium-672：$ 𝒛←𝑠_{66}+𝑠_{93}+𝑠_{162}+𝑠_{177}+𝒔_{𝟐𝟒𝟑}+𝑠_{288}$<br>子结点可以为C606的S177</p>
+</blockquote>
+<div align="center">
+<img src="pic3.png" width="100%">
+</div>
+
+<h2 id="模型高效的原因"><a href="#模型高效的原因" class="headerlink" title="模型高效的原因"></a>模型高效的原因</h2><p>相比单项式预测模型，图模型采用了一种类似于压缩表示的形式，变量是边（状态的传播关系），所需约束个数较少且可以快速得到多个解。</p>
+<h2 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h2><p>这篇论文提出的建模方法相比前人的方法有较大改进，用了新的数据结构和更少的约束和变量，并且去除偶数单项式路径更容易，对于加速模型求解具有较大的参考价值。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>cube攻击是一种有效的密码分析方法，恢复超多项式是该攻击中的一个关键步骤。现有恢复超多项式的模型，在求解效率方面还有改进的空间。大部分情况下实验表明，模型越小求解速度就越快。因此作者在恢复超多项式的建模方面，关注于可以减少约束数量的建模方法。基于Trivium的自身结构，作者将涉及的多项式建模为一个有向图，使用了更少的约束和变量。同时作者提出了两个策略来加速本文模型求解，一是通过寻找“加倍路径”来去除部分偶数单项式路径，二是设置Gurobi的求解选项和使用次数估计来剪枝。最终作者提出的模型可以去除50%～80%的偶数单项式路径，相比单项式预测模型，总体求解效率有30～60倍提升。本文提出的建模方法相比前人的方法有较大改进，构造的模型更简单，去除偶数单项式路径更容易，对于加速模型求解具有较大的参考价值。</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x7a;&#x68;&#x61;&#110;&#103;&#109;&#x69;&#x6e;&#50;&#48;&#x32;&#50;&#64;&#105;&#x69;&#101;&#x2e;&#97;&#x63;&#x2e;&#x63;&#110;">&#x7a;&#x68;&#x61;&#110;&#103;&#109;&#x69;&#x6e;&#50;&#48;&#x32;&#50;&#64;&#105;&#x69;&#101;&#x2e;&#97;&#x63;&#x2e;&#x63;&#110;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#58;&#x7a;&#x68;&#x61;&#110;&#103;&#109;&#105;&#x6e;&#50;&#48;&#x32;&#50;&#x40;&#x69;&#x69;&#x65;&#x2e;&#97;&#99;&#46;&#99;&#110;">&#x7a;&#x68;&#x61;&#110;&#103;&#109;&#105;&#x6e;&#50;&#48;&#x32;&#50;&#x40;&#x69;&#x69;&#x65;&#x2e;&#97;&#99;&#46;&#99;&#110;</a>.</p>
 
         </div>
 
@@ -328,9 +326,9 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/DivisionProperty/"># DivisionProperty</a>
+                        <a href="/tags/cubeattack/"># cubeattack</a>
                     
-                        <a href="/tags/CorrelationCubeAttack/"># CorrelationCubeAttack</a>
+                        <a href="/tags/object-Object/"># [object Object]</a>
                     
                         
                 </span>
@@ -343,10 +341,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2024/01/22/PRG-1/">PRG的安全性与流密码的语义安全性</a>
             
-            
-            <a class="next" rel="next" href="/2024/01/19/cube/">Cube attack related</a>
+            <a class="next" rel="next" href="/2024/01/25/degree-eval/">NFSR代数次数估计</a>
             
         </section>
 
