@@ -13,7 +13,7 @@
 
 
 
-<title>A Simpler Model for Recovering Superpoly on Trivium | ZhangMin</title>
+<title>Graph model vs. Division model | ZhangMin</title>
 
 
 
@@ -233,81 +233,69 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">A Simpler Model for Recovering Superpoly on Trivium</h1>
+            <h1 class="post-title">Graph model vs. Division model</h1>
             
                 <div class="post-meta">
                     
 
                     
                         <span class="post-time">
-                        Date: <a href="#">January 31, 2024&nbsp;&nbsp;22:22:30</a>
+                        Date: <a href="#">February 1, 2024&nbsp;&nbsp;11:36:05</a>
                         </span>
                     
-                    
-                        <span class="post-category">
-                    Category:
-                            
-                                <a href="/categories/cube/">cube</a>
-                            
-                        </span>
                     
                 </div>
             
         </header>
 
         <div class="post-content">
-            <h2 id="A-Simpler-Model-for-Recovering-Superpoly-on-Trivium"><a href="#A-Simpler-Model-for-Recovering-Superpoly-on-Trivium" class="headerlink" title="A Simpler Model for Recovering Superpoly on Trivium"></a>A Simpler Model for Recovering Superpoly on Trivium</h2><p>Trivium中恢复超多项式的一个更简单的模型</p>
-<blockquote>
-<p>虽然题目中提到了Trivium，但该论文中提出的方法也可以用于其他的流密码中</p>
+            <blockquote>
+<p><strong>什么是需要探究真正导致结果的解的性质(实验结果与本质)</strong><br><strong>实验结果：</strong> 偶数解是没有用的，可以去除的<br><strong>本质：</strong> 布尔域上偶数个单项式发生相消导致偶数解没有用</p>
 </blockquote>
-<p>Stéphanie Delaune, Patrick Derbez等人发在SAC2021：<a target="_blank" rel="noopener" href="https://eprint.iacr.org/2021/1191.pdf">原文</a></p>
-<h3 id="研究意义"><a href="#研究意义" class="headerlink" title="研究意义"></a>研究意义</h3><ul>
-<li><p>cube攻击是一种有效的密码分析方法，恢复超多项式是该攻击中的一个关键步骤。</p>
-</li>
-<li><p>对于一个密码问题，确定最佳的MILP建模方法是困难的</p>
-</li>
-</ul>
-<h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><ul>
-<li>大部分情况下实验表明，模型越小求解速度越快</li>
-<li>作者在恢复超多项式的建模方面，关注于可以减少约束数量的建模方法。</li>
-<li>基于Trivium的自身特点，找到了<strong>有向图</strong>的结构来建模</li>
-</ul>
-<h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><ul>
-<li><p>涉及多项式建模为一个有向图，使用<strong>更少的约束和变量</strong>。</p>
-</li>
-<li><p>提出了两个策略来加速模型求解</p>
-<ol>
-<li>通过寻找“加倍路径”来去除部分偶数单项式路径，</li>
-<li>设置Gurobi的求解选项和使用次数估计来剪枝。</li>
-</ol>
-</li>
-<li><p>可以去除50%～80%的偶数单项式路径</p>
-</li>
-<li>总体求解效率相比单项式预测模型有30～60倍提升。</li>
-</ul>
-<p>下图中为Trivium的结构，有288个内部状态s，分布在3个寄存器ABC上 。每一轮产生3个新比特，替换掉每个寄存器的最后面的比特，然后288个状态变量的值全部循环右移1位。最终产生的3个新比特，放在寄存器的第一个位置， 其他位都是循环右移。</p>
+<h2 id="为什么图模型会更快"><a href="#为什么图模型会更快" class="headerlink" title="为什么图模型会更快"></a>为什么图模型会更快</h2><p>这是一个“经典困难”问题，尝试解释如下：</p>
+<h2 id="真正使得作者可以实现剪枝的原因"><a href="#真正使得作者可以实现剪枝的原因" class="headerlink" title="真正使得作者可以实现剪枝的原因"></a>真正使得作者可以实现剪枝的原因</h2><p>为使叙述更加直观，一个简单的流密码定义如下：</p>
+<script type="math/tex; mode=display">
+z = y_1 y_2 \\
+y_1 = x_2 + x_3 \\
+y_2 = x_1 + x_2 x_3</script><p>根据图模型的构建原理，得到的模型$G=(V,E)$如下：</p>
+<script type="math/tex; mode=display">
+V = \{z,y_1,y_2,x_1,x_2,x_3\} \\
+E = \{\lang z,y_1\rang ,\lang z,y_2\rang , \lang y_1,x_2\rang , \lang y_1,x_3\rang , \lang y_2,x_1\rang , \lang y_2,x_2\rang , \lang y_2,x_3\rang\}</script><p>有向图为：</p>
+<div align="center">
+<img src="pic1.png" width="50%">
+</div>
+
+<p>在模型的逐层展开$(z \to y \to x)$中，存在$y_1 \to x_2 , y_2 \to \{x_2,x_3\}$ 和 $y_1 \to x_3 , y_2 \to \{x_2,x_3\}$这两种情况，他们在多项式中的结果都是一样的： $ y_1y_2 \to x_2x_3$ ，由于是布尔域上的函数，消去后并不会存在于超多项式中。</p>
+<script type="math/tex; mode=display">
+z=y_1y_2 \\
+=x_2x_3+x_2x_3+x_1x_2+x_1x_3 \\
+=x_1x_2+x_1x_3</script><p>易知完整的4条路径如下：</p>
 <div align="center">
 <img src="pic2.png" width="100%">
 </div>
-
-<p>下图是完整描述的Trivium生成过程，包含了所有的转换关系</p>
-<div align="center">
-<img src="pic1.png" width="80%">
-</div>
-
-<p>根据刚才的转换的表示，这里给出一条路径的例子，顶部节点是606轮的点C，由该点可以追溯到523轮和524轮的点B，最终可以发现，这个图其实是一条单项式路径，表示的是K16这个单项式</p>
-<blockquote>
-<p>Trivium-672：$ 𝒛←𝑠_{66}+𝑠_{93}+𝑠_{162}+𝑠_{177}+𝒔_{𝟐𝟒𝟑}+𝑠_{288}$<br>子结点可以为C606的S177</p>
-</blockquote>
 <div align="center">
 <img src="pic3.png" width="100%">
 </div>
 
-<h2 id="模型高效的原因"><a href="#模型高效的原因" class="headerlink" title="模型高效的原因"></a>模型高效的原因</h2><p>相比单项式预测模型，图模型采用了一种类似于压缩表示的形式，变量是边（状态的传播关系），所需约束个数较少且可以快速得到多个解。</p>
-<h2 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h2><p>这篇论文提出的建模方法相比前人的方法有较大改进，用了新的数据结构和更少的约束和变量，并且去除偶数单项式路径更容易，对于加速模型求解具有较大的参考价值。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>cube攻击是一种有效的密码分析方法，恢复超多项式是该攻击中的一个关键步骤。现有恢复超多项式的模型，在求解效率方面还有改进的空间。大部分情况下实验表明，模型越小求解速度就越快。因此作者在恢复超多项式的建模方面，关注于可以减少约束数量的建模方法。基于Trivium的自身结构，作者将涉及的多项式建模为一个有向图，使用了更少的约束和变量。同时作者提出了两个策略来加速本文模型求解，一是通过寻找“加倍路径”来去除部分偶数单项式路径，二是设置Gurobi的求解选项和使用次数估计来剪枝。最终作者提出的模型可以去除50%～80%的偶数单项式路径，相比单项式预测模型，总体求解效率有30～60倍提升。本文提出的建模方法相比前人的方法有较大改进，构造的模型更简单，去除偶数单项式路径更容易，对于加速模型求解具有较大的参考价值。</p>
+<blockquote>
+<p>状态变量“相同输入-相同输出”，是可以去除的偶数单项式路径</p>
+</blockquote>
+<h3 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h3><h3 id="实际分析"><a href="#实际分析" class="headerlink" title="实际分析"></a>实际分析</h3><ol>
+<li>实现对比<ul>
+<li>图模型的Gurobi变量是有向图的边（传播关系），而边是可以较快判断哪些点是活跃的，该方法更容易判断这种偶数情况</li>
+<li>可分性模型的Gurobi变量是状态变量（约等于图模型中的点），点本身就是变量，点是否活跃难以快速判断，想要实现判断需要增加大量约束。</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li>具体实现：<ul>
+<li>一个前提：同一个寄存器若存在3个（4个）连续的活跃点，则一定存在指定情况的Pattern。</li>
+<li>判断条件：3个（4个）连续的活跃点 = 某个状态变量S连续3轮（4轮）都存在于单项式路径中</li>
+</ul>
+</li>
+</ol>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#122;&#104;&#97;&#110;&#103;&#x6d;&#105;&#110;&#x32;&#x30;&#x32;&#x32;&#64;&#105;&#x69;&#x65;&#46;&#x61;&#x63;&#46;&#x63;&#110;">&#122;&#104;&#97;&#110;&#103;&#x6d;&#105;&#110;&#x32;&#x30;&#x32;&#x32;&#64;&#105;&#x69;&#x65;&#46;&#x61;&#x63;&#46;&#x63;&#110;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x7a;&#104;&#x61;&#110;&#103;&#x6d;&#x69;&#110;&#x32;&#x30;&#50;&#50;&#64;&#x69;&#105;&#x65;&#x2e;&#97;&#99;&#x2e;&#x63;&#110;">&#x7a;&#104;&#x61;&#110;&#103;&#x6d;&#x69;&#110;&#x32;&#x30;&#50;&#50;&#64;&#x69;&#105;&#x65;&#x2e;&#97;&#99;&#x2e;&#x63;&#110;</a>.</p>
 
         </div>
 
@@ -325,10 +313,6 @@
                 <span>Tag(s):</span>
                 <span class="tag">
                     
-                    
-                        <a href="/tags/cubeattack/"># cubeattack</a>
-                    
-                        
                 </span>
             </div>
             <div>
@@ -339,10 +323,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2024/02/01/0131-1/">Graph model vs. Division model</a>
             
-            
-            <a class="next" rel="next" href="/2024/01/25/degree-eval/">NFSR代数次数估计</a>
+            <a class="next" rel="next" href="/2024/01/31/graph-mdel/">A Simpler Model for Recovering Superpoly on Trivium</a>
             
         </section>
 
