@@ -257,9 +257,9 @@
 
         <div class="post-content">
             <blockquote>
-<p><strong>什么是需要探究真正导致结果的解的性质(实验结果与本质)</strong><br><strong>实验结果：</strong> 偶数解是没有用的，可以去除的<br><strong>本质：</strong> 布尔域上偶数个单项式发生相消导致偶数解没有用</p>
+<p>什么是<strong>探究真正导致结果的解的原因</strong>(实验结果与本质)<br><strong>实验结果：</strong> 偶数解是没有用的，可以去除的<br><strong>本质：</strong> 布尔域上偶数个单项式发生相消导致偶数解没有用</p>
 </blockquote>
-<h2 id="真正可以实现剪枝的原因"><a href="#真正可以实现剪枝的原因" class="headerlink" title="真正可以实现剪枝的原因"></a>真正可以实现剪枝的原因</h2><p>这是一个“经典困难”问题，问题源自两篇论文提出的模型：<a target="_blank" rel="noopener" href="https://eprint.iacr.org/2020/1048.pdf">可分性模型-原文</a>，<a target="_blank" rel="noopener" href="https://eprint.iacr.org/2021/1191.pdf">  图模型 -原文</a>。为使叙述更加直观，一个简单的流密码定义如下：</p>
+<h2 id="真正可以实现剪枝的原因"><a href="#真正可以实现剪枝的原因" class="headerlink" title="真正可以实现剪枝的原因"></a>真正可以实现剪枝的原因</h2><p>这是一个“经典困难解释”问题，问题源自两篇论文提出的模型：<a target="_blank" rel="noopener" href="https://eprint.iacr.org/2020/1048.pdf">可分性模型-原文</a>，<a target="_blank" rel="noopener" href="https://eprint.iacr.org/2021/1191.pdf">  图模型 -原文</a>。对于该问题，我更偏向的解释是：<strong>图模型的结构更适合Gurobi底层的求解原理，即分支定界法</strong>。为使叙述更加直观，一个简单的流密码定义如下：</p>
 <script type="math/tex; mode=display">
 z = y_1 y_2 \\
 y_1 = x_2 + x_3 \\
@@ -286,7 +286,31 @@ z=y_1y_2 \\
 <ul>
 <li>状态变量”<strong>相同输入-相同输出</strong>“，是可以去除的偶数单项式路径</li>
 </ul>
-<h3 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h3><h3 id="实际分析"><a href="#实际分析" class="headerlink" title="实际分析"></a>实际分析</h3><ol>
+<h3 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h3><p>对于该问题，理论分析如下所示，定义记号和假设为：</p>
+<script type="math/tex; mode=display">
+z≔z_1,z_2,… \\
+y≔y_1,y_2,…</script><ul>
+<li>假设对于一条单项式路径的图模型，有如下的变量展开关系：$z→y→x→w$。在$y→x$的展开中，假设$y$层和$x$层的整体单项式为：$Y$和$X$。</li>
+<li>假设对于$Y$中的任意变量$ y_i $和$ y_i $可能存在的转换关系如下，（但实际上仅有一种转换）：<script type="math/tex; mode=display">
+y_i→x_{i_1},x_{i_2},x_{i_3},\ \ y_i→\{x_{i_4},x_{i_5}\} \\
+y_i→x_{j_1},x_{j_2},x_{j_3},\ \ y_j→\{x_{j_4},x_{j_3}\}</script>例如转换为：$y_i→x_{i_1}，\ y_j→\{x_{j_2},x_{j_3}\}$</li>
+</ul>
+<blockquote>
+<p>推论：假设有一些$z→y$的展开完全相同的单项式路径，满足：$Y_1=Y_2=⋯$，且在$y→x$的展开中，满足：$X_1=X_2=⋯$。这些路径最终得到的是相同的单项式，若这些路径一共有偶数条，则这些路径为冗余的，可就是可以去除的。</p>
+</blockquote>
+<p>证明：<br>根据$y→x$的不同路径中，变量$y_i $和$y_j$存在不同的转换但是输出变量集满足：</p>
+<script type="math/tex; mode=display">
+x_i\subseteq x_j \ \  or \ \  x_j \subseteq x_i \ \ or \\
+路径1的x_i (x_j)=路径2的x_j (x_i)</script><p>显然得到的X是相等的，变量为3个，4个…时同理。<br>用数学表示为：$x_1 \cdot x_1 x_2 x_3=x_2\cdot x_1 x_2 x_3$,或者$ x_1 x_2 \cdot x_3 x_4=x_1 x_3 \cdot x_2 x_4$</p>
+<p><strong>更一般的</strong>，在本文中，实际上可能类似的$y_i$和$y_j$是不在同一层的，且可能涉及到多个层。但是对于结论没有影响，因为每一层的输出都是单项式，无论指向哪一层的相同的输出变量最终都会得到相同的单项式结果。</p>
+<blockquote>
+<p>有偶数条路径满足：输入变量相等，输出变量相等，且指向的变量具有包含关系，依旧是冗余解。</p>
+</blockquote>
+<ul>
+<li>问题1:需要在添加约束和时间消耗之间找一个trade-off</li>
+<li>问题2:需要保证添加的约束不会干扰到另一种pattern，保证计算的正确性</li>
+</ul>
+<h3 id="实际分析"><a href="#实际分析" class="headerlink" title="实际分析"></a>实际分析</h3><ol>
 <li><p>实现对比</p>
 <ul>
 <li><strong>图模型</strong>的Gurobi变量是有向图的边（传播关系），而边是可以较快判断哪些点是活跃的，该方法更容易判断这种偶数情况</li>
@@ -301,7 +325,7 @@ z=y_1y_2 \\
 </li>
 </ol>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#122;&#x68;&#97;&#x6e;&#103;&#x6d;&#x69;&#110;&#50;&#48;&#50;&#50;&#64;&#105;&#x69;&#101;&#x2e;&#x61;&#x63;&#x2e;&#99;&#110;">&#122;&#x68;&#97;&#x6e;&#103;&#x6d;&#x69;&#110;&#50;&#48;&#50;&#50;&#64;&#105;&#x69;&#101;&#x2e;&#x61;&#x63;&#x2e;&#99;&#110;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#122;&#x68;&#x61;&#110;&#103;&#x6d;&#x69;&#x6e;&#50;&#x30;&#50;&#x32;&#x40;&#105;&#105;&#x65;&#x2e;&#97;&#x63;&#46;&#99;&#x6e;">&#122;&#x68;&#x61;&#110;&#103;&#x6d;&#x69;&#x6e;&#50;&#x30;&#50;&#x32;&#x40;&#105;&#105;&#x65;&#x2e;&#97;&#x63;&#46;&#99;&#x6e;</a>.</p>
 
         </div>
 
@@ -362,6 +386,21 @@ z=y_1y_2 \\
 </footer>
 
     </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>
