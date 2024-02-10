@@ -336,7 +336,22 @@ f=a_0x^m+a_1x^{m-1}+\dots+a_m</script><p>其中 $a_i \in k.a_0 \neq0$，称 $a_0
 <li><strong>解多项式方程问题</strong>：找到多项式方程系统在$k^n$上的所有解<script type="math/tex">f_1(x_1,\dots,x_n)=\dots=f_s(x_1,\dots,x_n)=0</script>同样的，该问题也相当于找仿射簇$\mathbf{V}(f_1,\dots,f_s)$的所有点集</li>
 <li><strong>隐含问题</strong>：设$V$是$k^n$上的子集，其参数为<script type="math/tex">x_1=g_1(t_1,\dots,t_m),\\ \vdots \\ x_n=g_n(t_1,\dots,t_m).</script>其中$g_i$是关于变量$t_j$的多项式，则$V$是一个仿射簇。寻找一个多项式方程系统（关于$x_i$）可以表示这个仿射簇。</li>
 </ol>
-<h4 id="k-x-1-dots-x-n-上的单项式序"><a href="#k-x-1-dots-x-n-上的单项式序" class="headerlink" title="$k[x_1,\dots,x_n]$上的单项式序"></a>$k[x_1,\dots,x_n]$上的单项式序</h4><p>将除法和行归约推广到任意多变量多项式的一个主要组成部分是多项式项的排序。</p>
+<h4 id="k-x-1-dots-x-n-上的单项式序"><a href="#k-x-1-dots-x-n-上的单项式序" class="headerlink" title="$k[x_1,\dots,x_n]$上的单项式序"></a>$k[x_1,\dots,x_n]$上的单项式序</h4><p>可以将除法和行归约推广到任意多变量多项式的一个关键是多项式项的排序。单项式序需要具有如下性质：</p>
+<blockquote>
+<p><strong>定义（单项式序）</strong>：$k[x_1,\dots,x_n]$上的单项式序$&gt;$是一个$\mathbb{Z}^n_{\geq 0}$上的关系$&gt;$。或者等价的，是单项式集合$x^\alpha,\alpha \in \mathbb{Z}^n_{\geq 0}$上的一个关系，满足：<br>(i) $&gt;$是$\mathbb{Z}^n_{\geq 0}$上的一个完全（线性）序<br>(ii) 若$\alpha &gt; \beta$，且$\gamma \in \mathbb{Z}^n_{\geq 0}$，则$\alpha+\gamma &gt; \beta+\gamma$<br>(iii) $&gt;$是$\mathbb{Z}^n_{\geq 0}$上的一个良序。这表示每个$\mathbb{Z}^n_{\geq 0}$上的非空子集在$&gt;$下都有一个最小的项。也就是说，若$A\subseteq \mathbb{Z}^n_{\geq 0}$是非空的，存在$\alpha \in A$满足$\forall \beta\neq \alpha \in A, \beta &gt; \alpha$</p>
+</blockquote>
+<ul>
+<li><p>定义说明：</p>
+<ul>
+<li>（i）该性质保证了任意一对单项式（$x^\alpha$和$x^\beta$）间有明确的关系：大于，等于，小于；同时序是需要可以传递的。<script type="math/tex">x^\alpha > x^\beta, x^\alpha = x^\beta, x^\alpha < x^\beta \\
+x^\alpha > x^\beta, x^\beta > x^\gamma \Longrightarrow x^\alpha > x^\gamma</script></li>
+<li>（ii） 保证多项式的运算正确性</li>
+<li>（iii）见如下引理</li>
+</ul>
+</li>
+<li><p><strong>引理</strong>：一个$\mathbb{Z}^n_{\geq 0}$上的顺序关系$&gt;$是良序当且仅当每一个$\mathbb{Z}^n_{\geq 0}$上的严格递减序列最终可终止<script type="math/tex">\alpha(1)>\alpha(2)>\alpha(3)>\cdots</script><br>该引理将用于证明各种算法一定会终止，因为在算法的每一步都有一些项严格递减(相对于固定的单项顺序)。</p>
+</li>
+</ul>
 
         </div>
 
@@ -395,6 +410,21 @@ f=a_0x^m+a_1x^{m-1}+\dots+a_m</script><p>其中 $a_i \in k.a_0 \neq0$，称 $a_0
 </footer>
 
     </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>
