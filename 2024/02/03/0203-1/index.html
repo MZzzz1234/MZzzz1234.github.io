@@ -320,13 +320,13 @@ f=a_0x^m+a_1x^{m-1}+\dots+a_m</script><p>其中 $a_i \in k.a_0 \neq0$，称 $a_0
 <li><p><strong>推论1</strong>：若$k$是一个任意的域，令$g$是一个域$k[x]$上的非零多项式，则$f$在$k$上最多有$deg(f)$个根。</p>
 </li>
 <li><strong>推论2</strong>：若$k$是一个任意的域，则域$k[x]$上的每个理想都可以写成$\langle f \rangle$的形式，其中$f \in k[x]$.<br>  <strong>主理想</strong>：由一个非零元生成的理想。易知$k[x]$是一个主理想整环（PID）</li>
-<li><strong>推论3</strong>:令$f,g\in k[x]$,<br>(i) $GCD(f,g)$存在且唯一<br>(ii) $GCD(f,g)$是理想$\langle f,g \rangle$的生成元<br>(iii) $GCD(f,g)$是可以通过算法找到的</li>
+<li><strong>推论3</strong>:令$f,g\in k[x]$,<br><strong>(i)</strong> $GCD(f,g)$存在且唯一<br><strong>(ii)</strong> $GCD(f,g)$是理想$\langle f,g \rangle$的生成元<br><strong>(iii)</strong> $GCD(f,g)$是可以通过算法找到的</li>
 </ul>
 <blockquote>
-<p><strong>定义（最大公因子）</strong>：多项式$f_1,\dots,f_s \in k[x]$的最大公因子是多项式$h=GCD(f_1,\dots,f_s)$满足：<br>(i) $h$整除$f_1,\dots,f_s$<br>(ii) 若$p$也可以整除$f_1,\dots,f_s$，则$p|h$</p>
+<p><strong>定义（最大公因子）</strong>：多项式$f_1,\dots,f_s \in k[x]$的最大公因子是多项式$h=GCD(f_1,\dots,f_s)$满足：<br><strong>(i)</strong> $h$整除$f_1,\dots,f_s$<br><strong>(ii)</strong> 若$p$也可以整除$f_1,\dots,f_s$，则$p|h$</p>
 </blockquote>
 <ul>
-<li><strong>推论</strong>：令$f_1,\dots,f_s \in k[x],s \geq 2$,<br>(i) $GCD(f_1,\dots,f_s)$存在且唯一<br>(ii) $GCD(f_1,\dots,f_s)$是理想$\langle f_1,\dots,f_s \rangle$的生成元<br>(iii) 若$s \geq 2$，则$GCD(f_1,\dots,f_s)=GCD(f_1,GCD(f_2,\dots,f_s))$<br>(iv) $GCD(f_1,\dots,f_s)$是可以通过算法找到的</li>
+<li><strong>推论</strong>：令$f_1,\dots,f_s \in k[x],s \geq 2$,<br><strong>(i)</strong> $GCD(f_1,\dots,f_s)$存在且唯一<br><strong>(ii)</strong> $GCD(f_1,\dots,f_s)$是理想$\langle f_1,\dots,f_s \rangle$的生成元<br><strong>(iii)</strong> 若$s \geq 2$，则$GCD(f_1,\dots,f_s)=GCD(f_1,GCD(f_2,\dots,f_s))$<br><strong>(iv)</strong> $GCD(f_1,\dots,f_s)$是可以通过算法找到的</li>
 </ul>
 <h3 id="Groebner基"><a href="#Groebner基" class="headerlink" title="Groebner基"></a>Groebner基</h3><h4 id="主要问题介绍"><a href="#主要问题介绍" class="headerlink" title="主要问题介绍"></a>主要问题介绍</h4><p>通过Groebner基方法，可以解决在算法或计算方式上多项式理想的相关问题。</p>
 <p><strong>问题</strong></p>
@@ -338,20 +338,27 @@ f=a_0x^m+a_1x^{m-1}+\dots+a_m</script><p>其中 $a_i \in k.a_0 \neq0$，称 $a_0
 </ol>
 <h4 id="k-x-1-dots-x-n-上的单项式序"><a href="#k-x-1-dots-x-n-上的单项式序" class="headerlink" title="$k[x_1,\dots,x_n]$上的单项式序"></a>$k[x_1,\dots,x_n]$上的单项式序</h4><p>可以将除法和行归约推广到任意多变量多项式的一个关键是多项式项的排序。单项式序需要具有如下性质：</p>
 <blockquote>
-<p><strong>定义（单项式序）</strong>：$k[x_1,\dots,x_n]$上的单项式序$&gt;$是一个$\mathbb{Z}^n_{\geq 0}$上的关系$&gt;$。或者等价的，是单项式集合$x^\alpha,\alpha \in \mathbb{Z}^n_{\geq 0}$上的一个关系，满足：<br>(i) $&gt;$是$\mathbb{Z}^n_{\geq 0}$上的一个完全（线性）序<br>(ii) 若$\alpha &gt; \beta$，且$\gamma \in \mathbb{Z}^n_{\geq 0}$，则$\alpha+\gamma &gt; \beta+\gamma$<br>(iii) $&gt;$是$\mathbb{Z}^n_{\geq 0}$上的一个良序。这表示每个$\mathbb{Z}^n_{\geq 0}$上的非空子集在$&gt;$下都有一个最小的项。也就是说，若$A\subseteq \mathbb{Z}^n_{\geq 0}$是非空的，存在$\alpha \in A$满足$\forall \beta\neq \alpha \in A, \beta &gt; \alpha$</p>
+<p><strong>定义1（单项式序）</strong>：$k[x_1,\dots,x_n]$上的单项式序$&gt;$是一个$\mathbb{Z}^n_{\geq 0}$上的关系$&gt;$。或者等价的，是单项式集合$x^\alpha,\alpha \in \mathbb{Z}^n_{\geq 0}$上的一个关系，满足：<br><strong>(i)</strong> $&gt;$是$\mathbb{Z}^n_{\geq 0}$上的一个完全（线性）序<br><strong>(ii)</strong> 若$\alpha &gt; \beta$，且$\gamma \in \mathbb{Z}^n_{\geq 0}$，则$\alpha+\gamma &gt; \beta+\gamma$<br><strong>(iii)</strong> $&gt;$是$\mathbb{Z}^n_{\geq 0}$上的一个良序。这表示每个$\mathbb{Z}^n_{\geq 0}$上的非空子集在$&gt;$下都有一个最小的项。也就是说，若$A\subseteq \mathbb{Z}^n_{\geq 0}$是非空的，存在$\alpha \in A$满足$\forall \beta\neq \alpha \in A, \beta &gt; \alpha$</p>
 </blockquote>
 <ul>
 <li><p>定义说明：</p>
 <ul>
-<li>（i）该性质保证了任意一对单项式（$x^\alpha$和$x^\beta$）间有明确的关系：大于，等于，小于；同时序是需要可以传递的。<script type="math/tex">x^\alpha > x^\beta, x^\alpha = x^\beta, x^\alpha < x^\beta \\
+<li>（i）该性质保证了任意一对单项式（$x^\alpha$和$x^\beta$）间有明确的关系：大于，等于，小于；同时序是需要可以传递的。<script type="math/tex; mode=display">
+x^\alpha > x^\beta, x^\alpha = x^\beta, x^\alpha < x^\beta \\
 x^\alpha > x^\beta, x^\beta > x^\gamma \Longrightarrow x^\alpha > x^\gamma</script></li>
 <li>（ii） 保证多项式的运算正确性</li>
 <li>（iii）见如下引理</li>
 </ul>
 </li>
-<li><p><strong>引理</strong>：一个$\mathbb{Z}^n_{\geq 0}$上的顺序关系$&gt;$是良序当且仅当每一个$\mathbb{Z}^n_{\geq 0}$上的严格递减序列最终可终止<script type="math/tex">\alpha(1)>\alpha(2)>\alpha(3)>\cdots</script><br>该引理将用于证明各种算法一定会终止，因为在算法的每一步都有一些项严格递减(相对于固定的单项顺序)。</p>
+<li><p><strong>引理</strong>：一个$\mathbb{Z}^n_{\geq 0}$上的顺序关系$&gt;$是良序当且仅当每一个$\mathbb{Z}^n_{\geq 0}$上的严格递减序列最终可终止</p>
+<script type="math/tex; mode=display">\alpha(1)>\alpha(2)>\alpha(3)>\cdots</script><p>该引理将用于证明各种算法一定会终止，因为在算法的每一步都有一些项严格递减(相对于固定的单项顺序)。</p>
 </li>
 </ul>
+<p>通常的数字顺序就是一个简单的单项式序，因此$k[x]$中的单项式的次数序就是一个单项式序。在n元组上排序的一个示例是字典序(lex序)。</p>
+<script type="math/tex; mode=display">
+\cdots > m+1>m>\cdots>3>2>1>0</script><blockquote>
+<p><strong>定义2（字典序）</strong>：在$\mathbb{Z}^n_{\geq 0}$上，令$\alpha=(\alpha_1,\dots,\alpha_n),\beta=(\beta_1,\dots,\beta_n)$，若向量差的最左侧非零项   $\alpha-\beta \in \mathbb{Z}^n$是正的，则$\alpha &gt;_{lex} \beta$。<strong>若$\alpha &gt;_{lex} \beta$，则写作$x^\alpha &gt;_{lex} x^\beta$</strong></p>
+</blockquote>
 
         </div>
 
@@ -383,6 +390,8 @@ x^\alpha > x^\beta, x^\beta > x^\gamma \Longrightarrow x^\alpha > x^\gamma</scri
         </section>
         <section class="post-nav">
             
+                <a class="prev" rel="prev" href="/2024/02/18/0218/">刘邦《大风歌》阅读笔记</a>
+            
             
             <a class="next" rel="next" href="/2024/02/02/0202-1/">大规模矩阵乘法的GPU与CPU并行</a>
             
@@ -410,6 +419,21 @@ x^\alpha > x^\beta, x^\beta > x^\gamma \Longrightarrow x^\alpha > x^\gamma</scri
 </footer>
 
     </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>
