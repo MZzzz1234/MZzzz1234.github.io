@@ -13,7 +13,7 @@
 
 
 
-<title>Improved Graph-Based Model for Recovering Superpoly on Trivium | ZhangMin</title>
+<title>A New Method for Searching Cubes and Its Application to 815-Round Trivium | ZhangMin</title>
 
 
 
@@ -233,7 +233,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Improved Graph-Based Model for Recovering Superpoly on Trivium</h1>
+            <h1 class="post-title">A New Method for Searching Cubes and Its Application to 815-Round Trivium</h1>
             
                 <div class="post-meta">
                     
@@ -256,30 +256,27 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Improved-Graph-Based-Model-for-Recovering-Superpoly-on-Trivium"><a href="#Improved-Graph-Based-Model-for-Recovering-Superpoly-on-Trivium" class="headerlink" title="Improved Graph-Based Model for Recovering Superpoly on Trivium"></a>Improved Graph-Based Model for Recovering Superpoly on Trivium</h2><p>Junjie Cheng ,Kexin Qiao发表在CT-RSA 2023：<a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-031-30872-7_9">原文</a></p>
-<h3 id="研究意义"><a href="#研究意义" class="headerlink" title="研究意义"></a>研究意义</h3><p>cube攻击是对称密码中的一种代数密码分析方法，恢复超多项式是一个重要的部分。2015年以来，提出了可分性，单项式预测和之后的一系列技术，将该问题转换为MILP模型求解来恢复准确的超多项式。而偶数解在最终的超多项式中是没有用的，因此如果可以通过剪枝去掉偶数解，那么求解效率也会大幅提升。</p>
-<h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><p>在模型中，如果可以减小模型规模，或者减少模型可行解的数量，则有可能提高模型的求解效率，实现更高论数的密码攻击</p>
-<h3 id="insight"><a href="#insight" class="headerlink" title="insight"></a>insight</h3><p>一些子图如果具有相同的输入和输出点，但具有不同的边的指向，则可以考虑在模型中加约束来去掉该对子图。</p>
-<div align="center">
-<img src="pic1.png" width="100%">
-</div>
-
+            <h2 id="Improved-Graph-Based-Model-for-Recovering-Superpoly-on-Trivium"><a href="#Improved-Graph-Based-Model-for-Recovering-Superpoly-on-Trivium" class="headerlink" title="Improved Graph-Based Model for Recovering Superpoly on Trivium"></a>Improved Graph-Based Model for Recovering Superpoly on Trivium</h2><p>Liu chen, Tian tian等人发表在JSSC2023：<a target="_blank" rel="noopener" href="https://link.springer.com/article/10.1007/s11424-023-1497-1">原文</a></p>
+<h3 id="研究意义"><a href="#研究意义" class="headerlink" title="研究意义"></a>研究意义</h3><p>cube攻击中，需要通过对超多项式求解来获得密钥信息，超多项式次数越低，在攻击中可能越容易求解。如果随机的选择cube，大概率得到的超多项式是比较复杂的。因此搜索cube的方法非常关键。</p>
+<h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><p>对于如何寻找一组理想的候选cube集合，目前没有找到特别好的方法。</p>
+<ul>
+<li>田甜等人提出了805轮搜索cube的方法，依赖于Möbius变换来估计次数，该方法对轮数有限制</li>
+</ul>
+<h3 id="insight"><a href="#insight" class="headerlink" title="insight"></a>insight</h3><p>通过将一个大cube重复划分为两个不相交的子cube，来估计超多项式中高次项出现的频率，从而判断超多项式是否容易恢复</p>
+<ul>
+<li>一个实例如下：</li>
+</ul>
 <h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><ul>
-<li>提出自动搜索2层剪枝模式的算法：穷举3个输入点，发现了12种新的剪枝模式</li>
-<li>部分剪枝模式可以添加较少的约束来去除大量的可行解</li>
-<li>基于图模型和胡凯等人提出的分解策略，准确恢复Trivium 843轮的超多项式，减少了可行解的数量。</li>
+<li>提出了一种cube筛选算法，可以根据给定cube，得到一个超多项式次数较低的候选子cube集合。</li>
+<li>作者实现了Trivium-815轮的理论攻击，攻击复杂度为$2^72.46$。</li>
 </ul>
-<div align="center">
-<img src="pic2.png" width="100%">
-</div>
-
 <h3 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h3><ul>
-<li>使用新剪枝模式时，计算结果是否正确需要进一步研究：例如多个剪枝模式一起用是否会出现问题，单个剪枝模式多次使用是否会出现类似三连的问题。</li>
-<li>对于新剪枝模式使用后模型规模减小而声称带来的求解效率的提高，文中没有明确的对比说明。</li>
+<li>作者的方法其实是改进了805轮搜索cube的方法中的一个步骤，大部分步骤和之前的方法是相似的，例如cube扩展的过程，初始cube的选择等。</li>
+<li>次数估计使用的Mobius变换方法没有具体介绍</li>
 </ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在cube攻击中，恢复超多项式是一个关键步骤，我们通常通过建立MILP模型并枚举所有可行解，来得到超多项式中包含的所有单项式。在建模过程中，如果可以减小模型规模或减少模型的可行解数量，则有可能提高模型的求解效率。作者观察到，一些子图如果具有相同的输入和输出点，但具有不同的边的指向，则可以考虑在模型中加约束来去掉该对子图。因此本文提出了一种自动搜索2层剪枝模式的算法，通过穷举3个输入点的所有可能情况，发现了12种新的剪枝模式，其中部分剪枝模式可以通过添加较少的约束来去除大量的可行解。最终作者基于图模型，结合胡凯等人提出的分解策略，可以准确恢复Trivium 843轮的超多项式并减少了模型可行解的数量。我认为使用新剪枝模式时，计算结果是否正确需要进一步研究。对于模型规模减小而作者声称带来的求解效率的提高，文中没有明确的对比说明。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在基于可分性的cube攻击中，选择超多项式次数低的cube是非常关键的。因为随机的选择cube是低效的，所以搜索cube的方法很重要。作者发现目前没有特别好的方法来得到一些理想的cube，因此提出了一种cube筛选算法，可以根据给定的cube，得到一个超多项式次数较低的候选子cube集合。算法的核心思想是通过将一个大cube重复划分为两个不相交的子cube，来估计超多项式中高次项出现的频率，从而判断超多项式是否容易恢复。最终作者实现了Trivium-815轮的理论攻击，攻击复杂度为2^72.46。我认为作者主要通过cube拆分来解决次数估计时M𝑜 ̈bius变换对轮数的限制问题，作者提出的方法更像是Trivium-805轮搜索cube的方法的改进。</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#58;&#122;&#104;&#97;&#x6e;&#x67;&#109;&#x69;&#x6e;&#50;&#48;&#50;&#x32;&#64;&#x69;&#105;&#x65;&#46;&#97;&#x63;&#x2e;&#99;&#x6e;">&#122;&#104;&#97;&#x6e;&#x67;&#109;&#x69;&#x6e;&#50;&#48;&#50;&#x32;&#64;&#x69;&#105;&#x65;&#46;&#97;&#x63;&#x2e;&#99;&#x6e;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x7a;&#x68;&#97;&#x6e;&#x67;&#x6d;&#105;&#110;&#50;&#48;&#x32;&#50;&#x40;&#x69;&#105;&#101;&#x2e;&#97;&#99;&#x2e;&#99;&#110;">&#x7a;&#x68;&#97;&#x6e;&#x67;&#x6d;&#105;&#110;&#50;&#48;&#x32;&#50;&#x40;&#x69;&#105;&#101;&#x2e;&#97;&#99;&#x2e;&#99;&#110;</a>.</p>
 
         </div>
 
@@ -298,7 +295,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/cubeattack/"># cubeattack</a>
+                        <a href="/tags/cube-search/"># cube search</a>
                     
                         
                 </span>
@@ -310,6 +307,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/03/23/0323/">A New Method for Searching Cubes and Its Application to 815-Round Trivium</a>
             
             
             <a class="next" rel="next" href="/2024/02/28/0228/">docker使用简记</a>
@@ -338,6 +337,21 @@
 </footer>
 
     </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>
