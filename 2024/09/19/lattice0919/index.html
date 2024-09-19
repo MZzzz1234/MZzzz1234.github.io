@@ -289,7 +289,9 @@
 </ol>
 <p><strong>LLL算法为什么能找到短向量</strong>：</p>
 <ol>
-<li>经过LLL约化后的基，$b_1$可证明是小于某个界的</li>
+<li>经过LLL约化后的基，$b_1$可证明是小于某个界的，这个界是和GS基的向量长度相关的，并且由于格中最短向量是大于最小的GS基向量的，因此可以得到一个短向量。<script type="math/tex; mode=display">
+\lambda_1(\mathcal{L}(B)) \geq \underset{i=1,\dots,n}{\text{min}} ||\tilde{b_i}|| > 0</script></li>
+<li>LLL约化算法限制了新旧向量的长度的比值，不让它减的太快，这样的基向量是更容易找到短向量的。</li>
 </ol>
 
         </div>
@@ -349,6 +351,21 @@
 </footer>
 
     </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>
