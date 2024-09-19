@@ -164,6 +164,71 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
@@ -191,7 +256,41 @@
         </header>
 
         <div class="post-content">
-            <p> LLL和BKZ</p>
+            <h3 id="LLL算法"><a href="#LLL算法" class="headerlink" title="LLL算法"></a>LLL算法</h3><h4 id="LLL约化基"><a href="#LLL约化基" class="headerlink" title="LLL约化基"></a>LLL约化基</h4><p><strong>Gram-Schmit正交化</strong>: 给定一组线性无关的向量$b_1, \dots, b_n \in \mathbb{R}^n$, $b_1, \dots, b_n$的Gram-Schmit正交化是： </p>
+<script type="math/tex; mode=display">
+\tilde{b_i}=b_i-\sum_{j=1}^{i-1}\mu_{i,j}\tilde{b_j}, \\  \mu_{i,j}=\frac{\langle b_i, \tilde{b_j} \rangle}{\langle \tilde{b_j},\tilde{b_j} \rangle}</script><p><strong>LLL约化基</strong>: 一个基$B={b_1, \dots, b_n}\in \mathbb{R}^n$是一个$\delta-$LLL约化基,若满足：</p>
+<ol>
+<li>$\forall 1 \leq i \leq n, j&lt;i. |\mu_{i,j} \leq \frac{1}{2}|$</li>
+<li>$\forall 1 \leq i \leq n. \delta || \tilde{b_i} ||^2 \leq || \mu_{i+1}\tilde{b_i} + \tilde{b_{i+1}} ||^2$</li>
+</ol>
+<blockquote>
+<ul>
+<li>条件1: $\delta=\frac{3}{4}$, 事实上算法允许 $\frac{1}{4} \leq \delta\leq 1$. 这个条件使得格基向量之间变得更紧凑，以及尽可能接近正交。</li>
+<li>条件2: $||\tilde{b_{i+1}}||^2 \geq (\delta-\frac{1}{4})||\tilde{b_i}||^2$, 这表明 $\tilde{b_{i+1}}$ 不会比 $\tilde{b_i}$ 短太多。如果短太多，那么会在算法中进行向量交换并重新进行约化，这也说明，短太多的基的约化效果并不好。</li>
+<li>对于条件2，表明LLL约化基的正交向量的长度应该是差不多大的。同时，条件2保证了最短向量的界。</li>
+</ul>
+</blockquote>
+<p><strong>最短向量</strong>：令$b_1, \dots, b_n \in \mathbb{R}^n$是一个$\delta-$LLL约化基， $||b_1|| \leq (\frac{2}{\sqrt{4\delta-1}})^{n-1} \lambda_1(\mathcal{L})$.</p>
+<p>当$\delta=\frac{3}{4}$， $||b_1|| \leq 2^{(n-1)/2}\lambda_1(\mathcal{L})$.</p>
+<h4 id="LLL算法-1"><a href="#LLL算法-1" class="headerlink" title="LLL算法"></a>LLL算法</h4><p><strong>算法介绍</strong>：</p>
+<p>输入：格基$b_1,\dots,b_n \in \mathbb{Z}^n$<br>输出：$\mathcal{L}(B)$的$\delta-$LLL约化基</p>
+<ul>
+<li>Start: 计算$\tilde{b_1},\dots,\tilde{b_n}$</li>
+<li>Reduction:<br><strong>for</strong> $i=2$ to $n$ <strong>do</strong>:<br>  $\quad$ <strong>for</strong> $j=i-1$ to $1$ <strong>do</strong>:<br>  $\quad \quad$ $b_i \leftarrow b_i-c_{i,j}b_j$, 其中 $c_{i,j}=\lceil \langle b_i, \tilde{b_j} \rangle / \langle \tilde{b_j}, \tilde{b_j} \rangle\rfloor$ </li>
+<li><p>Swap：<br><strong>if</strong> $\exists i$ s.t. $\delta || \tilde{b_i} ||^2 &gt; || \mu_{i+1}\tilde{b_i} + \tilde{b_{i+1}} ||^2$ <strong>then</strong>:<br>$\quad$ $b_i \leftrightarrow b_{i+1}$<br>$\quad$ 回到Start</p>
+</li>
+<li><p>输出$b_1,\dots,b_n$</p>
+</li>
+</ul>
+<p><strong>算法分析</strong>：</p>
+<ol>
+<li>经过约化步后，GS基是不需要重新计算的。因为约化步对正交基没有影响。</li>
+<li>算法是多项式时间的。</li>
+</ol>
+<p><strong>LLL算法为什么能找到短向量</strong>：</p>
+<ol>
+<li>经过LLL约化后的基，$b_1$可证明是小于某个界的</li>
+</ol>
 
         </div>
 
