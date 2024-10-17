@@ -257,18 +257,18 @@
         </header>
 
         <div class="post-content">
-            <h3 id="格"><a href="#格" class="headerlink" title="格"></a>格</h3><h4 id="基础定义"><a href="#基础定义" class="headerlink" title="基础定义"></a>基础定义</h4><h5 id="LATTICE："><a href="#LATTICE：" class="headerlink" title="LATTICE："></a>LATTICE：</h5><p>给定n个线性无关的向量$b_1, \dots, b_n \in \mathbb{R}^m$，由他们生成的格是</p>
+            <h3 id="格"><a href="#格" class="headerlink" title="格"></a>格</h3><h4 id="基础定义"><a href="#基础定义" class="headerlink" title="基础定义"></a>基础定义</h4><h4 id="LATTICE："><a href="#LATTICE：" class="headerlink" title="LATTICE："></a>LATTICE：</h4><p>给定n个线性无关的向量$b_1, \dots, b_n \in \mathbb{R}^m$，由他们生成的格是</p>
 <script type="math/tex; mode=display">
 \mathcal{L}(b_1,b_2,\dots,b_n)=\{\sum x_ib_i | x_i \in \mathbb{Z}\}.</script><p>$b_1, \dots, b_n$是格中的一组基。（格向量是实数域上的）</p>
-<h5 id="SPAN："><a href="#SPAN：" class="headerlink" title="SPAN："></a>SPAN：</h5><p>格$\mathcal{L}(B)$的span是由其格向量张成的线性空间。</p>
+<h4 id="SPAN："><a href="#SPAN：" class="headerlink" title="SPAN："></a>SPAN：</h4><p>格$\mathcal{L}(B)$的span是由其格向量张成的线性空间。</p>
 <script type="math/tex; mode=display">
-\text{span}(\mathcal{L}(B))=\text{span}(B)=\{By | y \in \mathbb{R}^n\}</script><h5 id="FUNDAMENTAL-PARALLELEPIPED"><a href="#FUNDAMENTAL-PARALLELEPIPED" class="headerlink" title="FUNDAMENTAL PARALLELEPIPED:"></a>FUNDAMENTAL PARALLELEPIPED:</h5><p>对于任意的格基$B$,</p>
+\text{span}(\mathcal{L}(B))=\text{span}(B)=\{By | y \in \mathbb{R}^n\}</script><h4 id="FUNDAMENTAL-PARALLELEPIPED"><a href="#FUNDAMENTAL-PARALLELEPIPED" class="headerlink" title="FUNDAMENTAL PARALLELEPIPED:"></a>FUNDAMENTAL PARALLELEPIPED:</h4><p>对于任意的格基$B$,</p>
 <script type="math/tex; mode=display">
-\mathcal{P}(B)=\{Bx | x \in \mathbb{R}^n, \forall i: 0 \le x_i \le 1\}.</script><h5 id="幺模矩阵："><a href="#幺模矩阵：" class="headerlink" title="幺模矩阵："></a>幺模矩阵：</h5><p>对于矩阵$U \in \mathbb{Z}^{n \times n}$, 满足 $\text{det}U=\pm 1$（矩阵元素都是整数）</p>
-<h5 id="DETERMINANT："><a href="#DETERMINANT：" class="headerlink" title="DETERMINANT："></a>DETERMINANT：</h5><p>令$\Lambda=\mathcal{L}(B)$是一个秩为$n$的格</p>
+\mathcal{P}(B)=\{Bx | x \in \mathbb{R}^n, \forall i: 0 \le x_i \le 1\}.</script><h4 id="幺模矩阵："><a href="#幺模矩阵：" class="headerlink" title="幺模矩阵："></a>幺模矩阵：</h4><p>对于矩阵$U \in \mathbb{Z}^{n \times n}$, 满足 $\text{det}U=\pm 1$（矩阵元素都是整数）</p>
+<h4 id="DETERMINANT："><a href="#DETERMINANT：" class="headerlink" title="DETERMINANT："></a>DETERMINANT：</h4><p>令$\Lambda=\mathcal{L}(B)$是一个秩为$n$的格</p>
 <script type="math/tex; mode=display">
 \text{det}(\Lambda) := \sqrt{\text{det}(B^TB)} (\text{或者}|\text{det}(B)|)</script><p>对于格 $\Lambda$ 来说，不同格基矩阵 $B$ 对应的基础区域是不同的，但基础区域对应多面体的体积是个定值。$\text{det}(\Lambda)$ 是格 $\Lambda$ 最为重要的不变量之一。</p>
-<h5 id="Gram-Schmit正交化"><a href="#Gram-Schmit正交化" class="headerlink" title="Gram-Schmit正交化:"></a>Gram-Schmit正交化:</h5><p> 给定一组线性无关的向量$b_1, \dots, b_n \in \mathbb{R}^n$, $b_1, \dots, b_n$的Gram-Schmit正交化是： </p>
+<h4 id="Gram-Schmit正交化"><a href="#Gram-Schmit正交化" class="headerlink" title="Gram-Schmit正交化:"></a>Gram-Schmit正交化:</h4><p> 给定一组线性无关的向量$b_1, \dots, b_n \in \mathbb{R}^n$, $b_1, \dots, b_n$的Gram-Schmit正交化是： </p>
 <script type="math/tex; mode=display">
 \tilde{b_i}=b_i-\sum_{j=1}^{i-1}\mu_{i,j}\tilde{b_j}, \\  \mu_{i,j}=\frac{\langle b_i, \tilde{b_j} \rangle}{\langle \tilde{b_j},\tilde{b_j} \rangle}</script><p>$\tilde{b_i}$ 是与 $\tilde{b_1}, \dots, \tilde{b_{i-1}}$ 正交的 $b_i$ 的分量。Gram-Schmit正交化有几个简单的性质：</p>
 <ol>
@@ -277,7 +277,7 @@
 <li>$\tilde{b_1},\dots, \tilde{b_i}$不一定是格的基。</li>
 <li>$b_1,b_2, \dots,b_i$ 是一个序列而不是集合</li>
 </ol>
-<h5 id="successive-minimum"><a href="#successive-minimum" class="headerlink" title="successive minimum:"></a>successive minimum:</h5><p>令$\Lambda=\mathcal{L}(B)$是一个秩为$n$的格,$\forall i \in \{ 1,\dots,n\}$，逐次最小长度$\lambda_i(\Lambda)$:</p>
+<h4 id="successive-minimum"><a href="#successive-minimum" class="headerlink" title="successive minimum:"></a>successive minimum:</h4><p>令$\Lambda=\mathcal{L}(B)$是一个秩为$n$的格,$\forall i \in \{ 1,\dots,n\}$，逐次最小长度$\lambda_i(\Lambda)$:</p>
 <script type="math/tex; mode=display">
 \lambda_i(\Lambda)=\text{inf} \{ r | \text{dim}(\text{span}(\Lambda \cap \overline{\bf{B}}(0,r))) \geq i\}</script><p>其中，$\overline{\bf{B}}(0,r)=\{ x\in \mathbb{R}^m | ||x|| \le r\}$是以0为圆心，半径为$r$的球。</p>
 <p>在几何中可以理解为：第 $i$ 个逐次最小长度 $\lambda_i$ 为以原点为球心，包含 $i$ 个线性无关格向量的最小球半径。显然，$\lambda_i(\Lambda)$ 为格 $\Lambda$ 的最短非零向量长度。一些简单的性质如下：</p>
@@ -287,13 +287,13 @@
 <li>$\forall 1 \le i \le n , \exists v_i \in \Lambda, ||v_i||=\lambda_i(\Lambda)$</li>
 <li>$\text{vol}(B(0,r)) \geq (\frac{2r}{\sqrt{n}})^n$</li>
 </ol>
-<h5 id="q-ary格"><a href="#q-ary格" class="headerlink" title="q-ary格:"></a>q-ary格:</h5><p>格$\Lambda$称为 $q$-ary格，如果它满足</p>
+<h4 id="q-ary格"><a href="#q-ary格" class="headerlink" title="q-ary格:"></a>q-ary格:</h4><p>格$\Lambda$称为 $q$-ary格，如果它满足</p>
 <script type="math/tex; mode=display">
 q\mathbb{Z}^n \subseteq \Lambda \subseteq \mathbb{Z}^n</script><ul>
 <li>$\mathbb{Z}^n$是一个整数格</li>
 <li>$q\mathbb{Z}^n$ 在模$q$意义下是周期性的</li>
 </ul>
-<h5 id="投影子格："><a href="#投影子格：" class="headerlink" title="投影子格："></a>投影子格：</h5><p>令$\bf{B} :=({\bf{b}}_1,\cdots,{\bf{b}}_n)$为$\mathcal{L}$的格基，定义投影算子$\pi_i$为向量在补空间$(\bf{b}_1,\cdots,\bf{b}_i)^\perp$上的投影。<br>投影格基$\bf{B}<script type="math/tex">_{[j,k]} :=(\pi_j({\bf{b}}_{j+1}),\cdots,\pi_j({\bf{b}}_k))$；投影子格 $\mathcal{L}_{[j,k]} := \mathcal{L}(\bf{B}</script>_{[j,k]})$。易知$\bf{B}$$_{[j,k]}$张成的线性空间即为$(\bf{b}_{j+1}^<em>,\cdots,\bf{b}_k^</em>)$张成的线性空间。</p>
+<h4 id="投影子格："><a href="#投影子格：" class="headerlink" title="投影子格："></a>投影子格：</h4><p>令$\bf{B} :=({\bf{b}}_1,\cdots,{\bf{b}}_n)$为$\mathcal{L}$的格基，定义投影算子$\pi_i$为向量在补空间$(\bf{b}_1,\cdots,\bf{b}_i)^\perp$上的投影。<br>投影格基$\bf{B}<script type="math/tex">_{[j,k]} :=(\pi_j({\bf{b}}_{j+1}),\cdots,\pi_j({\bf{b}}_k))$；投影子格 $\mathcal{L}_{[j,k]} := \mathcal{L}(\bf{B}</script>_{[j,k]})$。易知$\bf{B}$$_{[j,k]}$张成的线性空间即为$(\bf{b}_{j+1}^<em>,\cdots,\bf{b}_k^</em>)$张成的线性空间。</p>
 <ul>
 <li>对于高维格的格基约化，常见的策略是对其低维的投影子格进行格基约化，并将其提升回高维格。</li>
 <li>对于$\mathcal{L}_{[j,k]}$中的格向量$\bf v’$，将其提升到格$\mathcal{L}$中，等价于找到$\bf v’$在$\mathcal{L}$中的（近似）最近向量。（Babai最近平面算法）</li>
@@ -366,7 +366,7 @@ q\mathbb{Z}^n \subseteq \Lambda \subseteq \mathbb{Z}^n</script><ul>
 
 <p>而CVP问题可以转换为SVP问题：</p>
 <div align="center">
-<img src="pic3.png" width="100%">
+<img src="pic3.png" width="80%">
 </div>
 
 <p>SVP和CVP发展历史：</p>
