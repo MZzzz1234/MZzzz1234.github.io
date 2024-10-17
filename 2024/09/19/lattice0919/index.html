@@ -282,7 +282,7 @@
 \lambda_i(\Lambda)=\text{inf} \{ r | \text{dim}(\text{span}(\Lambda \cap \overline{\bf{B}}(0,r))) \geq i\}</script><p>其中，$\overline{\bf{B}}(0,r)=\{ x\in \mathbb{R}^m | ||x|| \le r\}$是以0为圆心，半径为$r$的球。</p>
 <p>在几何中可以理解为：第 $i$ 个逐次最小长度 $\lambda_i$ 为以原点为球心，包含 $i$ 个线性无关格向量的最小球半径。显然，$\lambda_i(\Lambda)$ 为格 $\Lambda$ 的最短非零向量长度。一些简单的性质如下：</p>
 <ol>
-<li>对任意格：$\lambda_1(\mathcal{L}(B)) \le \lambda_2(\mathcal{L}(B)) \le \cdots \le $\lambda_n(\mathcal{L}(B))$, $\lambda_2(\mathcal{L}(B))是与最短非0格向量线性无关的最短格向量长度</li>
+<li>对任意格：$\lambda_1(\mathcal{L}(B)) \le \lambda_2(\mathcal{L}(B)) \le \cdots \le \lambda_n(\mathcal{L}(B))$, $\lambda_2(\mathcal{L}(B))$是与最短非0格向量线性无关的最短格向量长度</li>
 <li>$\lambda_1(\mathcal{L}(B)) \geq \underset{i=1,\dots,n}{\text{min}} ||\tilde{b_i}|| &gt; 0$ </li>
 <li>$\forall 1 \le i \le n , \exists v_i \in \Lambda, ||v_i||=\lambda_i(\Lambda)$</li>
 <li>$\text{vol}(B(0,r)) \geq (\frac{2r}{\sqrt{n}})^n$</li>
@@ -293,7 +293,7 @@ q\mathbb{Z}^n \subseteq \Lambda \subseteq \mathbb{Z}^n</script><ul>
 <li>$\mathbb{Z}^n$是一个整数格</li>
 <li>$q\mathbb{Z}^n$ 在模$q$意义下是周期性的</li>
 </ul>
-<h4 id="投影子格："><a href="#投影子格：" class="headerlink" title="投影子格："></a>投影子格：</h4><p>令$\bf{B} :=({\bf{b}}_1,\cdots,{\bf{b}}_n)$为$\mathcal{L}$的格基，定义投影算子$\pi_i$为向量在补空间$(\bf{b}_1,\cdots,\bf{b}_i)^\perp$上的投影。<br>投影格基$\bf{B}<script type="math/tex">_{[j,k]} :=(\pi_j({\bf{b}}_{j+1}),\cdots,\pi_j({\bf{b}}_k))$；投影子格 $\mathcal{L}_{[j,k]} := \mathcal{L}(\bf{B}</script>_{[j,k]})$。易知$\bf{B}$$_{[j,k]}$张成的线性空间即为$(\bf{b}_{j+1}^<em>,\cdots,\bf{b}_k^</em>)$张成的线性空间。</p>
+<h4 id="投影子格："><a href="#投影子格：" class="headerlink" title="投影子格："></a>投影子格：</h4><p>令$\bf{B} :=({\bf{b}}_1,\cdots,{\bf{b}}_n)$为$\mathcal{L}$的格基，定义投影算子$\pi_i$为向量在补空间$(\bf{b}_1,\cdots,\bf{b}_i)^\perp$上的投影。<br>投影格基${\bf{B}}_{[j,k]} :=(\pi_j({\bf{b}}_{j+1}),\cdots,\pi_j({\bf{b}}_k))$；投影子格 $\mathcal{L}_{[j,k]} := \mathcal{L}({\bf{B}}_{[j,k]})$。易知${\bf{B}}_{[j,k]}$张成的线性空间即为$(\tilde{\bf{b}_{j+1}},\cdots,\tilde{\bf{b}_k})$张成的线性空间。</p>
 <ul>
 <li>对于高维格的格基约化，常见的策略是对其低维的投影子格进行格基约化，并将其提升回高维格。</li>
 <li>对于$\mathcal{L}_{[j,k]}$中的格向量$\bf v’$，将其提升到格$\mathcal{L}$中，等价于找到$\bf v’$在$\mathcal{L}$中的（近似）最近向量。（Babai最近平面算法）</li>
