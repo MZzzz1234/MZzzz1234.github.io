@@ -13,7 +13,7 @@
 
 
 
-<title>格密码基础-LLL和BKZ | ZhangMin</title>
+<title>格密码基础-LLL和BKZ及相关困难问题 | ZhangMin</title>
 
 
 
@@ -234,7 +234,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">格密码基础-LLL和BKZ</h1>
+            <h1 class="post-title">格密码基础-LLL和BKZ及相关困难问题</h1>
             
                 <div class="post-meta">
                     
@@ -259,12 +259,12 @@
         <div class="post-content">
             <h3 id="格"><a href="#格" class="headerlink" title="格"></a>格</h3><h4 id="基础定义"><a href="#基础定义" class="headerlink" title="基础定义"></a>基础定义</h4><p><strong>LATTICE</strong>： 给定n个线性无关的向量$b_1, \dots, b_n \in \mathbb{R}^m$，由他们生成的格是</p>
 <script type="math/tex; mode=display">
-\mathcal{L}(b_1,b_2,\dots,b_n)=\{\sum x_ib_i | x_i \in \mathbb{Z}\}.</script><p>$b_1, \dots, b_n$是格中的一组基。</p>
+\mathcal{L}(b_1,b_2,\dots,b_n)=\{\sum x_ib_i | x_i \in \mathbb{Z}\}.</script><p>$b_1, \dots, b_n$是格中的一组基。（格向量是实数域上的）</p>
 <p><strong>SPAN</strong>：格$\mathcal{L}(B)$的span是由其格向量张成的线性空间。</p>
 <script type="math/tex; mode=display">
 \text{span}(\mathcal{L}(B))=\text{span}(B)=\{By | y \in \mathbb{R}^n\}</script><p><strong>FUNDAMENTAL PARALLELEPIPED</strong>:对于任意的格基$B$,</p>
 <script type="math/tex; mode=display">
-\mathcal{P}(B)=\{Bx | x \in \mathbb{R}^n, \forall i: 0 \le x_i \le 1\}.</script><p><strong>幺模矩阵</strong>：对于矩阵$U \in \mathbb{Z}^{n \times n}$, 满足 $\text{det}U=\pm 1$</p>
+\mathcal{P}(B)=\{Bx | x \in \mathbb{R}^n, \forall i: 0 \le x_i \le 1\}.</script><p><strong>幺模矩阵</strong>：对于矩阵$U \in \mathbb{Z}^{n \times n}$, 满足 $\text{det}U=\pm 1$（矩阵元素都是整数）</p>
 <p><strong>DETERMINANT</strong>：令$\Lambda=\mathcal{L}(B)$是一个秩为$n$的格</p>
 <script type="math/tex; mode=display">
 \text{det}(\Lambda) := \sqrt{\text{det}(B^TB)} (\text{或者}|\text{det}(B)|)</script><p>对于格 $\Lambda$ 来说，不同格基矩阵 $B$ 对应的基础区域是不同的，但基础区域对应多面体的体积是个定值。$\text{det}(\Lambda)$ 是格 $\Lambda$ 最为重要的不变量之一。</p>
@@ -282,10 +282,17 @@
 \lambda_i(\Lambda)=\text{inf} \{ r | \text{dim}(\text{span}(\Lambda \cap \overline{\bf{B}}(0,r))) \geq i\}</script><p>其中，$\overline{\bf{B}}(0,r)=\{ x\in \mathbb{R}^m | ||x|| \le r\}$是以0为圆心，半径为$r$的球。</p>
 <p>在几何中可以理解为：第 $i$ 个逐次最小长度 $\lambda_i$ 为以原点为球心，包含 $i$ 个线性无关格向量的最小球半径。显然，$\lambda_i(\Lambda)$ 为格 $\Lambda$ 的最短非零向量长度。一些简单的性质如下：</p>
 <ol>
+<li>对任意格：$\lambda_1(\mathcal{L}(B)) \le \lambda_2(\mathcal{L}(B)) \le \cdots \le $\lambda_n(\mathcal{L}(B))$, $\lambda_2(\mathcal{L}(B))是与最短非0格向量线性无关的最短格向量长度</li>
 <li>$\lambda_1(\mathcal{L}(B)) \geq \underset{i=1,\dots,n}{\text{min}} ||\tilde{b_i}|| &gt; 0$ </li>
 <li>$\forall 1 \le i \le n , \exists v_i \in \Lambda, ||v_i||=\lambda_i(\Lambda)$</li>
 <li>$\text{vol}(B(0,r)) \geq (\frac{2r}{\sqrt{n}})^n$</li>
 </ol>
+<p><strong>q-ary格</strong>: 格$\Lambda$称为 $q-ary$ 格，如果它满足</p>
+<script type="math/tex; mode=display">
+q\mathbb{Z}^n \subseteq \Lambda \subseteq \mathbb{Z}^n</script><ul>
+<li>$\mathbb{Z}^n$是一个整数格</li>
+<li>$q\mathbb{Z}^n$ 在模$q$意义下是周期性的</li>
+</ul>
 <h4 id="基础定理"><a href="#基础定理" class="headerlink" title="基础定理"></a>基础定理</h4><p><strong>如何判断一组基是格基？</strong><br>令$\Lambda$是一个秩为$n$的格，令$b_1,b_2,\dots,b_n \in \Lambda$是$n$个线性无关的格向量。则$b_1,b_2,\dots,b_n$是格$\Lambda$的一组基 $\leftrightarrow \mathcal{P}(b_1,b_2,\dots,b_n) \cap \Lambda = \{ 0\}$. </p>
 <p><strong>如何判断两组基生成的格是相同的？</strong></p>
 <ul>
@@ -293,9 +300,9 @@
 <li>两个基$B_1, B_2 \in \mathbb{R}^{m \times n}$是相等的 $\leftrightarrow $ 一个基可以通过初等变换得到另一个基</li>
 </ul>
 <p><strong>如何预测格中最短向量的长度？</strong><br>根据MINKOWSKI第一定理，$\lambda_1(\Lambda) \le \sqrt{n}(\text{det}\Lambda)^{1/n}$</p>
-<p><strong>MINKOWSKI第一定理</strong>: 对任意秩为$n$的满秩格$\Lambda$，</p>
+<p><strong>MINKOWSKI第二定理</strong>: 对任意秩为$n$的满秩格$\Lambda$，</p>
 <script type="math/tex; mode=display">
-(\prod_{i=1}^n\lambda_i(\Lambda))^{1/n} \le \sqrt{n}(\text{det}\Lambda)^{1/n}</script><h3 id="LLL算法"><a href="#LLL算法" class="headerlink" title="LLL算法"></a>LLL算法</h3><h4 id="LLL约化基"><a href="#LLL约化基" class="headerlink" title="LLL约化基"></a>LLL约化基</h4><p><strong>LLL约化基</strong>: 一个基$B={b_1, \dots, b_n}\in \mathbb{R}^n$是一个$\delta-$LLL约化基,若满足：</p>
+\lambda_1(\Lambda) \leq (\prod_{i=1}^n\lambda_i(\Lambda))^{1/n} \le \sqrt{n}(\text{det}\Lambda)^{1/n}</script><h3 id="LLL算法"><a href="#LLL算法" class="headerlink" title="LLL算法"></a>LLL算法</h3><h4 id="LLL约化基"><a href="#LLL约化基" class="headerlink" title="LLL约化基"></a>LLL约化基</h4><p><strong>LLL约化基</strong>: 一个基$B={b_1, \dots, b_n}\in \mathbb{R}^n$是一个$\delta-$LLL约化基,若满足：</p>
 <ol>
 <li>$\forall 1 \leq i \leq n, j&lt;i. |\mu_{i,j} \leq \frac{1}{2}|$</li>
 <li>$\forall 1 \leq i \leq n. \delta || \tilde{b_i} ||^2 \leq || \mu_{i+1}\tilde{b_i} + \tilde{b_{i+1}} ||^2$</li>
@@ -330,7 +337,16 @@
 \lambda_1(\mathcal{L}(B)) \geq \underset{i=1,\dots,n}{\text{min}} ||\tilde{b_i}|| > 0</script></li>
 <li>LLL约化算法限制了新旧向量的长度的比值，不让它减的太快，这样的基向量是更容易找到短向量的。</li>
 </ol>
+<h3 id="特殊形式的CVP"><a href="#特殊形式的CVP" class="headerlink" title="特殊形式的CVP"></a>特殊形式的CVP</h3><p>给定一个格 $\Lambda$，一个向量 $\vec{t}$ 和一个实数 $d$，找到一个格向量 $B\vec{x}(\vec{x} \in \mathbb{Z}^k)$ 满足</p>
+<script type="math/tex; mode=display">
+||B\vec{x}-\vec{t} || \leq d</script><h4 id="有界距离解码问题（BDD）"><a href="#有界距离解码问题（BDD）" class="headerlink" title="有界距离解码问题（BDD）"></a>有界距离解码问题（BDD）</h4><p>如果 $d &lt; \frac{\lambda_1(\Lambda)}{2}$，该问题称之为BDD，此时至多存在一个格点（格向量）满足条件。该解恰好是 $\vec{t}$ 的最近向量</p>
+<h4 id="绝对距离解码问题（ADD）"><a href="#绝对距离解码问题（ADD）" class="headerlink" title="绝对距离解码问题（ADD）"></a>绝对距离解码问题（ADD）</h4><p>如果$d＞\mu(\Lambda)$，该问题称为ADD，此时该问题总有解。该解不一定是 $\vec{t}$ 的最近向量</p>
+<h4 id="困难问题的难度刻画"><a href="#困难问题的难度刻画" class="headerlink" title="困难问题的难度刻画"></a>困难问题的难度刻画</h4><div align="center">
+<img src="pic1.png" width="40%">
+</div>
 
+
+<h3 id="LWE"><a href="#LWE" class="headerlink" title="LWE"></a>LWE</h3>
         </div>
 
         
