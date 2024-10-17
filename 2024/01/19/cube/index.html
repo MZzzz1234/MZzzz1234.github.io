@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="ZhangMin">
+
+
+
+
+
+<title>Cube attack related | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Cube attack related</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 19, 2024&nbsp;&nbsp;11:01:56</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/cube/">cube</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="流密码的cube攻击简介"><a href="#流密码的cube攻击简介" class="headerlink" title="流密码的cube攻击简介"></a>流密码的cube攻击简介</h2><p>2017 年美密会上由Todo 提出基于可分性的立方攻击，受益于可分性和MILP 工具，攻击者可以使用高维数的cube集合，使得立方攻击是Trivium型密码最有效的攻击方法。</p>
+<h3 id="发展"><a href="#发展" class="headerlink" title="发展"></a>发展</h3><ul>
+<li>2020.12 Kai Hu, etc. ASIACRYPT 2020<br>An Algebraic Formulation of the Division Property: Revisiting Degree Evaluations, Cube Attacks, and Key-Independent Sums<br>提出单项式预测技术，改进了Trivium-840，841，842轮的理论攻击</li>
+<li>2021.12 ChenDong Ye, Tian Tian. ASIACRYPT 2021<br>A Practical Key-Recovery Attack on 805-Round Trivium<br>提出构建线性超多项式的cube方法，实现了复杂度为2^41.4的Trivium-805轮实际攻击</li>
+<li>2021.12 Yao Sun. FSE2021<br>Automatic Search of Cubes for Attacking Stream Ciphers<br>提出启发式算法搜索超多项式中包含平衡比特的cube，首次实现了Trivium-843轮的理论攻击和Trivium-806、Trivium-808轮的实际攻击</li>
+<li>2022.3 Stéphanie Delaune, etc. SAC2021<br>A Simpler Model for Recovering Superpoly on Trivium<br>构建有向图模型恢复超多项式，通过剪枝实现消去偶数单项式路径，恢复效率较胡凯模型提高30～60倍</li>
+<li><p>2023.1 Cheng Che, Tian Tian. Inscrypt 2022<br>An Experimentally Verified Attack on 820-Round Trivium<br>搜索近似带平衡bit的超多项式，给出了Trivium-815和Trivium-820时间复杂度分别为2^47.32  和2^53.17  的攻击</p>
+</li>
+<li><p>2023.4 Junjie Cheng, Kexin Qiao. CT-RSA2023<br>Improved Graph-Based Model for Recovering Superpoly on Trivium<br>在图模型基础上找到了剪枝效率更高的加约束方法，以及提出一种寻找更多偶数路径的算法</p>
+</li>
+<li><p>2023.8 Hao Lei, etc. ePrint2023<br>More Balanced Polynomials: Cube Attacks on 810- and 825-Round Trivium with Practical Complexities<br>对于Trivium-810，Trivium-825，提出启发式构建母cube算法实现了复杂度为2^44.17  和2^53.17  的攻击</p>
+</li>
+</ul>
+<p>目前，cube实际攻击的进展方面，胡凯等人在2023年亚密会实现了Trivium-825；同样在2023年亚密会，吴保峰等人以一定成功概率对轮数有进一步进展。</p>
+<h3 id="关键进展"><a href="#关键进展" class="headerlink" title="关键进展"></a>关键进展</h3><p><strong>难点</strong> — 寻找好的cube</p>
+<ol>
+<li>候选cube的数量非常多，大多数cube都不是“好”的。</li>
+<li>难以评估一个cube是否“好”</li>
+</ol>
+<p><strong>An algebraic formulation of the division property: Revisiting degree evaluations, cube attacks, and key-independent sums.</strong><br>胡凯 ASIACRYPT 2020</p>
+<ul>
+<li>提出单项式预测模型，从纯代数角度解释可分性</li>
+<li>计算单项式路径个数的奇偶，确定单项式是否出现在密码输出的代数表达式中，恢复超多项式<br>MILP模型：模型约束条件—-单项式指数间的传播关系；单项式的指数—-变量</li>
+</ul>
+<p><strong>Automatic search of cubes for attacking stream ciphers.</strong><br>孙瑶 FSE2022</p>
+<ul>
+<li>首次实现了Trivium-843轮的理论攻击，Trivium-806、Trivium-808轮的实际攻击</li>
+<li>基于实验观察可以及时排除不好的cube：在整个系统中单项式路径为奇数约等于在子系统中单项式路径为奇数</li>
+<li>提出启发式算法搜索超多项式中包含平衡比特的cube</li>
+</ul>
+<ol>
+<li>准备一些候选cube，选择一个变量 k</li>
+<li>将整个求解系统分为几个子系统</li>
+<li>依次计算每个子系统的解</li>
+<li>如果包含变量 k 的非线性单项式在子系统中出现奇数次，则移除该cube</li>
+<li>如果单项式k出现在一些子系统中，记录出现次数</li>
+<li>计算结束后，如果存在出现奇数次的cube，则该cube是好的</li>
+</ol>
+<p><strong>A Simpler Model for Recovering Superpoly on Trivium</strong><br>Stéphanie Delaune, Patrick Derbez, Arthur Gontier, Charles Prud’Homme SAC 2021</p>
+<ul>
+<li>使用有向图的结构建立约束来追踪单项式是否出现：<br>图的节点是变量，图的边代表变量的关系</li>
+<li>模型规模降低，使用剪枝来减少求解中单项式路径的数量，减轻了枚举负担</li>
+</ul>
+<p>（这篇文章改进数据结构，实现了非常快的搜索，价值比较大，值得具体研究）</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>到目前为止，Trivium 可以抵抗已有的所有攻击方法，2023年大部分研究人员开始关注相关cube攻击的方法。但是我认为实际上意义不大，因为不可避免的带来的概率问题是最致命的，某些密钥一定概率可攻击，且对密钥空间的估计等过程中存在问题，离实际应用还有一些差距。</p>
+<hr>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#122;&#x68;&#x61;&#110;&#x67;&#x6d;&#105;&#110;&#50;&#x30;&#x32;&#50;&#64;&#x69;&#x69;&#x65;&#x2e;&#97;&#x63;&#x2e;&#x63;&#110;">&#122;&#x68;&#x61;&#110;&#x67;&#x6d;&#105;&#110;&#50;&#x30;&#x32;&#50;&#64;&#x69;&#x69;&#x65;&#x2e;&#97;&#x63;&#x2e;&#x63;&#110;</a>.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/cubeattack/"># cubeattack</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/01/19/haoyonglin2023/">Key Filtering in Cube Attacks from the  Implementation Aspect</a>
+            
+            
+            <a class="next" rel="next" href="/2024/01/19/ct2023/">A New Correlation Cube Attack Based on Division Property</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min
+		 <!-- visitor -->
+        	  
+ 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+		
+	</span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

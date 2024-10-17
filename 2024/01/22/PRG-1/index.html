@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="ZhangMin">
+
+
+
+
+
+<title>PRG的安全性与流密码的语义安全性 | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">PRG的安全性与流密码的语义安全性</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 22, 2024&nbsp;&nbsp;23:00:52</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/PRG/">PRG</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="PRG-Pseudo-random-generators-的安全性"><a href="#PRG-Pseudo-random-generators-的安全性" class="headerlink" title="PRG(Pseudo-random generators)的安全性"></a>PRG(Pseudo-random generators)的安全性</h2><p>伪随机数生成器G是在(S,R)上的一个高效的确定性算法<br>它以一个密钥s作为输入，输出一个比特串r，密钥空间和输出空间分别为</p>
+<script type="math/tex; mode=display">
+S={\{0,1\}}^l,R={\{0,1\}}^L</script><h3 id="攻击游戏1"><a href="#攻击游戏1" class="headerlink" title="攻击游戏1"></a><font color="red"><strong>攻击游戏1</strong></font></h3><p>一个在(𝑆,𝑅)上的PRG G，有一个挑战者和一个敌手𝒜，设计了实验0和实验1<br><img src="WechatIMG1831.jpg" alt="game1"></p>
+<script type="math/tex; mode=display">𝑊_0:敌手在实验0中输出1，𝑊_1: 敌手在实验1中输出1</script><ul>
+<li>在G上敌手𝒜的优势:<script type="math/tex">PRGadv[𝒜,𝐺]=|𝑃(𝑊_0 )−𝑃(𝑊_1 )|</script></li>
+<li>敌手无法分辨收到的来源</li>
+</ul>
+<p>PRG的安全性是通过攻击游戏来定义的：</p>
+<blockquote>
+<p><strong>定义（安全的PRG）：</strong><br>如果PRG G对于所有有效敌手𝒜的PRGadv[𝒜,𝐺]是可忽略的，则G是安全的</p>
+</blockquote>
+<h3 id="攻击游戏1（比特猜测）"><a href="#攻击游戏1（比特猜测）" class="headerlink" title="攻击游戏1（比特猜测）"></a><font color="red"><strong>攻击游戏1（比特猜测）</strong></font></h3><div align="center">
+<img src="WechatIMG1833.jpg" width="85%">
+</div>
+
+<ul>
+<li>挑战者随机选择$𝑏∈{0,1}$，运行实验$𝑏$</li>
+<li>敌手的目标是猜测$𝑏$，成功的概率$&gt;\frac{1}{2}$</li>
+<li>敌手𝒜优势：<script type="math/tex; mode=display">
+PRGadv^∗ [\mathcal{A},𝐺]=|𝑃(𝑏=𝑏^′ )−\frac{1}{2}|=|\frac{1}{2} \{𝑃(𝑏^′=0│𝑏=0)+𝑃(𝑏^′=1│𝑏=1)\}−\frac{1}{2}|\\
+=\frac{1}{2}|𝑃(𝑊_0 )−𝑃(𝑊_1)|=\frac{1}{2} PRGadv[\mathcal{A},𝐺]</script></li>
+</ul>
+<p>比特猜测是将<strong>两个不同的实验</strong>   $\Longrightarrow$   <strong>一个单独的实验</strong>，可以看到两个版本的安全性定义是一致的</p>
+<h2 id="流密码的语义安全性"><a href="#流密码的语义安全性" class="headerlink" title="流密码的语义安全性"></a>流密码的语义安全性</h2><p><strong>密码方案具备语义安全性$\Longleftrightarrow$无法分辨$𝑚_0,𝑚_1$</strong></p>
+<blockquote>
+<p><strong>定理：</strong> 如果G是一个安全的PRG，则由G构造的流密码$\varepsilon$是语义安全的。即：在给定$\varepsilon$的敌手$\mathcal{A}$的情况下存在对于G的敌手$\mathcal{B}$满足</p>
+<script type="math/tex; mode=display">SSadv^*[\mathcal{A},\varepsilon]=PRGadv[\mathcal{B},G]</script></blockquote>
+<h3 id="证明思路"><a href="#证明思路" class="headerlink" title="证明思路"></a><strong>证明思路</strong></h3><ul>
+<li>用一个真正随机的字符串替换PRG的输出，不会对$\mathcal{A}$的优势造成太大的影响，替换后$\mathcal{A}$的优势依然为零。</li>
+<li>通过调用，联系敌手$\mathcal{A}$和敌手$\mathcal{B}$</li>
+</ul>
+<h3 id="证明"><a href="#证明" class="headerlink" title="证明:"></a><strong>证明:</strong></h3><p>敌手$\mathcal{A}$攻击$\varepsilon$<br>敌手$\mathcal{B}$攻击$G$</p>
+<p><strong><font color="red">游戏0:</font> </strong> </p>
+<ul>
+<li>敌手$\mathcal{A}$给挑战者两个明文$𝑚_0,𝑚_1$，</li>
+<li>挑战者选择一个随机比特$𝑏$,通过PRG生成的密钥加密$𝑚_𝑏$，</li>
+<li>将密文结果 $𝑐$ 返回给$\mathcal{A}$</li>
+<li>$𝑊_0: 𝑏=\hat{b}$，游戏0攻击成功</li>
+</ul>
+<script type="math/tex; mode=display">
+SSadv^*[\mathcal{A},\varepsilon]=|Pr[W_0]-\frac{1}{2}|</script><div align="center">
+<img src="pic1.png" width="85%">
+</div>
+
+<p> <strong><font color="red">游戏1:</font> </strong> </p>
+<p>与游戏0唯一的区别：用<strong>真正随机的字符串</strong>替换PRG的输出</p>
+<ul>
+<li>$𝑊_1: 𝑏=\hat{b}$，显然有：<script type="math/tex; mode=display">
+Pr[W_1]=\frac{1}{2} \\
+SSadv^*[\mathcal{A},\varepsilon]=|Pr[W_0]-Pr[W_1]|</script></li>
+</ul>
+<div align="center">
+<img src="pic2.png" width="85%">
+</div>
+
+<p><strong><font color="red">敌手$\mathcal{B}$攻击PRG:</font></strong><br>($\mathcal{B}$调用$\mathcal{A}$：建立两个敌手优势之间的关系)</p>
+<ul>
+<li>$\mathcal{B}$ 收到 $𝐿−𝑏𝑖𝑡$ 的随机的字符串 $r$ （不知道生成方式），并$\mathcal{B}$ 随机选择一个比特 $ 𝑏$ ，用 $r$ 加密 $𝑚_𝑏$</li>
+<li>密文结果 $𝑐$ 返回给 $\mathcal{A}$，$\mathcal{A}$输出一个比特 $\hat{b}$</li>
+<li>$\mathcal{B}$输出 $\delta(\hat{b},𝑏)$</li>
+</ul>
+<script type="math/tex; mode=display">\delta(\hat{b},𝑏):=\left\{
+\begin{array}{cl}
+1 & if & x=y\\
+0 & if & x\neq y
+\end{array}
+\right.</script><div align="center">
+<img src="WechatIMG1847.jpg" width="85%">
+</div>
+
+<p>若只看挑战者和$\mathcal{B}$两方，可以看作攻击游戏1</p>
+<ul>
+<li>$𝑝_0:$实验0中输出1的概率，</li>
+<li>$𝑝_1:$实验1中输出1的概率，</li>
+</ul>
+<p>显然$\mathcal{B}$的优势为：</p>
+<script type="math/tex; mode=display">
+PRGadv[\mathcal{B},G]=|p_0-p_1|\\
+p_0 = Pr[W_0],p_1 = Pr[W_1]</script><p>因此：</p>
+<script type="math/tex; mode=display">SSadv^*[\mathcal{A},\varepsilon]=PRGadv[\mathcal{B},G]</script><p><strong><font color="red">得证</font></strong></p>
+<hr>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#122;&#x68;&#97;&#110;&#x67;&#x6d;&#x69;&#110;&#x32;&#x30;&#50;&#50;&#x40;&#105;&#105;&#101;&#x2e;&#x61;&#99;&#46;&#99;&#x6e;">&#122;&#x68;&#97;&#110;&#x67;&#x6d;&#x69;&#110;&#x32;&#x30;&#50;&#50;&#x40;&#105;&#105;&#101;&#x2e;&#x61;&#99;&#46;&#99;&#x6e;</a>.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/PRG/"># PRG</a>
+                    
+                        <a href="/tags/streamcipher/"># streamcipher</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/01/24/hukai2020/">An Algebraic Formulation of the Division Property</a>
+            
+            
+            <a class="next" rel="next" href="/2024/01/19/haoyonglin2023/">Key Filtering in Cube Attacks from the  Implementation Aspect</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min
+		 <!-- visitor -->
+        	  
+ 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+		
+	</span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

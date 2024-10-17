@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="ZhangMin">
+
+
+
+
+
+<title>A Simpler Model for Recovering Superpoly on Trivium | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">A Simpler Model for Recovering Superpoly on Trivium</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 31, 2024&nbsp;&nbsp;22:22:30</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/cube/">cube</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="A-Simpler-Model-for-Recovering-Superpoly-on-Trivium"><a href="#A-Simpler-Model-for-Recovering-Superpoly-on-Trivium" class="headerlink" title="A Simpler Model for Recovering Superpoly on Trivium"></a>A Simpler Model for Recovering Superpoly on Trivium</h2><p>Trivium中恢复超多项式的一个更简单的模型</p>
+<blockquote>
+<p>虽然题目中提到了Trivium，但该论文中提出的方法也可以用于其他的流密码中</p>
+</blockquote>
+<p>Stéphanie Delaune, Patrick Derbez等人发在SAC2021：<a target="_blank" rel="noopener" href="https://eprint.iacr.org/2021/1191.pdf">原文</a></p>
+<h3 id="研究意义"><a href="#研究意义" class="headerlink" title="研究意义"></a>研究意义</h3><ul>
+<li><p>cube攻击是一种有效的密码分析方法，恢复超多项式是该攻击中的一个关键步骤。</p>
+</li>
+<li><p>对于一个密码问题，确定最佳的MILP建模方法是困难的</p>
+</li>
+</ul>
+<h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><ul>
+<li>大部分情况下实验表明，模型越小求解速度越快</li>
+<li>作者在恢复超多项式的建模方面，关注于可以减少约束数量的建模方法。</li>
+<li>基于Trivium的自身特点，找到了<strong>有向图</strong>的结构来建模</li>
+</ul>
+<h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><ul>
+<li><p>涉及多项式建模为一个有向图，使用<strong>更少的约束和变量</strong>。</p>
+</li>
+<li><p>提出了两个策略来加速模型求解</p>
+<ol>
+<li>通过寻找“加倍路径”来去除部分偶数单项式路径，</li>
+<li>设置Gurobi的求解选项和使用次数估计来剪枝。</li>
+</ol>
+</li>
+<li><p>可以去除50%～80%的偶数单项式路径</p>
+</li>
+<li>总体求解效率相比单项式预测模型有30～60倍提升。</li>
+</ul>
+<p>下图中为Trivium的结构，有288个内部状态s，分布在3个寄存器ABC上 。每一轮产生3个新比特，替换掉每个寄存器的最后面的比特，然后288个状态变量的值全部循环右移1位。最终产生的3个新比特，放在寄存器的第一个位置， 其他位都是循环右移。</p>
+<div align="center">
+<img src="pic2.png" width="100%">
+</div>
+
+<p>下图是完整描述的Trivium生成过程，包含了所有的转换关系</p>
+<div align="center">
+<img src="pic1.png" width="80%">
+</div>
+
+<p>根据刚才的转换的表示，这里给出一条路径的例子，顶部节点是606轮的点C，由该点可以追溯到523轮和524轮的点B，最终可以发现，这个图其实是一条单项式路径，表示的是K16这个单项式</p>
+<blockquote>
+<p>Trivium-672：$ 𝒛←𝑠_{66}+𝑠_{93}+𝑠_{162}+𝑠_{177}+𝒔_{𝟐𝟒𝟑}+𝑠_{288}$<br>子结点可以为C606的S177</p>
+</blockquote>
+<div align="center">
+<img src="pic3.png" width="100%">
+</div>
+
+<h2 id="模型高效的原因"><a href="#模型高效的原因" class="headerlink" title="模型高效的原因"></a>模型高效的原因</h2><p>相比单项式预测模型，图模型采用了一种类似于压缩表示的形式，变量是边（状态的传播关系），所需约束个数较少且可以快速得到多个解。</p>
+<h2 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h2><p>这篇论文提出的建模方法相比前人的方法有较大改进，用了新的数据结构和更少的约束和变量，并且去除偶数单项式路径更容易，对于加速模型求解具有较大的参考价值。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>cube攻击是一种有效的密码分析方法，恢复超多项式是该攻击中的一个关键步骤。现有恢复超多项式的模型，在求解效率方面还有改进的空间。大部分情况下实验表明，模型越小求解速度就越快。因此作者在恢复超多项式的建模方面，关注于可以减少约束数量的建模方法。基于Trivium的自身结构，作者将涉及的多项式建模为一个有向图，使用了更少的约束和变量。同时作者提出了两个策略来加速本文模型求解，一是通过寻找“加倍路径”来去除部分偶数单项式路径，二是设置Gurobi的求解选项和使用次数估计来剪枝。最终作者提出的模型可以去除50%～80%的偶数单项式路径，相比单项式预测模型，总体求解效率有30～60倍提升。本文提出的建模方法相比前人的方法有较大改进，构造的模型更简单，去除偶数单项式路径更容易，对于加速模型求解具有较大的参考价值。</p>
+<hr>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x7a;&#x68;&#x61;&#x6e;&#103;&#109;&#x69;&#x6e;&#50;&#x30;&#50;&#50;&#x40;&#x69;&#105;&#101;&#x2e;&#x61;&#x63;&#x2e;&#99;&#x6e;">&#x7a;&#x68;&#x61;&#x6e;&#103;&#109;&#x69;&#x6e;&#50;&#x30;&#50;&#50;&#x40;&#x69;&#105;&#101;&#x2e;&#x61;&#x63;&#x2e;&#99;&#x6e;</a>.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/cubeattack/"># cubeattack</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/02/01/0131-1/">Graph model vs. Division model</a>
+            
+            
+            <a class="next" rel="next" href="/2024/01/25/degree-eval/">NFSR代数次数估计</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min
+		 <!-- visitor -->
+        	  
+ 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+		
+	</span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

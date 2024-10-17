@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="ZhangMin">
+
+
+
+
+
+<title>Massive Superpoly Recovery with Nested Monomial Predictions | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Massive Superpoly Recovery with Nested Monomial Predictions</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 29, 2024&nbsp;&nbsp;16:01:43</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/cube/">cube</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Massive-Superpoly-Recovery-with-Nested-Monomial-Predictions"><a href="#Massive-Superpoly-Recovery-with-Nested-Monomial-Predictions" class="headerlink" title="Massive Superpoly Recovery with Nested Monomial Predictions"></a>Massive Superpoly Recovery with Nested Monomial Predictions</h2><p>Hu Kai等人发表在亚密2021：<a target="_blank" rel="noopener" href="https://eprint.iacr.org/2021/1225.pdf">原文</a></p>
+<h3 id="研究意义"><a href="#研究意义" class="headerlink" title="研究意义"></a>研究意义</h3><p>恢复超多项式是cube攻击中关键的一步；如果对于大规模的超多项式，可以在可接受时间内准确恢复并且能够用于密钥恢复攻击中，那么将可以改进cube攻击的结果，提高攻击轮数</p>
+<h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><p>在恢复超多项式中，随着密码的轮数升高，输出比特的代数标准型变得越来越复杂，现在的恢复超多项式的方法在高轮数的时候计算所需的时间会非常久。<br>因为<strong>分治和并行策略</strong>明显可能加速计算，因此作者基于这两个策略提出了一个新框架</p>
+<h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><ul>
+<li><p>一种新的框架：恢复大规模超多项式<br>  <div align="center">
+  <img src="pic2.png" width="70%">
+  </div><br>$f$是$r$轮的迭代函数，这里用了一个分治的思想，选择一个参数$r_0$，让$f$在$r-r_0$轮展开，得到一个$r-r_0$轮的单项式的集合，对于这个集合中的每一个单项式列模型去求解一部分超多项式。那么可能有3种情况，没有可行解，去掉，短时间求得所有可行解，记录下来，短时间内无法完整求解，将这个集合继续选择一个参数$r_1$，在更低轮数继续分解直到S集合变成空集，将所有计算得到的多项式加起来，就可以得到超多项式。</p>
+</li>
+<li><p>一种密钥恢复方法：基于大规模超多项式</p>
+<blockquote>
+<p>不交集$D$：集合中任意两个变量不会同时出现在一个单项式中</p>
+</blockquote>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+J={k_0,k_1,\cdots,k_{n-1}}/D \\
+p(k_0,k_1,\cdots,k_{n-1})=\bigg(\bigoplus_{0 \leq i \leq m} k_i \cdot p_i(J) \bigg)\bigoplus p_m(J)</script><p>通过遍历$J$中所有变量的值，得到$p_0,p_1,\cdots,p_m$的真值表，通过查表可以得到$p_i$的值，那么这个超多项式就可以转化成一个线性表达式，用于密钥恢复攻击。<br>这个方法的insight实际上就是作者发现：虽然超多项式中涉及所有变量，但是单项式的个数是远低于随机多项式的，作者认为可能可以通过这种方式得到计算复杂度优于穷搜的线性方程。</p>
+<ul>
+<li><p>作者对于Trivium,Grain128a,Kreyvium搜出了新的cube以及改进了密钥恢复攻击的结果</p>
+  <div align="center">
+  <img src="pic1.png" width="100%">
+  </div>
+
+
+</li>
+</ul>
+<h3 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h3><ol>
+<li>这篇论文虽然发在亚密，但是整篇文章很水，几乎没有任何创新。作者提出的新框架非常的trival，传统的加速方法</li>
+<li>即使提出了密钥恢复策略，但是占用内存能几乎达到2^70以上。据我所知目前2^40以上就存不下了，这个方法也非常扯</li>
+<li>21年的论文，后续已有一些改进。且在同期工作中，Sun发表的FSE2021中的程序明显快于该版程序。</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在cube攻击中，如果我们可以恢复项数非常多的超多项式，并利用大规模超多项式进行攻击，那么将有可能改进攻击的结果。我们使用现有的方法恢复大规模超多项式时，计算所需的时间比较久。因此作者通过嵌套使用单项式预测方法，基于分治策略和并行技术提出了一种恢复大规模超多项式的新框架，并将该框架应用到了Trivium（843轮、844轮和845轮）、Grain-128AEAD（191轮）和Kreyvium（894轮）的超多项式恢复过程中。同时作者针对包含了所有秘密变量的超多项式，提出了不交集方法来进行密钥恢复攻击。我认为即使作者提出了一种将大规模超多项式用于密钥恢复攻击的方法，但攻击的总体复杂度还是比较高的，而且不交集方法占用的内存也比较大。综合来看，作者提出的新方法可能没有穷举攻击的方法好。</p>
+<hr>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#122;&#104;&#x61;&#x6e;&#x67;&#x6d;&#105;&#110;&#50;&#48;&#x32;&#50;&#x40;&#105;&#105;&#x65;&#x2e;&#97;&#x63;&#46;&#99;&#x6e;">&#122;&#104;&#x61;&#x6e;&#x67;&#x6d;&#105;&#110;&#50;&#48;&#x32;&#50;&#x40;&#105;&#105;&#x65;&#x2e;&#97;&#x63;&#46;&#99;&#x6e;</a>.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Superpoly-Recovery/"># Superpoly Recovery</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/09/19/lattice0919/">格密码基础-LLL和BKZ</a>
+            
+            
+            <a class="next" rel="next" href="/2024/03/23/0323/">A New Method for Searching Cubes and Its Application to 815-Round Trivium</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min
+		 <!-- visitor -->
+        	  
+ 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+		
+	</span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

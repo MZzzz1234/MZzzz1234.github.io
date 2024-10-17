@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="ZhangMin">
+
+
+
+
+
+<title>格密码基础-LLL和BKZ | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">格密码基础-LLL和BKZ</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 19, 2024&nbsp;&nbsp;0:26:40</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/lattice/">lattice</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="格"><a href="#格" class="headerlink" title="格"></a>格</h3><h4 id="基础定义"><a href="#基础定义" class="headerlink" title="基础定义"></a>基础定义</h4><p><strong>LATTICE</strong>： 给定n个线性无关的向量$b_1, \dots, b_n \in \mathbb{R}^m$，由他们生成的格是</p>
+<script type="math/tex; mode=display">
+\mathcal{L}(b_1,b_2,\dots,b_n)=\{\sum x_ib_i | x_i \in \mathbb{Z}\}.</script><p>$b_1, \dots, b_n$是格中的一组基。</p>
+<p><strong>SPAN</strong>：格$\mathcal{L}(B)$的span是由其格向量张成的线性空间。</p>
+<script type="math/tex; mode=display">
+\text{span}(\mathcal{L}(B))=\text{span}(B)=\{By | y \in \mathbb{R}^n\}</script><p><strong>FUNDAMENTAL PARALLELEPIPED</strong>:对于任意的格基$B$,</p>
+<script type="math/tex; mode=display">
+\mathcal{P}(B)=\{Bx | x \in \mathbb{R}^n, \forall i: 0 \le x_i \le 1\}.</script><p><strong>幺模矩阵</strong>：对于矩阵$U \in \mathbb{Z}^{n \times n}$, 满足 $\text{det}U=\pm 1$</p>
+<p><strong>DETERMINANT</strong>：令$\Lambda=\mathcal{L}(B)$是一个秩为$n$的格</p>
+<script type="math/tex; mode=display">
+\text{det}(\Lambda) := \sqrt{\text{det}(B^TB)} (\text{或者}|\text{det}(B)|)</script><p>对于格 $\Lambda$ 来说，不同格基矩阵 $B$ 对应的基础区域是不同的，但基础区域对应多面体的体积是个定值。$\text{det}(\Lambda)$ 是格 $\Lambda$ 最为重要的不变量之一。</p>
+<p><strong>Gram-Schmit正交化</strong>: 给定一组线性无关的向量$b_1, \dots, b_n \in \mathbb{R}^n$, $b_1, \dots, b_n$的Gram-Schmit正交化是： </p>
+<script type="math/tex; mode=display">
+\tilde{b_i}=b_i-\sum_{j=1}^{i-1}\mu_{i,j}\tilde{b_j}, \\  \mu_{i,j}=\frac{\langle b_i, \tilde{b_j} \rangle}{\langle \tilde{b_j},\tilde{b_j} \rangle}</script><p>$\tilde{b_i}$ 是与 $\tilde{b_1}, \dots, \tilde{b_{i-1}}$ 正交的 $b_i$ 的分量。Gram-Schmit正交化有几个简单的性质：</p>
+<ol>
+<li>$\forall i \neq j, \langle \tilde{b_i},\tilde{b_j}\rangle = 0$</li>
+<li>$\forall 1 \le i \le n, \text{span}(b_1,b_2, \dots,b_i) = \text{span}(\tilde{b_1},\dots, \tilde{b_i})$</li>
+<li>$\tilde{b_1},\dots, \tilde{b_i}$不一定是格的基。</li>
+<li>$b_1,b_2, \dots,b_i$ 是一个序列而不是集合</li>
+</ol>
+<p><strong>successive minimum</strong>: 令$\Lambda=\mathcal{L}(B)$是一个秩为$n$的格,$\forall i \in \{ 1,\dots,n\}$，逐次最小长度$\lambda_i(\Lambda)$:</p>
+<script type="math/tex; mode=display">
+\lambda_i(\Lambda)=\text{inf} \{ r | \text{dim}(\text{span}(\Lambda \cap \overline{\bf{B}}(0,r))) \geq i\}</script><p>其中，$\overline{\bf{B}}(0,r)=\{ x\in \mathbb{R}^m | ||x|| \le r\}$是以0为圆心，半径为$r$的球。</p>
+<p>在几何中可以理解为：第 $i$ 个逐次最小长度 $\lambda_i$ 为以原点为球心，包含 $i$ 个线性无关格向量的最小球半径。显然，$\lambda_i(\Lambda)$ 为格 $\Lambda$ 的最短非零向量长度。一些简单的性质如下：</p>
+<ol>
+<li>$\lambda_1(\mathcal{L}(B)) \geq \underset{i=1,\dots,n}{\text{min}} ||\tilde{b_i}|| &gt; 0$ </li>
+<li>$\forall 1 \le i \le n , \exists v_i \in \Lambda, ||v_i||=\lambda_i(\Lambda)$</li>
+<li>$\text{vol}(B(0,r)) \geq (\frac{2r}{\sqrt{n}})^n$</li>
+</ol>
+<h4 id="基础定理"><a href="#基础定理" class="headerlink" title="基础定理"></a>基础定理</h4><p><strong>如何判断一组基是格基？</strong><br>令$\Lambda$是一个秩为$n$的格，令$b_1,b_2,\dots,b_n \in \Lambda$是$n$个线性无关的格向量。则$b_1,b_2,\dots,b_n$是格$\Lambda$的一组基 $\leftrightarrow \mathcal{P}(b_1,b_2,\dots,b_n) \cap \Lambda = \{ 0\}$. </p>
+<p><strong>如何判断两组基生成的格是相同的？</strong></p>
+<ul>
+<li>两个基$B_1, B_2 \in \mathbb{R}^{m \times n}$是相等的 $\leftrightarrow B_2 = B_1U$</li>
+<li>两个基$B_1, B_2 \in \mathbb{R}^{m \times n}$是相等的 $\leftrightarrow $ 一个基可以通过初等变换得到另一个基</li>
+</ul>
+<p><strong>如何预测格中最短向量的长度？</strong><br>根据MINKOWSKI第一定理，$\lambda_1(\Lambda) \le \sqrt{n}(\text{det}\Lambda)^{1/n}$</p>
+<p><strong>MINKOWSKI第一定理</strong>: 对任意秩为$n$的满秩格$\Lambda$，</p>
+<script type="math/tex; mode=display">
+(\prod_{i=1}^n\lambda_i(\Lambda))^{1/n} \le \sqrt{n}(\text{det}\Lambda)^{1/n}</script><h3 id="LLL算法"><a href="#LLL算法" class="headerlink" title="LLL算法"></a>LLL算法</h3><h4 id="LLL约化基"><a href="#LLL约化基" class="headerlink" title="LLL约化基"></a>LLL约化基</h4><p><strong>LLL约化基</strong>: 一个基$B={b_1, \dots, b_n}\in \mathbb{R}^n$是一个$\delta-$LLL约化基,若满足：</p>
+<ol>
+<li>$\forall 1 \leq i \leq n, j&lt;i. |\mu_{i,j} \leq \frac{1}{2}|$</li>
+<li>$\forall 1 \leq i \leq n. \delta || \tilde{b_i} ||^2 \leq || \mu_{i+1}\tilde{b_i} + \tilde{b_{i+1}} ||^2$</li>
+</ol>
+<blockquote>
+<ul>
+<li>条件1: $\delta=\frac{3}{4}$, 事实上算法允许 $\frac{1}{4} \leq \delta\leq 1$. 这个条件使得格基向量之间变得更紧凑，以及尽可能接近正交。</li>
+<li>条件2: $||\tilde{b_{i+1}}||^2 \geq (\delta-\frac{1}{4})||\tilde{b_i}||^2$, 这表明 $\tilde{b_{i+1}}$ 不会比 $\tilde{b_i}$ 短太多。如果短太多，那么会在算法中进行向量交换并重新进行约化，这也说明，短太多的基的约化效果并不好。</li>
+<li>对于条件2，表明LLL约化基的正交向量的长度应该是差不多大的。同时，条件2保证了最短向量的界。</li>
+</ul>
+</blockquote>
+<p><strong>最短向量</strong>：令$b_1, \dots, b_n \in \mathbb{R}^n$是一个$\delta-$LLL约化基， $||b_1|| \leq (\frac{2}{\sqrt{4\delta-1}})^{n-1} \lambda_1(\mathcal{L})$.</p>
+<p>当$\delta=\frac{3}{4}$， $||b_1|| \leq 2^{(n-1)/2}\lambda_1(\mathcal{L})$.</p>
+<h4 id="LLL算法-1"><a href="#LLL算法-1" class="headerlink" title="LLL算法"></a>LLL算法</h4><p><strong>算法介绍</strong>：</p>
+<p>输入：格基$b_1,\dots,b_n \in \mathbb{Z}^n$<br>输出：$\mathcal{L}(B)$的$\delta-$LLL约化基</p>
+<ul>
+<li>Start: 计算$\tilde{b_1},\dots,\tilde{b_n}$</li>
+<li>Reduction:<br><strong>for</strong> $i=2$ to $n$ <strong>do</strong>:<br>  $\quad$ <strong>for</strong> $j=i-1$ to $1$ <strong>do</strong>:<br>  $\quad \quad$ $b_i \leftarrow b_i-c_{i,j}b_j$, 其中 $c_{i,j}=\lceil \langle b_i, \tilde{b_j} \rangle / \langle \tilde{b_j}, \tilde{b_j} \rangle\rfloor$ </li>
+<li><p>Swap：<br><strong>if</strong> $\exists i$ s.t. $\delta || \tilde{b_i} ||^2 &gt; || \mu_{i+1}\tilde{b_i} + \tilde{b_{i+1}} ||^2$ <strong>then</strong>:<br>$\quad$ $b_i \leftrightarrow b_{i+1}$<br>$\quad$ 回到Start</p>
+</li>
+<li><p>输出$b_1,\dots,b_n$</p>
+</li>
+</ul>
+<p><strong>算法分析</strong>：</p>
+<ol>
+<li>经过约化步后，GS基是不需要重新计算的。因为约化步对正交基没有影响。</li>
+<li>算法是多项式时间的。</li>
+</ol>
+<p><strong>LLL算法为什么能找到短向量</strong>：</p>
+<ol>
+<li>经过LLL约化后的基，$b_1$可证明是小于某个界的，这个界是和GS基的向量长度相关的，并且由于格中最短向量是大于最小的GS基向量的，因此可以得到一个短向量。<script type="math/tex; mode=display">
+\lambda_1(\mathcal{L}(B)) \geq \underset{i=1,\dots,n}{\text{min}} ||\tilde{b_i}|| > 0</script></li>
+<li>LLL约化算法限制了新旧向量的长度的比值，不让它减的太快，这样的基向量是更容易找到短向量的。</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%A0%BC%E5%9F%BA%E7%BA%A6%E5%8C%96/"># 格基约化</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/09/20/test/">test</a>
+            
+            
+            <a class="next" rel="next" href="/2024/03/29/0329/">Massive Superpoly Recovery with Nested Monomial Predictions</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min
+		 <!-- visitor -->
+        	  
+ 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+		
+	</span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

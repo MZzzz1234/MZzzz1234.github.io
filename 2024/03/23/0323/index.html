@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="ZhangMin">
+
+
+
+
+
+<title>A New Method for Searching Cubes and Its Application to 815-Round Trivium | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">A New Method for Searching Cubes and Its Application to 815-Round Trivium</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 23, 2024&nbsp;&nbsp;13:18:37</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/cube/">cube</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Improved-Graph-Based-Model-for-Recovering-Superpoly-on-Trivium"><a href="#Improved-Graph-Based-Model-for-Recovering-Superpoly-on-Trivium" class="headerlink" title="Improved Graph-Based Model for Recovering Superpoly on Trivium"></a>Improved Graph-Based Model for Recovering Superpoly on Trivium</h2><p>Liu chen, Tian tian等人发表在JSSC2023：<a target="_blank" rel="noopener" href="https://link.springer.com/article/10.1007/s11424-023-1497-1">原文</a></p>
+<h3 id="研究意义"><a href="#研究意义" class="headerlink" title="研究意义"></a>研究意义</h3><p>cube攻击中，需要通过对超多项式求解来获得密钥信息，超多项式次数越低，在攻击中可能越容易求解。如果随机的选择cube，大概率得到的超多项式是比较复杂的。因此搜索cube的方法非常关键。</p>
+<h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><p>对于如何寻找一组理想的候选cube集合，目前没有找到特别好的方法。</p>
+<ul>
+<li>田甜等人提出了805轮搜索cube的方法，依赖于Möbius变换来估计次数，该方法对轮数有限制</li>
+</ul>
+<h3 id="insight"><a href="#insight" class="headerlink" title="insight"></a>insight</h3><p><strong>通过将一个大cube重复划分为两个不相交的子cube，来估计超多项式中高次项出现的频率，从而判断超多项式是否容易恢复</strong></p>
+<ul>
+<li><p>一个实例如下：</p>
+<ol>
+<li><p>将给定的cube划分为多个子cube对: 目标是对于一个给定的cube集合（例如$cube I$）想要找到超多项式次数低的子cube集合</p>
+<ul>
+<li>$cube I$划分为很多种两个不相交子集的形式；</li>
+<li>对于每一种划分，估计两个子cube的超多项式的次数来判断超多项式是否容易恢复。</li>
+<li>在下图例子中，假如输出多项式为$h=fg$，可以计算134在f和g上的次数，计算257在f和g上的次数，以及他们的子集13，14，34等。</li>
+<li>最终对于这一种划分可以得到组合起来可能次数低的子cube集合. <div align="center">
+ <img src="pic0.png" width="100%">
+ </div>
+</li>
+</ul>
+</li>
+<li><p>统计不同子cube组合的次数估计结果:</p>
+<ul>
+<li>对于所有的划分情况，统计了子cube出现频率.</li>
+<li>对于不同的划分，估计的超多项式次数都比较低，其对应的超多项式比较简单的概率也越大。</li>
+<li>因此搜索到了一组大概率超多项式容易恢复的子cube <div align="center">
+ <img src="pic2.png" width="100%">
+ </div>
+</li>
+</ul>
+</li>
+<li><p>找到可能超多项式次数低的子cube：</p>
+<ul>
+<li>最终结果看，该方法得到的子cube对应的超多项式确实次数比较低 <div align="center">
+ <img src="pic3.png" width="100%">
+ </div>
+
+
+
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="贡献"><a href="#贡献" class="headerlink" title="贡献"></a>贡献</h3><ul>
+<li>提出了一种<strong>cube筛选算法</strong>，可以根据给定cube，得到一个超多项式次数较低的候选子cube集合。</li>
+<li>作者实现了Trivium-815轮的理论攻击，攻击复杂度为$2^{72.46}$。</li>
+</ul>
+<h3 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h3><ul>
+<li>作者的方法其实是改进了805轮搜索cube的方法中的一个步骤，大部分步骤和之前的方法是相似的，例如cube扩展的过程，初始cube的选择等。</li>
+<li>次数估计使用的Mobius变换方法没有具体介绍</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在基于可分性的cube攻击中，选择超多项式次数低的cube是非常关键的。因为随机的选择cube是低效的，所以搜索cube的方法很重要。作者发现目前没有特别好的方法来得到一些理想的cube，因此提出了一种cube筛选算法，可以根据给定的cube，得到一个超多项式次数较低的候选子cube集合。算法的核心思想是通过将一个大cube重复划分为两个不相交的子cube，来估计超多项式中高次项出现的频率，从而判断超多项式是否容易恢复。最终作者实现了Trivium-815轮的理论攻击，攻击复杂度为2^72.46。我认为作者主要通过cube拆分来解决次数估计时M𝑜 ̈bius变换对轮数的限制问题，作者提出的方法更像是Trivium-805轮搜索cube的方法的改进。</p>
+<hr>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#122;&#104;&#97;&#110;&#x67;&#109;&#x69;&#110;&#50;&#x30;&#50;&#50;&#64;&#x69;&#x69;&#x65;&#46;&#97;&#99;&#46;&#99;&#x6e;">&#122;&#104;&#97;&#110;&#x67;&#109;&#x69;&#110;&#50;&#x30;&#50;&#50;&#64;&#x69;&#x69;&#x65;&#46;&#97;&#99;&#46;&#99;&#x6e;</a>.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/cube-search/"># cube search</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/03/29/0329/">Massive Superpoly Recovery with Nested Monomial Predictions</a>
+            
+            
+            <a class="next" rel="next" href="/2024/03/09/0309/">Improved Graph-Based Model for Recovering Superpoly on Trivium</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min
+		 <!-- visitor -->
+        	  
+ 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+		
+	</span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

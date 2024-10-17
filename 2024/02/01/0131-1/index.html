@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="ZhangMin">
+
+
+
+
+
+<title>Graph model vs. Division model | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Graph model vs. Division model</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 1, 2024&nbsp;&nbsp;11:36:05</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/avizandum/">avizandum</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="a6d78d4ced03e4a43caec0d9c3f9ac3238d941ddb03834e2dc21fbbaa775af57">fc53f1c0a8ed23b386dd332a0147e70797bb59a4896e38d744cd26faf5615cbff30ecff7ac366e8b597a7ba4279c485f42de3d0d717f0dcc258678ba0c36bf3d7348cd16c1c99c72c0eb44d19d155e2540bbc368e1fb7cbc06930ba2bbf116ebe53df4d8fc27c187439cccc1856d83ca42e40db52a2a97b18cd9fc66676d0bfe0980f961a97855df649bfca475387fa30b64d7b2b9c322c56f5825ea4cd64ee278fb1a9d91c6f1951575940f2b1355a285e1c2412bd643a2d6e74dfc37bda979ab3f75f920cb3158a208c14d5ff2725b880ec8b7489765a40bcb0d516c65e0326f3fc492e0bfa7f0c16d9c9a4431196337bc3cb922cc1e833181c1762d6405bfe6946280339de6ce882a90cb1acd757ee666e8e4bceca2cc27aa1d70bae29f9897ec923f56bbe2e3cf0609aa7217bb4ce80d3d7ad8235ef2fc1e268aa06e88bac27d87bd366091a91350c19bde3665e1d3a874c87277526b4ed76e95ac909d7b7598c4a09976afdcd341273cfb51a7eca3f5edf983ed993db12aadc0468c38cd0c81e51b4c794b0a584446dfdd99391a1f1eba2d5f54fbea4bacaae34518b1fb5fa30e09f41b28a7c2900a4120a0025a2918d352527c83bc9f5a08bf45728027d45c003e5b972e6a77d174b0608dc369703d3578a9d5b3d5e2104073d0988e7c7a5a11781fd071ab7446621a972b0285de49cb1d3506440e2f846b04be270f4f8caf3f6794bf06a3fe4b0d5e07c431139c3bda7ff722c926ccc56614d784b8b2471d6bd9d6f1dfd8d0c3e7f4938ad5785637c841928baadb830c9ac2c115f1fec85c3ce42b912bfea1012bef69d837211c61897bcc9ec624fb461bfc2aa7b83aa8361194630d0f566d7199e8ea8438f2d3b71518d16c6fea49e63fe2e303766a10fa6e890f9786d4106b36136b5039200e0223b49f012d32b403fef88273448cfcb0bd15e1c202e26c4b915d6b8e0b295ce9201e7bf73b6400d061d2989f123cd3b46ac971053e336184789855f2927f814931289e0e6467fa263a19b761354698496e8f06124a9c2b2a2fb614d42947ca08d6c42b19df3e36e6daca429ea7c81be0e4fdfc69eef2cd83b492c81176e6711100d25f0c2bdd1fae7de3447a307027c26a010b9902e8fa0178bb67f46a06c314b8640058c2e58396ec3b22b6231350603207c52f1637da8ddf313712497fd76e13d398ea4fa69a74ded2f2fef9103deb806ee8f08224970f0f304efbd183e5e995b55b368a2b373ccc8c3cf2029505e38d26bc79d20ee1bc5157c64ecd793e43dd831f45bb5c12e98ba048dd1dfe72e4c2a5f6562d3dd7a06676043b2506c2bee1ed34d6c056f2b89a05e554c9d7465f370b95890e6e898b6e7517cbfc743fff9cacf7c7a37bb7d7735b511dff8286c0ed22ef89718e40aebb9a160217005d0c56533a0695635b10845e30e9db847d9936b6fa06e6012a516a40130d7195ceff128a7ed518734f4e6ff79c2d25c526fa1e310a496296562f296013fe719fc52c3d6907d067da42da881af4f8030553bb8a34afc43111fffd0e4392afe62aec45f611a3894ec66e65bdb2392d2e9d4f66c52d3fb141ba1ec61b8939e1358daebba05d9e814080ab40716e469a632ef5bbedc05dce9d0501ff2f5e2f88d685320ba35ed194936cc602cff5fe19fd7f13970a7997fa9ddf932ab8950a6533e9234da92434509ddce96ec100029798c0acf61630b885c4a73f9d671115285d86b6a2a7b19c8bb47c8fdf5d9be1f8fbbcca4648670b11a48e162c342458824af1b8ab914e2581e714622df3c6e177f1e1b4fd2dfc60a72d8caeafc04dc6c4cd0862ea8e865a8ceacee8c9021c3b169e70fc06292ad0426bfa83192ef030a312e7f69d0d9106aa1e27b2709573d69a4e0612d5ed0b123d095a265339afff27b209533da2b1a9f97eccba1219d86e137d5d162b4fbbf0886d5e953244974f8ef666e9aa1f27715a5e7163da3ee8622e764c8a358ee3d5b065a0c423965b6c4e2451c14e4d09e5075ac594dec47f9e8692b31f7b3fdc7217d6f59d5c099744bdb9a03afd8c639870ea131ecbe2e69b1c3821866a42aacea5c7e226147f393dcebbd276e7c6488cda12fe9765f286e9d8e398615cdbfb698ee5ef1fc43b3767b5eb10d5622d5a148e0ab29c31a384005a3dc7a009f38ae8148ad1c1fa1472c9ea82d218b60435ccab36217297b50af1ca7f679d37660f424c324236a168817e45787a87285f2a7db2a3fcdf8935723e7fbc89a21b7fd512a70d1076ba8b4447becf378598c36e9db7404de9b109fc567bd37597b91899a7763072f54339ba142a2ba7fe750326f0ceecda79f0e0e0cf69d106b2025add248e8d09d71e13cafe59eb4dac29deed438cd999ea4c0958606cbc7713cd5b722508d862f031d34912fa5d3cc432e85ee556788dfdd81be1e2eb19284d18fcfcf59dcb15c8ddf5958c1ab63203d6b68d9b872b08e8da1ed20e0cc5269ad85527cdb816226da04c92fbd08cc65a714a9a511deb31dceb8d894e7060defef4bc17ee8daef93c35e7c061a0fd3517a099b0af1f495b42af6daa2c45b33358bc1dab2007efb4e16e530d72476cf68d570c9d0b592a8f912571e6502e33a6bef8d504b2430b1a3c166495f637acddc96c1468d80e494664742bbdd4f34dc0fc3142cee73ef105ef4a8226fb808b02050650d426166eec7e312cd75d5c9008e8fa0c22140cb6f02ba36b821f0467f5af90c1da15d7d5ec849dace64fe238e4a527e50e6bb87bb8c5ce4fda8b9a8f21a145604108d698b575d27197dfe94b43511b9074fe6fe17f69063f72960b92c1ca779a3a79a02fdbceddf9632521c0d9e76a3756b5632ed7b470f320961f0a7f299f44baa4bc2392f67ed71e1330caec4166999799f04a874fff816d2c77d4d3d13e44c8844c8e4ea75c854f683716a824b70c6a1ffcd6bb4c1a17c654ee0103011f1f52e6a8993d31a1462ef57c86b66b431efb227866de398eb10e163fe39b73f0d2d9ad2d9b34d2c33ff72aa2718fb97361d26bbe98e5193b4563712083580aae6295aa0cde1dd3c1fa4f775448f0570e92d32909d3ad06005e419021deea27ecc89e51560c69c8ce2b279c6cab47e6702c07b1ea3679d87d91f2bbba41d56766e62b6ae7b34ad0de42ef77dd07e727cd3c0391b28115c86a1cbe0fe55e79c1e7dd95f5c3187f555639783eb17ee440cbeade49ad30196dafe640ca997808ce03861f56fdaa29b7d0481a33eb1bf9256b11ad5d1061a7a36c190ff1a99a7eeea03463e5c447c46a876052d7e7a70ae8b08bd8355b8fd7cd41c4965847e7a3489afe00622c18030980377f1ccd6895015f5c0b0a87098608d7a5f878c4bc786edb43ae4ac8d744199652703fd41994e3e464db753792a866071b51d8b972d325f1f6d157658cedf14fbf8f9ebc7a532677bfc6337e1a93d7044ec484d38add8bde7bcd535d33c4f940a35b29febad30671c9db398bf5746f82f8509717de2909dd4c8e36f42c81d3dd3ac9ebfbde064ff178f3e2151d734aa83f769f5d398f4591729fb1fd302bf1174a738505f7097d8901c79cd56d3760ada16bcdf201aea5fd69bafac686c175da0a18fab5b9676b1558d6be6de8204d505b9ebda6a74e1c58522624254681830fe2ffd62c6aaf4e464937917ba5017b20af3909321c77183f196796f5bfad03c830651bf0f00e400a0cb7f6c58c8e0fc6d0e108620fcd9fa528379198cdaa93beff4a02e8ecf4a9f3abb3d14e00c14d927586124442eb0bd84b7cff274b6f98be8ff25702ad15c186cd7ce470ce2d97cc10b2ebfb3323f07a68e65b3d924beae4333c9cb143306c524a6263081e97b93368405c9c43e485a5001b35306c2984b3aa515586f985a735794b9e3428512ea8607cb45e054411410598a2b118483920e04aa67e5527daee3cce5ed37ff9c7893693666a315c4e6e4116552b419dafa2196129906eb59a2a631adeb126fce9bf123e3a3552b9033e1ffa47ab00c37180547f8ed663b3ea8c0f82f257bbafcf1550361f5b1509cc01924509d5fa5990e033ec062bcfc17816eee656ceb43dc14c1f239ee22d3bfa13b4352ad03115b71b2807bf091f4499b4aca1095ebc05d84970b51a374856be6c669bb815560c14d7ce303dd8862b661bc267e483b356d8bfa2e9f82e657f825c7ff09bf42b5f1038db722aa734e62a4e7fb8a0623a0b2e5ec19e08fc7d061f9ec9b6c90b4551cfddf1cebeff3f30a25adc81c3603a547634e78727b244274f28f571574d6cc69b7e617ec4c877c097dd031126afeeeb1d1a225a7e4f5017ebbaa62a5d38f546e7430e6f9b61a6860f4c781e7acd3ca511f6480c95704840082d6c1fc515c555e6fa3270a5d2a1e4542d77d986be0848bf1b35c2eb9775a4968824ed65bba70f478fe3a942a45caca6cc52ec2315ef12250fb45ce168b824547cde45ba66f4f09e2de16b2657a7cc854be1fe60797ee9695a8b9847cfe1a7094287485446466af3555dc9835e7d6996bfca22b6363de0a307706a01f285092222093797b5c8f0542115dbd926bbd1bb06422d94510aa69da7625de13a906057777dfb99cbaa4b9ad61b5f6459c007e39dcac8ef4e5cf2c45c49006f2bb7ded986534a9d8f61a9cb8d2b77cd5349ab01226765ac01c93affff45bbde50e116e73acf7fc225b0fb69b081e54bb9bce620630d26a57759cbf1a200e82fdb90e898cad9056852ec7d1b825df484d06dbc91aed60382c566b82398e767aa883aedf110c722321886e4a78058c3765496971035e57f58ba5cc6aa2f28d143897fe82211d35eaf16d3d8ec98b6c72efffe6764d515c26ea36b81edda8b21886de4a63320bcba46138a9ad841cacefe0561482bfef09afc78810956f43a8513fe1c17adfef61118d0ce7e5dd7e9f12289bc3bdd199e5f937d27778718eb98b7d2fcd22f97cec9e1bf10653f99b60dfa9c0397ab74418fe47a05de3be51df4416e6ea4d0d6d187157f89eac5e1ff78e526bc6a010140d74c9cb26b37a3f5a32847040e58de603abf1347362a3fd445e8a1105248a0527502d84d752fdc518c1021c709d970967aaa39ff98a7db195050aaa30bbdfabdf7c47be884d648898b2ad492e9d7775ee32f43f2f5b667ca1e2c648a39213e7dd147ec04e3ee9a0915ab205e131f40852e7dd9f92dc33725a8072b371a42613dc73ec8e6080686abf91580f85345910b0a549e00d16c67bf3b4cb2c76a9248cde8e5257303618284df82dbbd619dbf794c4f264b17516cc1087e884c54ff11d3c1d0409dfaaa1697145bc3184d6a8ebe344bf0ff347fd10cee54747e275d5c6bc56625e67a7955b60cae8493706bedf7d943b8177e5b15625bc521b542f4c7c569a7d307a5dd6793ee5207a2c391372d5fb1742f2755256fe4e322b981b30bbab876ca502bcf23d0198d4394303e08bb842b2bb7c4ae0bc5fb58f2c280c5ecca90e8177663d41debd3ce33aa8d8244fd7e658d50b8758d386a25fe37d49ade69942136855d65dbc955b8910e251acc4ab6a970ac6114e968898f8ae73d0ec9e5fcebc797770516fb8608ba7bacac77505f9574a618faf9153bc6621a6f9f952c5c3bb12ee04965a0c3cc77aadd31a3f52edf7f8421f3fa1188c7e4c2fcf7ea9e771e1d09f5f2e30cb448fc3dcbf4eac20a9dcc6456caa0e43cc44589eaddc51125999622cd27ab47c300151a2dba50f2f538963146956699a87d0749227ecabe0781b6040125e6c0e489e503718d4538cf9ccb88998070d9985e85c2eb8f3df5418342dd3f3fb3abcc27652546f643321efaafed06986f0b05b093704b4902577d0ae5c43d01293e0b45611a81a7d22a270b98917b4cf3097828d4674f7cab2246de2702eae93e4b6552c9a5fe0a7e78e8135eb2f783499dba78fc8d11cf1b49fc5567aec6704df9a976f30f9a33c448bb36ddfcd10770fca9f455040d3465b63859724c8fcfb97bfae9afedf0e9d2bc6e1c7a07b2d16c64b09771a1a22a957adb923c2b0145881b836926f4a1ed70fcd3589603769600ff59823da04be82ab4607730c4a7d0a077e01d2d4b70b5954c92acdba68c10b24f1668dc6f1e78a178a72a8b7a3827ec651d90eed57afad5108af7648be28ae96525026da5a3ab90bf51eb17caf2bfe79213cf6387ac5d7dafe31595804c2f84abf5b3e115da42d8d647a247fde23ead907afe9415c7d2070885c113171f1a4c400561a8f34cb94de385c1290f609e08a45a4e308359ff07a8c5fe63cb788a582a476658fad6a7593b433a932c9f985b372e898ea4fdf2eb7c0cc97f5ca90657312bd066f6f36734e9b5078425c863f6e9d6b1259d7fc02e96aea461f88807c66533505d9f828935fe86e55bb8e2d72af70d3583fa04728efa067d9d31276c4f10433c1e19a05b33ace7f39bd6e5f95c4a7102d4e585a30c1d831b304d8d689af7c3887a9202c1754b8416b275923efb278d6554bdc610de116f14b9c25416f988ed08ea2184223e732a06d60f83ff4997b7e7d1e858cb25f8ed5b33729942e0f7ad35a34311c3ed36dd01653789917c9a938c51ddd4d6b06408d3e3b5c77cc80235d55be4311cfdc009758c5f682954ce650848a8dfeef5fa47787e4ab2db3e77740b61a5bf9b091ccfd2f8bcc2b13160951dedbc8fbadb05533f7300653d234538a30bbc356f525a9a185bb66996b0bd434acf45393de9e2367261fed05a47784d196e3f5555143baf11648383e7a727afec2fe2714ada6c8dd9ea1fbd52044e655395cae55cfa001e4e60ab43bb4faf7ef5ce866591a986b3d74084911de031cacc3ebd950641bb3e74a39d4eeca492cff489314275d40a0981e99f12f9bec8a66d472eeef187919941c2aa2c0d5f40bfd94631f1cbc52621d7c25d57f6b85d444b2a1a6a0e0a00e51778570160490e6d3c9c28801c4459dcce46e3fc285a75c92f7a8d236bd9e501f074a26a13e79a91aa9a28737a4e87678e72cb0f554952eb5a83fd266950ca9db176b4e36ebd7a17480efac53da3dcd826ddf468a93c9bf6d6f3bc42e85076b5fac5054509e2b88c679e3e2142e32564b6df733d3c23d2150ce0c5bbcd661a64cd980ed2de30b11ea8c8df3538d82dc4c6e307e108b7aebe4d7f2eb3a67fa9af951a49715b1e7879f1119c3edb2e6d51947c28f306c7fb0a2a7ce55805680172151fb1e7b75fce5dd0e80c79ee86cf64e063ea65e45b25ba6333c8379e2f0da5c4bdd0232703545634a36c9759bbeb182e054be09ef45d5f116d10468c9cd3bdd44ba60f1af5e0240cbc167582fcf495c931a8aabd9e41d3e8fbc157f009887a65a15ce46dc19ab65e3197f400f6197bc4dd6de5279a416288ba5eb6df45f5f3abdfb775fd870dd61f4e02e277cf081e1ab43a9f342fc972ff8e50fd5e93630b90ec805e723f8401fc30a6cbe1d0d63d10a114ff3256977ad5613f49a6bec503fa374fed27baeb49575a42968ba1f53c9fe670fb56456dff6a7184d5b848b62d2fd18ce199cc71ae208dc94e3c94324d5af00a0e473162d259184002f9a3738adff722ca4431ca46d239ff1a06f3d737f00975879defa71c7e5c0faa59da797c0e5e5eb328f62c5c489bc314b38749f5a5ac70dfd1e53b6334467eca94f7b8cc96f2d605b1dc1354f8e3775850e2a42b2da8f77b860c95f9f7344bb993f522b922b5b672eb6834ab192c6f2c797f91ad409517a369b561d33ba4d348aac1df69e4d15ae874bc98c0778fd0cce4a2c2b91f94ed181062a537a8699d588e756ac202d435b69a7cc4679674b04f1ad75ba694b8eb6d69db5fd93b586d965d0546ba440b2ea7a107e2d283ea3265ca53859a991b86402cfc7e930e06c5c7be08e7f792c81453aa48fc2b3c45c1aefe55516962fcb3f6b550c598b9e725d2366af7a0d61e01c7c717f20a7124bf22c59b7d3461a14fe22169637b31bdd316b1fda832287a333f15fbdc5a21db53853b14522f904ba5026b012d6591e81fc241b2ff4e2a3d0efc421d4aff9b3dd9dbe467b85392812f779ea97eb7d3db7f7f5f8e855ea11d1ce558f47577bb5c7a413de5f99bd504172ab78b7d22264a201b1ac6f64ed2d54a1692fde4cade937808e67f4fc9a816744a54516bb9cbdda7d2a1943d9bef3cd50ebe37f76b99e270bf7a323f05ed7d3a9b2aad177dcc3ac63193f269539655f897dd20481e689ebaa03fa58185c070f1317b11f536b1066632f082e283e0712684a95e7ae01c90a623f2c78a5469fcf9b2272065084325c761161a925257269b10e42134633982547d30c19c1dfa204d4132851e62d491f0231869f907afe71dae726d0fa0d776a4b6dbd8f927d508e3439405dc624ff4577d</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/superpoly/"># superpoly</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/02/02/0202-1/">大规模矩阵乘法的GPU与CPU并行</a>
+            
+            
+            <a class="next" rel="next" href="/2024/01/31/graph-mdel/">A Simpler Model for Recovering Superpoly on Trivium</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min
+		 <!-- visitor -->
+        	  
+ 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+		
+	</span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>
