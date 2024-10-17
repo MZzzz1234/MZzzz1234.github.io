@@ -287,11 +287,19 @@
 <li>$\forall 1 \le i \le n , \exists v_i \in \Lambda, ||v_i||=\lambda_i(\Lambda)$</li>
 <li>$\text{vol}(B(0,r)) \geq (\frac{2r}{\sqrt{n}})^n$</li>
 </ol>
-<p><strong>q-ary格</strong>: 格$\Lambda$称为 $q-ary$ 格，如果它满足</p>
+<p><strong>q-ary格</strong>: 格$\Lambda$称为 $q$-ary格，如果它满足</p>
 <script type="math/tex; mode=display">
 q\mathbb{Z}^n \subseteq \Lambda \subseteq \mathbb{Z}^n</script><ul>
 <li>$\mathbb{Z}^n$是一个整数格</li>
 <li>$q\mathbb{Z}^n$ 在模$q$意义下是周期性的</li>
+</ul>
+<p><strong>投影子格</strong>：</p>
+<p>令$\bf{B} :=({\bf{b}}_1,\cdots,{\bf{b}}_n)$为$\mathcal{L}$的格基，定义投影算子$\pi_i$为向量在补空间$(\bf{b}_1,\cdots,\bf{b}_i)^\perp$上的投影。<br>投影格基$\bf{B}<script type="math/tex">_{[j,k]} :=(\pi_j({\bf{b}}_{j+1}),\cdots,\pi_j({\bf{b}}_k))$；投影子格 $\mathcal{L}_{[j,k]} := \mathcal{L}(\bf{B}</script>_{[j,k]})$。易知$\bf{B}$$_{[j,k]}$张成的线性空间即为$(\bf{b}_{j+1}^<em>,\cdots,\bf{b}_k^</em>)$张成的线性空间。</p>
+<ul>
+<li>对于高维格的格基约化，常见的策略是对其低维的投影子格进行格基约化，并将其提升回高维格。</li>
+<li>对于$\mathcal{L}_{[j,k]}$中的格向量$\bf v’$，将其提升到格$\mathcal{L}$中，等价于找到$\bf v’$在$\mathcal{L}$中的（近似）最近向量。（Babai最近平面算法）</li>
+<li>在投影子格的操作和另一个空间是互不影响的，因为是完全正交的。</li>
+<li>投影子格不是格的子格。</li>
 </ul>
 <h4 id="基础定理"><a href="#基础定理" class="headerlink" title="基础定理"></a>基础定理</h4><p><strong>如何判断一组基是格基？</strong><br>令$\Lambda$是一个秩为$n$的格，令$b_1,b_2,\dots,b_n \in \Lambda$是$n$个线性无关的格向量。则$b_1,b_2,\dots,b_n$是格$\Lambda$的一组基 $\leftrightarrow \mathcal{P}(b_1,b_2,\dots,b_n) \cap \Lambda = \{ 0\}$. </p>
 <p><strong>如何判断两组基生成的格是相同的？</strong></p>
@@ -346,7 +354,32 @@ q\mathbb{Z}^n \subseteq \Lambda \subseteq \mathbb{Z}^n</script><ul>
 </div>
 
 
-<h3 id="LWE"><a href="#LWE" class="headerlink" title="LWE"></a>LWE</h3>
+<h3 id="格困难问题：LWE问题"><a href="#格困难问题：LWE问题" class="headerlink" title="格困难问题：LWE问题"></a>格困难问题：LWE问题</h3><p>输入$A \in \mathbb{Z}_q^{m \times n}$ 和 $A \cdot \vec{s}+\vec{e}$, 其中$\vec{s} \in \mathbb{Z}^n_q$任取，$\vec{e}$ 服从高斯分布； 输出 $\vec{s},\vec{e}$</p>
+<ul>
+<li>等同于：在随机 $q$-ary格$\Lambda(A^T)$ 上给定随机目标向量$\vec{t}=A\cdot \vec{s}+\vec{e}$，求解CVP</li>
+<li>通常$\vec{e} &lt; \frac{\lambda_1(\Lambda(A^T))}{2}$，并且给定样本 $A \cdot \vec{s}+\vec{e}$， $\vec{e}$唯一确定。</li>
+<li>LWE $\equiv$ 近似BDD</li>
+</ul>
+<div align="center">
+<img src="pic2.png" width="65%">
+</div>
+
+
+<p>而CVP问题可以转换为SVP问题：</p>
+<div align="center">
+<img src="pic3.png" width="100%">
+</div>
+
+<p>SVP和CVP发展历史：</p>
+<div align="center">
+<img src="pic4.png" width="100%">
+</div>
+
+
+
+
+
+
         </div>
 
         
