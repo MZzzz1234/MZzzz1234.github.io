@@ -13,7 +13,7 @@
 
 
 
-<title>An Algebraic Formulation of the Division Property | ZhangMin</title>
+<title>Schnorr-Euchner 枚举算法 | ZhangMin</title>
 
 
 
@@ -234,21 +234,21 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">An Algebraic Formulation of the Division Property</h1>
+            <h1 class="post-title">Schnorr-Euchner 枚举算法</h1>
             
                 <div class="post-meta">
                     
 
                     
                         <span class="post-time">
-                        Date: <a href="#">January 24, 2024&nbsp;&nbsp;22:53:41</a>
+                        Date: <a href="#">October 20, 2024&nbsp;&nbsp;16:31:33</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/cube/">cube</a>
+                                <a href="/categories/lattice/">lattice</a>
                             
                         </span>
                     
@@ -257,48 +257,47 @@
         </header>
 
         <div class="post-content">
-            <h2 id="An-Algebraic-Formulation-of-the-Division-Property-Revisiting-Degree-Evaluations-Cube-Attacks-and-Key-Independent-Sums"><a href="#An-Algebraic-Formulation-of-the-Division-Property-Revisiting-Degree-Evaluations-Cube-Attacks-and-Key-Independent-Sums" class="headerlink" title="An Algebraic Formulation of the Division Property:Revisiting Degree Evaluations, Cube Attacks, and Key-Independent Sums"></a>An Algebraic Formulation of the Division Property:Revisiting Degree Evaluations, Cube Attacks, and Key-Independent Sums</h2><p>胡凯等人发表在亚密会2020: <a target="_blank" rel="noopener" href="https://eprint.iacr.org/2020/1048.pdf">原文</a></p>
-<h3 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h3><ul>
-<li>2017年，Todo等人将可分性引入到立方攻击中，用于恢复超多项式</li>
-<li>可分性是通过多重集定义的</li>
-<li>如何用密码代数结构本身定义？</li>
-<li>作者发现：<strong>f是复合而成的，具有一些代数结构</strong></li>
+            <h2 id="Schnorr-Euchner-枚举算法"><a href="#Schnorr-Euchner-枚举算法" class="headerlink" title="Schnorr-Euchner 枚举算法"></a>Schnorr-Euchner 枚举算法</h2><p>来自SVP综述：<a target="_blank" rel="noopener" href="https://link.springer.com/content/pdf/10.1007/978-981-15-5191-8_15.pdf">原文</a></p>
+<h3 id="研究意义"><a href="#研究意义" class="headerlink" title="研究意义"></a>研究意义</h3><ul>
+<li>枚举算法是求解最短向量问题的精确算法。</li>
+<li>给定一组格基, 遍历在一定界限之内的所有整系数线性组合, 从而找到最短向量。</li>
 </ul>
-<h3 id="研究意义及贡献"><a href="#研究意义及贡献" class="headerlink" title="研究意义及贡献"></a>研究意义及贡献</h3><ol>
-<li><p><strong>单项式传播理论：</strong></p>
+<h3 id="主要逻辑"><a href="#主要逻辑" class="headerlink" title="主要逻辑"></a>主要逻辑</h3><p>通过将高维空间的问题逐层分解为低维问题，并逐步构造满足条件的向量。</p>
+<h3 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h3><p>Schnorr–Euchner枚举算法:构造一个枚举树</p>
 <ul>
-<li>基于郝泳霖等人提出的无未知子集的三子集可分性理论</li>
-<li>另一种从代数角度的不借助其他概念的可分性的解释</li>
+<li>搜索方法：深度优先搜索</li>
+<li>深度：$𝑛$</li>
+<li>节点：$\forall 1 \le 𝑘 \le𝑛+1$，第$𝑛+1−𝑘$层的节点是所有投影子格$\pi_𝑘(\mathbb{𝐿})$中二范数小于R的向量。</li>
+<li>每找到一个新的叶子，更新枚举半径R为叶的范数，更新枚举中心。</li>
 </ul>
-</li>
-<li><p><strong>单项式预测技术：</strong></p>
-<ul>
-<li>可以计算Trivium在1-834轮的精确代数次数</li>
-<li>改进了840、841和842轮Trivium的攻击结果</li>
-</ul>
-</li>
-</ol>
 <div align="center">
 <img src="pic1.png" width="90%">
 </div>
 
-<h3 id="主要想法"><a href="#主要想法" class="headerlink" title="主要想法"></a>主要想法</h3><div align="center">
-<img src="pic2.jpg" width="100%">
+<ul>
+<li>枚举范围<div align="center">
+<img src="pic2.png" width="70%">
 </div>
 
-<ul>
-<li><p>单项式传播理论：</p>
-<ul>
-<li>将单项式的存在性与单项式路径数量的奇偶性建立了联系</li>
-<li>将自动化模型中的一个解对应一条单项式路径。</li>
-</ul>
-</li>
-<li><p>单项式预测技术：<br>计算单项式路径的个数 $\to$ 该单项式是否存在于超多项式中</p>
+
 </li>
 </ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>2017年，可分性被Todo等人引入到cube攻击中，用来尝试恢复超多项式。可分性在前人论文中是通过多重集定义的，而不是用其自身的内在属性定义的。所以本文中作者将郝泳霖等人提出的无未知子集的三子集可分性理论，从密码代数结构的角度解释为单项式传播理论。该理论中作者将单项式的存在性与单项式路径数量的奇偶性建立了联系，将自动化模型中的一个解对应为一条单项式路径。基于此，作者提出了单项式预测技术，通过计算单项式路径的个数来确定该单项式是否存在于超多项式中，从而可以准确计算超多项式的代数标准型。利用该技术，作者可以计算1-834轮Trivium的精确代数次数，改进了840、841和842轮Trivium的攻击结果。由本文可知，对于恢复超多项式而言，作者发现真正有意义的是出现奇数次的单项式路径。如果未来能够提前识别并去除出现偶数次的单项式路径，将显著降低MILP模型的求解负担。</p>
+<ul>
+<li>算法<div align="center">
+<img src="pic3.png" width="80%">
+</div>
+
+</li>
+</ul>
+<p>对于这个算法过程，总体上枚举是从$\pi_n,\pi_{n-1},\cdots,\pi_1$的顺序来的。但对于算法所示，会先给这个向量的系数给一个初值，然后再去更新枚举中心来根据深度优先搜索去枚举。</p>
+<h3 id="评价"><a href="#评价" class="headerlink" title="评价"></a>评价</h3><ol>
+<li>具有精确性，树型搜索结构， Zig-Zag 搜索，应用广泛</li>
+<li>不适合大规模问题，时间复杂度高，很大程度上取决于输入格基的质量</li>
+<li>改进：树型结构适合并行化，剪枝函数</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Schnorr-Euchner 枚举算法是一种经典的可以用于求解最短向量问题的枚举方法，广泛应用于密码学和编码理论。为了枚举非零最短向量的每个系数，算法通过对枚举树的深度优先搜索，将高维空间的问题逐层分解为低维空间问题，逐步构造出了满足条件的向量。算法中每次一个新的非零叶子被找到，就会更新枚举半径R为叶子节点的范数。这也说明格基越规约，枚举树中的节点就越少，枚举就越快。尽管算法在低维格中表现良好，但其时间复杂度是超指数的。改进思路包括引入剪枝策略、并行化处理以及利用混合算法等。</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x7a;&#x68;&#x61;&#110;&#103;&#109;&#x69;&#110;&#x32;&#x30;&#50;&#x32;&#64;&#105;&#105;&#x65;&#46;&#97;&#x63;&#x2e;&#99;&#x6e;">&#x7a;&#x68;&#x61;&#110;&#103;&#109;&#x69;&#110;&#x32;&#x30;&#50;&#x32;&#64;&#105;&#105;&#x65;&#46;&#97;&#x63;&#x2e;&#99;&#x6e;</a>.</p>
+<p>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#122;&#104;&#x61;&#x6e;&#103;&#109;&#x69;&#x6e;&#x32;&#x30;&#50;&#x32;&#64;&#105;&#x69;&#x65;&#46;&#x61;&#99;&#x2e;&#99;&#110;">&#122;&#104;&#x61;&#x6e;&#103;&#109;&#x69;&#x6e;&#x32;&#x30;&#50;&#x32;&#64;&#105;&#x69;&#x65;&#46;&#x61;&#99;&#x2e;&#99;&#110;</a>.</p>
 
         </div>
 
@@ -317,7 +316,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/DivisionProperty/"># DivisionProperty</a>
+                        <a href="/tags/%E6%A0%BC%E5%9F%BA%E7%BA%A6%E5%8C%96/"># 格基约化</a>
                     
                         
                 </span>
@@ -330,10 +329,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2024/01/25/degree-eval/">NFSR代数次数估计</a>
             
-            
-            <a class="next" rel="next" href="/2024/01/22/PRG-1/">PRG的安全性与流密码的语义安全性</a>
+            <a class="next" rel="next" href="/2024/09/19/lattice0919/">格密码基础-格基约化算法及相关困难问题</a>
             
         </section>
 
