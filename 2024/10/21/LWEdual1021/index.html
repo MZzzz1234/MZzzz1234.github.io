@@ -13,7 +13,7 @@
 
 
 
-<title>Archives: 2024 | ZhangMin</title>
+<title>对偶格及LWE对偶攻击 | ZhangMin</title>
 
 
 
@@ -162,107 +162,162 @@
     }
 </script>
             <div class="main">
-                <div class="post-wrap archive">
+                <div class="container">
     
     
-        
-
-        
-            <h3>2024</h3>
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/10/21/LWEdual1021/">对偶格及LWE对偶攻击</a>
-            <span class="archive-item-date">October 21, 2024</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/10/20/enum1020/">Schnorr-Euchner 枚举算法</a>
-            <span class="archive-item-date">October 20, 2024</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/09/19/lattice0919/">格密码基础-格基约化算法及相关困难问题</a>
-            <span class="archive-item-date">September 19, 2024</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/03/29/0329/">Massive Superpoly Recovery with Nested Monomial Predictions</a>
-            <span class="archive-item-date">March 29, 2024</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/03/23/0323/">A New Method for Searching Cubes and Its Application to 815-Round Trivium</a>
-            <span class="archive-item-date">March 23, 2024</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/03/09/0309/">Improved Graph-Based Model for Recovering Superpoly on Trivium</a>
-            <span class="archive-item-date">March 9, 2024</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/02/28/0228/">docker使用简记</a>
-            <span class="archive-item-date">February 28, 2024</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/02/03/0203-1/">Groebner基与代数几何</a>
-            <span class="archive-item-date">February 3, 2024</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/02/02/0202-1/">大规模矩阵乘法的GPU与CPU并行</a>
-            <span class="archive-item-date">February 2, 2024</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2024/02/01/0131-1/">Graph model vs. Division model</a>
-            <span class="archive-item-date">February 1, 2024</span>
-        </article>
-    
-    
-    <nav class="pagination">
-        <span class="page-number current">1</span><a class="page-number" href="/archives/2024/page/2/">2</a>
-    </nav>
-
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
 </div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">对偶格及LWE对偶攻击</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 21, 2024&nbsp;&nbsp;14:13:23</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/lattice/">lattice</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="对偶格"><a href="#对偶格" class="headerlink" title="对偶格"></a>对偶格</h2><p>参考资料：<a target="_blank" rel="noopener" href="https://cims.nyu.edu/~regev/teaching/lattices_fall_2004/ln/DualLattice.pdf">Regev讲义</a>、<a target="_blank" rel="noopener" href="https://eprint.iacr.org/2017/047.pdf">Albrecht17</a></p>
+<h3 id="基础定义"><a href="#基础定义" class="headerlink" title="基础定义"></a>基础定义</h3><h4 id="对偶格："><a href="#对偶格：" class="headerlink" title="对偶格："></a>对偶格：</h4><p>对于一个满秩格$\Lambda$，其对偶格为</p>
+<script type="math/tex; mode=display">
+\Lambda^*=\{y \in \mathbb{R}^n | \forall x \in \Lambda,\langle x,y \rangle \in \mathbb{Z} \}.</script><p>更一般的，可以定义为：</p>
+<script type="math/tex; mode=display">
+\Lambda^*=\{y \in \text{span}(\Lambda) | \forall x \in \Lambda,\langle x,y \rangle \in \mathbb{Z} \}.</script><p>格$\Lambda$的对偶格中的所有点就是和任意格$\Lambda$中格点内积为整数的点。<br>在几何中一个简单的例子如下：对于任意一个向量点$x$，与该向量点乘积为整数的点为:点乘为0的超平面，点乘为1的超平面,…。超平面之间的距离为$1/||x||$</p>
+<div align="center">
+<img src="pic1.png" width="80%">
+</div>
+
+<h4 id="对偶基："><a href="#对偶基：" class="headerlink" title="对偶基："></a>对偶基：</h4><p>对于一个基$B=(b_1,\cdots,b_n) \in \mathbb{R}^{m\times n}$，对偶基$D=(d_1,\cdots,d_n) \in \mathbb{R}^{m\times n}$为唯一的基满足：</p>
+<ul>
+<li>$\text{span}(D)=\text{span}(B)$</li>
+<li>$B^TD=I$</li>
+</ul>
+<h4 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h4><ul>
+<li>$(\mathcal{L}(B))^* = \mathcal{L}(D)$</li>
+<li>对任意格$\Lambda$，$(\Lambda^<em>)^</em>=\Lambda$</li>
+<li>对任意格$\Lambda$，$\text{det}(\Lambda^*)=1/\text{det}(\Lambda)$</li>
+<li>对任意秩为n的格$\Lambda$，$1 \le \lambda_1(\Lambda)\cdot \lambda_1(\Lambda^*) \le n $</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/LWE/"># LWE</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2024/10/20/enum1020/">Schnorr-Euchner 枚举算法</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
             </div>
             <footer id="footer" class="footer">
     <div class="copyright">
