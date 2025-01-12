@@ -289,8 +289,8 @@
 <li>攻击者已知: $(t_i, a_i)$。</li>
 </ul>
 <h3 id="1-3-ECDSA-作为-HNP-问题"><a href="#1-3-ECDSA-作为-HNP-问题" class="headerlink" title="1.3 ECDSA 作为 HNP 问题"></a>1.3 ECDSA 作为 HNP 问题</h3><p>在对 ECDSA 的侧信道攻击中，对手可能会获知签名随机数 $ k $ 的一些最高有效位, 假设这些位均为 0。然后重新整理 ECDSA 签名公式 $ s $，可以得到：</p>
-<p>[<br>-s^{-1} \cdot h + k \equiv s^{-1} \cdot r \cdot d \pmod{n}<br>]</p>
-<p>因此得到了一个 HNP 实例，其中：</p>
+<script type="math/tex; mode=display">
+-s^{-1} \cdot h + k \equiv s^{-1} \cdot r \cdot d \pmod{n}</script><p>因此得到了一个 HNP 实例，其中：</p>
 <ul>
 <li>$ a_i = -s^{-1} \cdot h $,</li>
 <li>$ t_i = s^{-1} \cdot r $,</li>
@@ -322,7 +322,8 @@
 <ul>
 <li>一个格基 $B$，</li>
 <li>一个目标向量 $t$，</li>
-<li>一个参数 $0 &lt; \alpha$，使得目标点 $t$ 与格的欧几里得距离满足：<br>[<br>\text{dist}(t, B) &lt; \alpha \cdot \lambda_1(\Lambda(B)),<br>]</li>
+<li>一个参数 $0 &lt; \alpha$，使得目标点 $t$ 与格的欧几里得距离满足：<script type="math/tex; mode=display">
+\text{dist}(t, B) < \alpha \cdot \lambda_1(\Lambda(B)),</script></li>
 </ul>
 <p>求一个格向量 $\mathbf{v} \in \Lambda(B)$，使其为距离 $t$ 最近的格点。</p>
 <p><strong>唯一解的保证</strong>：为了保证解的唯一性，通常要求 $\alpha &lt; 1/2$。但实际上，这个问题可以推广到 $1/2 \leq \alpha &lt; 1$，在这种情况下，我们可以期望高概率找到唯一解。</p>
@@ -332,45 +333,76 @@
 <p><strong>定义 4: $\gamma$-唯一最短向量问题 (uSVP$_\gamma$)</strong></p>
 <p>给定一个格 $\Lambda$，假设满足：</p>
 <ul>
-<li>第二短向量的长度 $\lambda_2(\Lambda)$ 满足：<br>[<br>\lambda_2(\Lambda) &gt; \gamma \cdot \lambda_1(\Lambda),<br>]</li>
+<li>第二短向量的长度 $\lambda_2(\Lambda)$ 满足：<script type="math/tex; mode=display">
+\lambda_2(\Lambda) > \gamma \cdot \lambda_1(\Lambda),</script></li>
 </ul>
 <p>找到格中满足长度为 $\lambda_1(\Lambda)$ 的非零向量。</p>
 <h3 id="1-7-从-BDD-到-uSVP-的归约"><a href="#1-7-从-BDD-到-uSVP-的归约" class="headerlink" title="1.7 从 BDD 到 uSVP 的归约"></a>1.7 <strong>从 BDD 到 uSVP 的归约</strong></h3><p>基于Kannan嵌入：<strong>嵌入矩阵 $L$ 的构造：</strong></p>
-<p>[<br>L =<br>\begin{pmatrix}<br>B &amp; 0 \\<br>t &amp; \tau<br>\end{pmatrix}<br>]</p>
-<p>其中：</p>
+<script type="math/tex; mode=display">
+L =
+\begin{pmatrix}
+B & 0 \\
+t & \tau
+\end{pmatrix}</script><p>其中：</p>
 <ul>
-<li>$\tau$ 是嵌入因子，通常可以认为：<br>[<br>\tau = \mathbb{E}\left[|t - \mathbf{v}| / \sqrt{d}\right],<br>]<br>这是目标向量 $t$ 与格向量最近点 $\mathbf{v}$ 之间的预期距离。</li>
+<li>$\tau$ 是嵌入因子，通常可以认为：<script type="math/tex; mode=display">
+\tau = \mathbb{E}\left[\|t - \mathbf{v}\| / \sqrt{d}\right],</script>这是目标向量 $t$ 与格向量最近点 $\mathbf{v}$ 之间的预期距离。</li>
 </ul>
-<p><strong>解释</strong>：如果 $\mathbf{v}$ 是目标向量 $t$ 的最近向量，则新格 $\Lambda(L)$ 将包含向量：<br>[<br>(t - \mathbf{v}, \tau),<br>]<br>这个向量是一个较短的向量，便于通过算法找到。</p>
+<p><strong>解释</strong>：如果 $\mathbf{v}$ 是目标向量 $t$ 的最近向量，则新格 $\Lambda(L)$ 将包含向量：</p>
+<script type="math/tex; mode=display">
+(t - \mathbf{v}, \tau),</script><p>这个向量是一个较短的向量，便于通过算法找到。</p>
 <h2 id="2-使用格方法求解-HNP"><a href="#2-使用格方法求解-HNP" class="headerlink" title="2 使用格方法求解 HNP"></a>2 使用格方法求解 HNP</h2><h3 id="2-1-Boneh-和-Venkatesan"><a href="#2-1-Boneh-和-Venkatesan" class="headerlink" title="2.1 Boneh 和 Venkatesan"></a>2.1 <strong>Boneh 和 Venkatesan</strong></h3><p>提出了以下的格，通过 BDD oracle 求解隐藏数问题（HNP）：</p>
-<p>[<br>\begin{bmatrix}<br>n &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\<br>\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\<br>0 &amp; 0 &amp; 0 &amp; \cdots &amp; n &amp; 0 \\<br>t_0 &amp; t_1 &amp; t_2 &amp; \cdots &amp; t_{m-1} &amp; 1/n<br>\end{bmatrix}<br>]</p>
-<ul>
-<li>目标向量为$(a_0, \dots, a_{m-1}, 0)$， 如果可以找到距离目标向量最近的格向量[<br>(t_0 \cdot \alpha \bmod n, \dots, t_{m-1} \cdot \alpha \bmod n, \alpha / n),<br>]就可以确定$\alpha$。</li>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+n & 0 & 0 & \cdots & 0 & 0 \\
+0 & n & 0 & \cdots & 0 & 0 \\
+\vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+0 & 0 & 0 & \cdots & n & 0 \\
+t_0 & t_1 & t_2 & \cdots & t_{m-1} & 1/n
+\end{bmatrix}</script><ul>
+<li>目标向量为$(a_0, \dots, a_{m-1}, 0)$， 如果可以找到距离目标向量最近的格向量<script type="math/tex">(t_0 \cdot \alpha \bmod n, \dots, t_{m-1} \cdot \alpha \bmod n, \alpha / n),</script>就可以确定$\alpha$。</li>
 </ul>
 <p>根据$<br>a_i + k_i \equiv t_i \cdot \alpha \mod n<br>$左乘$(\alpha,\cdots,\alpha)$可以得到格向量：<br>$<br>(t_0 \cdot \alpha \bmod n, \dots, t_{m-1} \cdot \alpha \bmod n, \alpha / n)<br>$，在 $|k_i| &lt; 2^\ell$ 时，与目标向量的距离在 $\sqrt{m+1} \cdot 2^\ell$ 范围内。</p>
 <h3 id="2-2-Kannan嵌入方法"><a href="#2-2-Kannan嵌入方法" class="headerlink" title="2.2 Kannan嵌入方法"></a>2.2 Kannan嵌入方法</h3><p>大多数研究通过 Kannan 的嵌入方法解决此 BDD 问题，即构造以下的格并求解SVP：</p>
-<p>[<br>\begin{bmatrix}<br>n &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\<br>\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\<br>0 &amp; 0 &amp; 0 &amp; \cdots &amp; n &amp; 0 &amp; 0 \\<br>t_0 &amp; t_1 &amp; t_2 &amp; \cdots &amp; t_{m-1} &amp; 2^\ell / n &amp; 0 \\<br>a_0 &amp; a_1 &amp; a_2 &amp; \cdots &amp; a_{m-1} &amp; 0 &amp; 2^\ell<br>\end{bmatrix}<br>]</p>
-<p>通过左乘$(0,0,\cdots, \alpha,1)$得到格向量：$<br>(k_0, k_1, \dots, k_{m-1}, 2^\ell \cdot \alpha / n, 2^\ell)<br>$，其范数约为 $\sqrt{m + 2} \cdot 2^\ell$。该格子还包含向量 $(0, 0, \dots, 0, 2^\ell, 0)$，因此目标向量通常不是最短向量，可以对该格进行多种改进。</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+n & 0 & 0 & \cdots & 0 & 0 & 0 \\
+0 & n & 0 & \cdots & 0 & 0 & 0 \\
+\vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots \\
+0 & 0 & 0 & \cdots & n & 0 & 0 \\
+t_0 & t_1 & t_2 & \cdots & t_{m-1} & 2^\ell / n & 0 \\
+a_0 & a_1 & a_2 & \cdots & a_{m-1} & 0 & 2^\ell
+\end{bmatrix}</script><p>通过左乘$(0,0,\cdots, \alpha,1)$得到格向量：$<br>(k_0, k_1, \dots, k_{m-1}, 2^\ell \cdot \alpha / n, 2^\ell)<br>$，其范数约为 $\sqrt{m + 2} \cdot 2^\ell$。该格子还包含向量 $(0, 0, \dots, 0, 2^\ell, 0)$，因此目标向量通常不是最短向量，可以对该格进行多种改进。</p>
 <h3 id="2-3-作者的进一步改进"><a href="#2-3-作者的进一步改进" class="headerlink" title="2.3 作者的进一步改进"></a>2.3 作者的进一步改进</h3><h4 id="减小-k-的大小"><a href="#减小-k-的大小" class="headerlink" title="减小 $k$ 的大小"></a><strong>减小 $k$ 的大小</strong></h4><p>在 ECDSA 的输入中，$k$ 通常是正数，因此有 $0 \leq k_i &lt; 2^\ell$。<br>格允许在 $k$ 为正数或者负数，可以通过 $k_i’ = k_i - 2^{\ell-1}$ 来减少 $k$ 的位长一位。<br>[63]在实践中提供了显著的改进，但通常并未广泛应用于实际场景。</p>
 <h4 id="消除变量-alpha"><a href="#消除变量-alpha" class="headerlink" title="消除变量 $\alpha$"></a><strong>消除变量 $\alpha$</strong></h4><p>给定以下输入方程组：</p>
-<p>[<br>a_0 + k_0 \equiv t_0 \cdot \alpha \mod n, \\ \dots, \\<br>a_{m-1} + k_{m-1} \equiv t_{m-1} \cdot \alpha \mod n \\<br>]</p>
-<p>消除 $\alpha$ 得到一个新的方程组：</p>
-<p>[<br>a_1’ + k_1 \equiv t_1’ \cdot k_0 \mod n, \\<br>\dots, \\<br>a_{m-1}’ + k_{m-1} \equiv t_{m-1}’ \cdot k_0 \mod n<br>]</p>
-<p>对于每一个关系：</p>
-<p>[<br>t_i’ = t_i \cdot t_0^{-1}, \quad a_i’ = a_i - t_i \cdot t_0^{-1} \cdot a_0<br>]</p>
-<p>重新排列后得：</p>
-<p>[<br>a_i - t_i \cdot t_0^{-1} \cdot a_0 + k_i \equiv t_i \cdot t_0^{-1} \cdot k_0 \mod n<br>]</p>
-<h5 id="优化结果"><a href="#优化结果" class="headerlink" title="优化结果:"></a><strong>优化结果</strong>:</h5><p>通过这种方式，sample有 $m-1$ 个关系，且：</p>
-<p>[<br>a_i’ = a_i - t_i \cdot t_0^{-1} \cdot a_0, \quad t_i’ = t_i \cdot t_0^{-1}<br>]</p>
-<ol>
+<script type="math/tex; mode=display">
+a_0 + k_0 \equiv t_0 \cdot \alpha \mod n, \\ \dots, \\
+a_{m-1} + k_{m-1} \equiv t_{m-1} \cdot \alpha \mod n \\</script><p>消除 $\alpha$ 得到一个新的方程组：</p>
+<script type="math/tex; mode=display">
+a_1' + k_1 \equiv t_1' \cdot k_0 \mod n, \\
+\dots, \\
+a_{m-1}' + k_{m-1} \equiv t_{m-1}' \cdot k_0 \mod n</script><p>对于每一个关系：</p>
+<script type="math/tex; mode=display">
+t_i' = t_i \cdot t_0^{-1}, \quad a_i' = a_i - t_i \cdot t_0^{-1} \cdot a_0</script><p>重新排列后得：</p>
+<script type="math/tex; mode=display">
+a_i - t_i \cdot t_0^{-1} \cdot a_0 + k_i \equiv t_i \cdot t_0^{-1} \cdot k_0 \mod n</script><h5 id="优化结果"><a href="#优化结果" class="headerlink" title="优化结果:"></a><strong>优化结果</strong>:</h5><p>通过这种方式，sample有 $m-1$ 个关系，且：</p>
+<script type="math/tex; mode=display">
+a_i' = a_i - t_i \cdot t_0^{-1} \cdot a_0, \quad t_i' = t_i \cdot t_0^{-1}</script><ol>
 <li><strong>减少格维度</strong>：维度从 $m+1$ 减少到 $m$。</li>
 <li><strong>移除特定的归一化向量</strong>：$(0, 0, \dots, 0, 2^\ell, 0)$ 不再属于新的格。新目标向量 $(k_1, k_2, \dots, k_{m-1}, k_0, 2^\ell)$ 成为格中的唯一最短向量。</li>
 </ol>
 <h4 id="新格的构造"><a href="#新格的构造" class="headerlink" title="新格的构造"></a>新格的构造</h4><p>令 $w = 2^{\ell-1}$。通过以上两种优化，新格 $\Lambda$ 的生成矩阵为：</p>
-<p>[<br>\begin{bmatrix}<br>n &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\<br>\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\<br>0 &amp; 0 &amp; 0 &amp; \cdots &amp; n &amp; 0 &amp; 0 \\<br>t_1’ &amp; t_2’ &amp; t_3’ &amp; \cdots &amp; t_{m-1}’ &amp; 1 &amp; 0 \\<br>a_1’ &amp; a_2’ &amp; a_3’ &amp; \cdots &amp; a_{m-1}’ &amp; 0 &amp; w<br>\end{bmatrix}<br>]</p>
-<p>目标向量为：</p>
-<p>[<br>v_t = (k_1 - w, k_2 - w, \dots, k_{m-1} - w, k_0 - w, w)<br>]</p>
-<p>矩阵中的值 $1$ 和 $w$ 是归一化值，确保最短向量的所有系数具有相同的长度。</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+n & 0 & 0 & \cdots & 0 & 0 & 0 \\
+0 & n & 0 & \cdots & 0 & 0 & 0 \\
+\vdots & \vdots & \ddots & \vdots & \vdots & \vdots & \vdots \\
+0 & 0 & 0 & \cdots & n & 0 & 0 \\
+t_1' & t_2' & t_3' & \cdots & t_{m-1}' & 1 & 0 \\
+a_1' & a_2' & a_3' & \cdots & a_{m-1}' & 0 & w
+\end{bmatrix}</script><p>目标向量为：</p>
+<script type="math/tex; mode=display">
+v_t = (k_1 - w, k_2 - w, \dots, k_{m-1} - w, k_0 - w, w)</script><p>矩阵中的值 $1$ 和 $w$ 是归一化值，确保最短向量的所有系数具有相同的长度。</p>
 <h4 id="不同大小的-k-i"><a href="#不同大小的-k-i" class="headerlink" title="不同大小的 $k_i$"></a><strong>不同大小的 $k_i$</strong></h4><p>我们可以通过在格的每一列乘以因子 $2^{l_{\max}} / 2^{\ell_i}$ 来适应满足 $|k_i| &lt; 2^{\ell_i}$ 的不同大小的 $k_i$。</p>
 <h2 id="3-The-“Lattice-Barrier”"><a href="#3-The-“Lattice-Barrier”" class="headerlink" title="3.The “Lattice Barrier”"></a>3.The “Lattice Barrier”</h2><p><strong>格障碍：</strong> 当目标向量长度不显著短于格中其他典型向量时，传统格算法通常失败。<br><strong>信息论极限</strong>： 当泄露的随机数位数太少时，传统认为攻击是不可行的。</p>
 <p>人们认为，对于隐藏数问题（HNP），当只知道随机数 $k$ 的一小部分位时，格算法基本上变得不可用。特别是，对于仅泄漏1位随机数的情况，普遍认为格算法将以高概率失败，因为<strong>对应于秘密值的格向量不再显著短于格中的其他向量[13]</strong>。</p>
@@ -385,16 +417,16 @@
 <li>3位随机数偏差是不可行的。</li>
 </ul>
 <p>为了理解为什么存在这种“格障碍”，我们需要注意格的体积（volume），定义为：</p>
-<p>[<br>\text{Vol}(\Lambda) = n^{m-1} \cdot w<br>]</p>
-<p>其中，格的维度为 $m+1$。根据高斯启发式，格中最短向量的长度预计为：</p>
-<p>[<br>\text{gh}(\Lambda) \approx \frac{\Gamma(1 + (m+1)/2)^{1/(m+1)}}{\sqrt{\pi}} \cdot \text{Vol}(\Lambda)^{1/(m+1)}<br>]</p>
-<p>简化后为：</p>
-<p>[<br>\text{gh}(\Lambda) \approx \sqrt{\frac{m+1}{2 \pi e}} \cdot \left(n^{m-1} \cdot w\right)^{1/(m+1)}.<br>]</p>
-<p>同时注意目标向量 $\mathbf{v}$ 的范数满足：</p>
-<p>[<br>|\mathbf{v}| \leq \sqrt{m+1} \cdot w \tag{3}<br>]</p>
-<h3 id="3-1-BDD-求解器的成功条件"><a href="#3-1-BDD-求解器的成功条件" class="headerlink" title="3.1 BDD 求解器的成功条件"></a>3.1 <strong>BDD 求解器的成功条件</strong></h3><p>BDD 求解器在以下情况下能够成功恢复目标向量：</p>
-<p>[<br>|\mathbf{v}| &lt; \text{gh}(\Lambda)<br>]</p>
-<ol>
+<script type="math/tex; mode=display">
+\text{Vol}(\Lambda) = n^{m-1} \cdot w</script><p>其中，格的维度为 $m+1$。根据高斯启发式，格中最短向量的长度预计为：</p>
+<script type="math/tex; mode=display">
+\text{gh}(\Lambda) \approx \frac{\Gamma(1 + (m+1)/2)^{1/(m+1)}}{\sqrt{\pi}} \cdot \text{Vol}(\Lambda)^{1/(m+1)}</script><p>简化后为：</p>
+<script type="math/tex; mode=display">
+\text{gh}(\Lambda) \approx \sqrt{\frac{m+1}{2 \pi e}} \cdot \left(n^{m-1} \cdot w\right)^{1/(m+1)}.</script><p>同时注意目标向量 $\mathbf{v}$ 的范数满足：</p>
+<script type="math/tex; mode=display">
+\|\mathbf{v}\| \leq \sqrt{m+1} \cdot w \tag{3}</script><h3 id="3-1-BDD-求解器的成功条件"><a href="#3-1-BDD-求解器的成功条件" class="headerlink" title="3.1 BDD 求解器的成功条件"></a>3.1 <strong>BDD 求解器的成功条件</strong></h3><p>BDD 求解器在以下情况下能够成功恢复目标向量：</p>
+<script type="math/tex; mode=display">
+\|\mathbf{v}\| < \text{gh}(\Lambda)</script><ol>
 <li>高斯启发式 $\text{gh}(\Lambda)$ 表示典型短向量的长度。</li>
 <li>如果目标向量 $|\mathbf{v}|$ 更短，它会在格算法中被优先找到。</li>
 <li>这是判断目标向量是否可以通过格算法有效恢复的一个重要判据。</li>
@@ -414,11 +446,11 @@
 <p><strong>优化后的目标向量的期望平方范数：</strong></p>
 </li>
 </ol>
-<p>[<br>\mathbb{E}[|\mathbf{v}|^2] = \mathbb{E}\left[\sum_{i=1}^m (k_i - w)^2 + w^2\right] = m \cdot \mathbb{E}[(k_i - w)^2] + w^2<br>]</p>
-<p>假设随机数偏差为 $k_i - w$，首先对其平方求期望：</p>
-<p>[<br>\mathbb{E}[(k_i - w)^2] = \frac{1}{2w} \sum_{i=0}^{2w-1} (i - w)^2<br>]</p>
-<p>[<br>\mathbb{E}[(k_i - w)^2] = \frac{1}{2w} \cdot \left( \sum_{i=0}^{2w-1} i^2 - 2w \sum_{i=0}^{2w-1} i + \sum_{i=0}^{2w-1} w^2 \right)<br>]</p>
-<ul>
+<script type="math/tex; mode=display">
+\mathbb{E}[\|\mathbf{v}\|^2] = \mathbb{E}\left[\sum_{i=1}^m (k_i - w)^2 + w^2\right] = m \cdot \mathbb{E}[(k_i - w)^2] + w^2</script><p>假设随机数偏差为 $k_i - w$，首先对其平方求期望：</p>
+<script type="math/tex; mode=display">
+\mathbb{E}[(k_i - w)^2] = \frac{1}{2w} \sum_{i=0}^{2w-1} (i - w)^2</script><script type="math/tex; mode=display">
+\mathbb{E}[(k_i - w)^2] = \frac{1}{2w} \cdot \left( \sum_{i=0}^{2w-1} i^2 - 2w \sum_{i=0}^{2w-1} i + \sum_{i=0}^{2w-1} w^2 \right)</script><ul>
 <li><p>$\sum_{i=0}^{2w-1} i^2 = \frac{(2w-1)(2w)(2w+1)}{6}$</p>
 </li>
 <li><p>$\sum_{i=0}^{2w-1} i = \frac{(2w-1)(2w)}{2}$</p>
@@ -426,11 +458,11 @@
 <li><p>$\sum_{i=0}^{2w-1} w^2 = w^2 \cdot 2w$</p>
 </li>
 </ul>
-<p>[<br>\mathbb{E}[(k_i - w)^2] = w^2 / 3 + 1 / 6<br>]</p>
-<p>[<br>\mathbb{E}[|\mathbf{v}|^2] = \mathbb{E} \left[ \sum_{i=1}^m (k_i - w)^2 + w^2 \right]<br>]</p>
-<p>[<br>\mathbb{E}[|\mathbf{v}|^2] = m \cdot (w^2 / 3 + 1 / 6) + w^2<br>]</p>
-<p>[<br>\mathbb{E}[|\mathbf{v}|^2] = m \cdot w^2 / 3 + m / 6 + w^2 \tag{4}<br>]</p>
-<hr>
+<script type="math/tex; mode=display">
+\mathbb{E}[(k_i - w)^2] = w^2 / 3 + 1 / 6</script><script type="math/tex; mode=display">
+\mathbb{E}[\|\mathbf{v}\|^2] = \mathbb{E} \left[ \sum_{i=1}^m (k_i - w)^2 + w^2 \right]</script><script type="math/tex; mode=display">
+\mathbb{E}[\|\mathbf{v}\|^2] = m \cdot (w^2 / 3 + 1 / 6) + w^2</script><script type="math/tex; mode=display">
+\mathbb{E}[\|\mathbf{v}\|^2] = m \cdot w^2 / 3 + m / 6 + w^2 \tag{4}</script><hr>
 <div align="center">
 <img src="pic2.png" width="100%">
 </div>
@@ -445,8 +477,8 @@
 <p>针对隐藏数问题（HNP），任何算法的适用性还受到另一个更强的限制：问题本身编码的关于秘密 $d$ 的信息量。具体而言，对于每个样本（即一次签名），$k$ 是一个随机数，长度为 $\log(n)$位，如果随机数 $k$ 泄露了 $\ell $位信息，则剩余的未知信息为$\log(n) - \ell$.</p>
 <p>每个样本揭示了 $\log(n) - \ell$ 位与秘密 $d$ 相关的信息。</p>
 <p>因此，我们期望需要满足以下条件才能恢复 $d$：</p>
-<p>[<br>m \geq \frac{\log(n)}{\log(n) - \ell}<br>]</p>
-<p>从启发式上看，对于随机实例，低于这一点时，我们不期望格能够唯一地确定问题的解，无论使用何种算法解决它。</p>
+<script type="math/tex; mode=display">
+m \geq \frac{\log(n)}{\log(n) - \ell}</script><p>从启发式上看，对于随机实例，低于这一点时，我们不期望格能够唯一地确定问题的解，无论使用何种算法解决它。</p>
 <h2 id="4-带谓词的有界距离解码"><a href="#4-带谓词的有界距离解码" class="headerlink" title="4. 带谓词的有界距离解码"></a>4. 带谓词的有界距离解码</h2><p><strong>定义5：带谓词的 $\alpha$-有界距离解码问题（BDD$_{\alpha, f(\cdot)}$）</strong></p>
 <p>给定：</p>
 <ul>
@@ -476,8 +508,12 @@
 </ol>
 <p>因此，我们选择了这些名字来区别于传统的“CVP”（最近向量问题）和“SVP”（最短向量问题）。</p>
 <p>为了明确说明如何使用求解 uSVP$_{f(\cdot)}$ 的 oracle 来解决 BDD$_{\alpha, f(\cdot)}$，我们构造了以下格：</p>
-<p>[<br>L =<br>\begin{pmatrix}<br>B &amp; 0 \\<br>t &amp; \tau<br>\end{pmatrix}<br>]</p>
-<p>其中：</p>
+<script type="math/tex; mode=display">
+L =
+\begin{pmatrix}
+B & 0 \\
+t & \tau
+\end{pmatrix}</script><p>其中：</p>
 <ul>
 <li>$\tau \approx \mathbb{E}\left[|\mathbf{v} - t| / \sqrt{d}\right]$ 是某种嵌入因子。</li>
 <li>如果 $\mathbf{v}$ 是最接近 $t$ 的向量，则格 $\Lambda(L)$ 包含向量 $(t - \mathbf{v}, \tau)$。</li>
@@ -572,10 +608,13 @@
 <li>在数据库中的每个向量上运行谓词检查，筛选出满足特定谓词的目标向量。</li>
 </ol>
 <p>筛法的主要作用是高效生成大量短向量，并利用这些向量解决格问题（如 BDD 或 SVP）。</p>
-<p><strong>假设 1</strong>：当 2-sieve 算法运行结束时，数据库 $L$ 满足以下性质：<br>[<br>|v| \leq \sqrt{4/3} \cdot \text{gh}(\Lambda),<br>]<br>其中 $\text{gh}(\Lambda)$ 是高斯启发式预测的最短向量长度。</p>
+<p><strong>假设 1</strong>：当 2-sieve 算法运行结束时，数据库 $L$ 满足以下性质：</p>
+<script type="math/tex; mode=display">
+\|v\| \leq \sqrt{4/3} \cdot \text{gh}(\Lambda),</script><p>其中 $\text{gh}(\Lambda)$ 是高斯启发式预测的最短向量长度。</p>
 <p><strong>定理 2</strong>： 筛法的性能保证如下：</p>
 <ul>
-<li>假设格 $\Lambda \subset \mathbb{R}^d$ 包含目标向量 $v$，且：<br>[<br>|v| \leq \sqrt{4/3} \cdot \text{gh}(\Lambda).<br>]</li>
+<li>假设格 $\Lambda \subset \mathbb{R}^d$ 包含目标向量 $v$，且：<script type="math/tex; mode=display">
+\|v\| \leq \sqrt{4/3} \cdot \text{gh}(\Lambda).</script></li>
 <li>在满足假设的情况下，筛选算法在 $2^{0.292d + o(d)}$ 步中找到满足谓词 $f(v) = 1$ 的目标向量。</li>
 <li>计算谓词 $f(\cdot)$ 的调用次数为 $(4/3)^{d/2 + o(d)}$。</li>
 </ul>
