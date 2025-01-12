@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="ZhangMin">
+
+
+
+
+
+<title>隐藏数问题 | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">隐藏数问题</h1>
+            
+                <div class="post-meta">
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 9, 2025&nbsp;&nbsp;10:08:14</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <!-- ### 隐藏数问题（HNP）
+在隐藏数问题中，有一个秘密整数$\alpha$和公开模数$n$。关于$\alpha$的信息隐藏在这样的samples中：一个oracle选择一个 -->
+<h2 id="1-ECDSA与HNP"><a href="#1-ECDSA与HNP" class="headerlink" title="1 ECDSA与HNP"></a>1 ECDSA与HNP</h2><p>ECDSA 是一种基于椭圆曲线密码学的数字签名算法。它被广泛应用于现代密码系统中，例如比特币、以太坊等区块链系统，以及其他需要安全通信的场景（如TLS证书）。</p>
+<p>ECDSA 的核心思想是利用椭圆曲线上的数学性质实现签名生成和验证，同时相比传统签名算法（如 RSA）提供更高的安全性和更短的密钥长度。</p>
+<h3 id="1-1-ECDSA-签名机制"><a href="#1-1-ECDSA-签名机制" class="headerlink" title="1.1 ECDSA 签名机制"></a>1.1 ECDSA 签名机制</h3><p>ECDSA 签名的全局参数包括：</p>
+<ul>
+<li>一个椭圆曲线 ( E(F_p) )，</li>
+<li>( E ) 上的一个阶为 ( n ) 的生成点 ( G )。</li>
+</ul>
+<p>签名密钥是一个满足 ( 0 \leq d &lt; n ) 的整数，而公钥是点 ( dG )。（已知$dG$和G想要得到$d$是困难的）为了对消息摘要 ( h ) 生成 ECDSA 签名，签名者需要：</p>
+<ol>
+<li>生成一个随机整数随机数 ( k &lt; n )（$k$是秘密的）；</li>
+<li>计算 ( r = (kG)_x )（其中下标 ( x ) 表示点的 ( x )-坐标），</li>
+<li>再计算 ( s = k^{-1} \cdot (h + d \cdot r) \mod n )。</li>
+</ol>
+<p>最终签名为 <strong>(r, s)</strong>。</p>
+<h3 id="1-2-隐藏数问题"><a href="#1-2-隐藏数问题" class="headerlink" title="1.2 隐藏数问题"></a>1.2 隐藏数问题</h3><p>在<strong>隐藏数问题（HNP）</strong> 中：一个秘密整数 (\alpha) 和一个公开的模数 (n)。</p>
+<ul>
+<li>关于 (\alpha) 的信息：sample。</li>
+<li>隐藏数问题可以被视为一维的LWE问题。</li>
+</ul>
+<h4 id="1-sample生成过程"><a href="#1-sample生成过程" class="headerlink" title="(1) sample生成过程"></a>(1) sample生成过程</h4><ol>
+<li>一个oracle随机选择一个整数 (t_i)，满足 (0 &lt; t_i &lt; n)。</li>
+<li>计算 ( t_i \cdot \alpha \equiv s_i\mod n)，其中 (0 \leq s_i &lt; n)。</li>
+<li>oracle会揭示 (s_i) 的某些<strong>最高有效位</strong>（most significant bits）以及对应的 (t_i)。</li>
+</ol>
+<h4 id="2-数学表示"><a href="#2-数学表示" class="headerlink" title="(2) 数学表示"></a>(2) 数学表示</h4><p>该问题可以形式化为：(<br>a_i + k_i = t_i \cdot \alpha \mod n<br>), 其中 (k_i &lt; 2^\ell)，(\ell \in \mathbb{Z}) 是问题的一个参数。</p>
+<ul>
+<li>攻击者已知: ((t_i, a_i))。</li>
+</ul>
+<h3 id="1-3-ECDSA-作为-HNP-问题"><a href="#1-3-ECDSA-作为-HNP-问题" class="headerlink" title="1.3 ECDSA 作为 HNP 问题"></a>1.3 ECDSA 作为 HNP 问题</h3><p>在对 ECDSA 的侧信道攻击中，对手可能会获知签名随机数 ( k ) 的一些最高有效位, 假设这些位均为 0。然后重新整理 ECDSA 签名公式 ( s )，可以得到：</p>
+<p>[<br>-s^{-1} \cdot h + k \equiv s^{-1} \cdot r \cdot d \pmod{n}<br>]</p>
+<p>因此得到了一个 HNP 实例，其中：</p>
+<ul>
+<li>( a_i = -s^{-1} \cdot h ),</li>
+<li>( t_i = s^{-1} \cdot r ),</li>
+<li>( \alpha = d )。</li>
+</ul>
+<p>目标：根据泄露的$k$计算出私钥$d$。</p>
+<h3 id="1-4-从随机数比特破解ECDSA"><a href="#1-4-从随机数比特破解ECDSA" class="headerlink" title="1.4 从随机数比特破解ECDSA"></a>1.4 从随机数比特破解ECDSA</h3><p>许多文献利用 ECDSA（或更广泛的 EC-DSA）随机数的侧信道信息，通过解决 <strong>隐藏数问题（HNP）</strong> 来攻击 ECDSA，例如 [12,19,44,53,61,63,68,69,73,78]。这一研究领域始于 Bleichenbacher [18] 和 Howgrave-Graham 与 Smart [43] 的开创性工作。</p>
+<ul>
+<li><strong>Howgrave-Graham 与 Smart 的研究</strong>：利用格约化（lattice reduction）方法来解决 HNP。</li>
+<li><strong>Bleichenbacher 的研究</strong>：采用了一种可以视为 BKW 算法 [3,20,39,47] 变体的组合算法。</li>
+</ul>
+<p>最新的相关研究成果是 [13]，该工作利用 Bleichenbacher 的算法在随机数比特少于 1 位的情况下成功恢复密钥。更近期的研究 [54] 则首次发现了一个 <strong>实际可行的攻击场景</strong>，能够利用 Boneh 和 Venkatesan [21] 提出的 HNP 原始应用，即针对素域 Diffie-Hellman 密钥交换的攻击。</p>
+<h3 id="1-5-侧信道攻击"><a href="#1-5-侧信道攻击" class="headerlink" title="1.5 侧信道攻击"></a>1.5 侧信道攻击</h3><p>针对 ECDSA 的实际侧信道攻击通常分为两个阶段：</p>
+<ol>
+<li>攻击者通过侧信道测量收集大量签名数据。</li>
+<li>然后，攻击者在一个精心选择的轨迹子集上运行密钥恢复算法。</li>
+</ol>
+<p>根据测量的鲁棒性，数据收集阶段可能会非常昂贵。例如：</p>
+<ul>
+<li>在 [60] 中，研究人员报告需要重复攻击 <strong>10,000 到 20,000 次</strong> 才能获得 <strong>1 字节信息</strong>。</li>
+<li>在 [37] 中，研究人员测量了 <strong>5,000 次签名操作</strong>（每次操作耗时 0.1 秒），从中提取了 <strong>114 条可用轨迹</strong>。</li>
+<li>在 [61] 中，研究人员描述了生成 <strong>40,000 个签名</strong>（耗时 80 分钟），以获取 <strong>35 条适用轨迹</strong>来完成攻击。</li>
+</ul>
+<p>因此，在侧信道攻击的研究中，<strong>减少成功攻击所需的数据量</strong> 通常是一个重要的衡量指标 [44,68]。利用本文所述方法，可以实现更高效的整体攻击。</p>
+<h3 id="1-6-困难问题"><a href="#1-6-困难问题" class="headerlink" title="1.6 困难问题"></a>1.6 困难问题</h3><p><strong>定义 2: 最短向量问题 (SVP)</strong>：给定一个格基 (B)，找到格 (\Lambda(B)) 中的最短非零向量。</p>
+<p>在许多应用中，我们更感兴趣的是找到离目标向量最近的格向量。在这种情况下，如果目标向量距离格不是太远，我们称之为<strong>有界距离解码</strong>。</p>
+<p><strong>定义 3: (\alpha)-有界距离解码问题 (BDD(_\alpha))</strong></p>
+<p>给定：</p>
+<ul>
+<li>一个格基 (B)，</li>
+<li>一个目标向量 (t)，</li>
+<li>一个参数 (0 &lt; \alpha)，使得目标点 (t) 与格的欧几里得距离满足：<br>[<br>\text{dist}(t, B) &lt; \alpha \cdot \lambda_1(\Lambda(B)),<br>]</li>
+</ul>
+<p>求一个格向量 (\mathbf{v} \in \Lambda(B))，使其为距离 (t) 最近的格点。</p>
+<p><strong>唯一解的保证</strong>：为了保证解的唯一性，通常要求 (\alpha &lt; 1/2)。但实际上，这个问题可以推广到 (1/2 \leq \alpha &lt; 1)，在这种情况下，我们可以期望高概率找到唯一解。</p>
+<ul>
+<li>在渐近意义下，对于任意多项式有界的 (\gamma \geq 1)，可以通过从 BDD(_{1/(\sqrt{2}\gamma)}) 到 uSVP(_\gamma) 的归约解决问题。</li>
+</ul>
+<p><strong>定义 4: (\gamma)-唯一最短向量问题 (uSVP(_\gamma))</strong></p>
+<p>给定一个格 (\Lambda)，假设满足：</p>
+<ul>
+<li>第二短向量的长度 (\lambda_2(\Lambda)) 满足：<br>[<br>\lambda_2(\Lambda) &gt; \gamma \cdot \lambda_1(\Lambda),<br>]</li>
+</ul>
+<p>找到格中满足长度为 (\lambda_1(\Lambda)) 的非零向量。</p>
+<h3 id="1-7-从-BDD-到-uSVP-的归约"><a href="#1-7-从-BDD-到-uSVP-的归约" class="headerlink" title="1.7 从 BDD 到 uSVP 的归约"></a>1.7 <strong>从 BDD 到 uSVP 的归约</strong></h3><p>基于Kannan嵌入：<strong>嵌入矩阵 (L) 的构造：</strong></p>
+<p>[<br>L =<br>\begin{pmatrix}<br>B &amp; 0 \\<br>t &amp; \tau<br>\end{pmatrix}<br>]</p>
+<p>其中：</p>
+<ul>
+<li>(\tau) 是嵌入因子，通常可以认为：<br>[<br>\tau = \mathbb{E}\left[|t - \mathbf{v}| / \sqrt{d}\right],<br>]<br>这是目标向量 (t) 与格向量最近点 (\mathbf{v}) 之间的预期距离。</li>
+</ul>
+<p><strong>解释</strong>：如果 (\mathbf{v}) 是目标向量 (t) 的最近向量，则新格 (\Lambda(L)) 将包含向量：<br>[<br>(t - \mathbf{v}, \tau),<br>]<br>这个向量是一个较短的向量，便于通过算法找到。</p>
+<h2 id="2-使用格方法求解-HNP"><a href="#2-使用格方法求解-HNP" class="headerlink" title="2 使用格方法求解 HNP"></a>2 使用格方法求解 HNP</h2><h3 id="2-1-Boneh-和-Venkatesan"><a href="#2-1-Boneh-和-Venkatesan" class="headerlink" title="2.1 Boneh 和 Venkatesan"></a>2.1 <strong>Boneh 和 Venkatesan</strong></h3><p>提出了以下的格，通过 BDD oracle 求解隐藏数问题（HNP）：</p>
+<p>[<br>\begin{bmatrix}<br>n &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; \cdots &amp; 0 &amp; 0 \\<br>\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots \\<br>0 &amp; 0 &amp; 0 &amp; \cdots &amp; n &amp; 0 \\<br>t_0 &amp; t_1 &amp; t_2 &amp; \cdots &amp; t_{m-1} &amp; 1/n<br>\end{bmatrix}<br>]</p>
+<ul>
+<li>目标向量为((a_0, \dots, a_{m-1}, 0))， 如果可以找到距离目标向量最近的格向量[<br>(t_0 \cdot \alpha \bmod n, \dots, t_{m-1} \cdot \alpha \bmod n, \alpha / n),<br>]就可以确定$\alpha$。</li>
+</ul>
+<p>根据(<br>a_i + k_i \equiv t_i \cdot \alpha \mod n<br>)左乘$(\alpha,\cdots,\alpha)$可以得到格向量：<br>(<br>(t_0 \cdot \alpha \bmod n, \dots, t_{m-1} \cdot \alpha \bmod n, \alpha / n)<br>)，在 (|k_i| &lt; 2^\ell) 时，与目标向量的距离在 (\sqrt{m+1} \cdot 2^\ell) 范围内。</p>
+<h3 id="2-2-Kannan嵌入方法"><a href="#2-2-Kannan嵌入方法" class="headerlink" title="2.2 Kannan嵌入方法"></a>2.2 Kannan嵌入方法</h3><p>大多数研究通过 Kannan 的嵌入方法解决此 BDD 问题，即构造以下的格并求解SVP：</p>
+<p>[<br>\begin{bmatrix}<br>n &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\<br>\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\<br>0 &amp; 0 &amp; 0 &amp; \cdots &amp; n &amp; 0 &amp; 0 \\<br>t_0 &amp; t_1 &amp; t_2 &amp; \cdots &amp; t_{m-1} &amp; 2^\ell / n &amp; 0 \\<br>a_0 &amp; a_1 &amp; a_2 &amp; \cdots &amp; a_{m-1} &amp; 0 &amp; 2^\ell<br>\end{bmatrix}<br>]</p>
+<p>通过左乘$(0,0,\cdots, \alpha,1)$得到格向量：(<br>(k_0, k_1, \dots, k_{m-1}, 2^\ell \cdot \alpha / n, 2^\ell)<br>)，其范数约为 (\sqrt{m + 2} \cdot 2^\ell)。该格子还包含向量 ((0, 0, \dots, 0, 2^\ell, 0))，因此目标向量通常不是最短向量，可以对该格进行多种改进。</p>
+<h3 id="2-3-作者的进一步改进"><a href="#2-3-作者的进一步改进" class="headerlink" title="2.3 作者的进一步改进"></a>2.3 作者的进一步改进</h3><h4 id="减小-k-的大小"><a href="#减小-k-的大小" class="headerlink" title="减小 (k) 的大小"></a><strong>减小 (k) 的大小</strong></h4><p>在 ECDSA 的输入中，(k) 通常是正数，因此有 (0 \leq k_i &lt; 2^\ell)。<br>格允许在 (k) 为正数或者负数，可以通过 (k_i’ = k_i - 2^{\ell-1}) 来减少 (k) 的位长一位。<br>[63]在实践中提供了显著的改进，但通常并未广泛应用于实际场景。</p>
+<h4 id="消除变量-alpha"><a href="#消除变量-alpha" class="headerlink" title="消除变量 (\alpha)"></a><strong>消除变量 (\alpha)</strong></h4><p>给定以下输入方程组：</p>
+<p>[<br>a_0 + k_0 \equiv t_0 \cdot \alpha \mod n, \\ \dots, \\<br>a_{m-1} + k_{m-1} \equiv t_{m-1} \cdot \alpha \mod n \\<br>]</p>
+<p>消除 (\alpha) 得到一个新的方程组：</p>
+<p>[<br>a_1’ + k_1 \equiv t_1’ \cdot k_0 \mod n, \\<br>\dots, \\<br>a_{m-1}’ + k_{m-1} \equiv t_{m-1}’ \cdot k_0 \mod n<br>]</p>
+<p>对于每一个关系：</p>
+<p>[<br>t_i’ = t_i \cdot t_0^{-1}, \quad a_i’ = a_i - t_i \cdot t_0^{-1} \cdot a_0<br>]</p>
+<p>重新排列后得：</p>
+<p>[<br>a_i - t_i \cdot t_0^{-1} \cdot a_0 + k_i \equiv t_i \cdot t_0^{-1} \cdot k_0 \mod n<br>]</p>
+<h5 id="优化结果"><a href="#优化结果" class="headerlink" title="优化结果:"></a><strong>优化结果</strong>:</h5><p>通过这种方式，sample有 (m-1) 个关系，且：</p>
+<p>[<br>a_i’ = a_i - t_i \cdot t_0^{-1} \cdot a_0, \quad t_i’ = t_i \cdot t_0^{-1}<br>]</p>
+<ol>
+<li><strong>减少格维度</strong>：维度从 (m+1) 减少到 (m)。</li>
+<li><strong>移除特定的归一化向量</strong>：((0, 0, \dots, 0, 2^\ell, 0)) 不再属于新的格。新目标向量 ((k_1, k_2, \dots, k_{m-1}, k_0, 2^\ell)) 成为格中的唯一最短向量。</li>
+</ol>
+<h4 id="新格的构造"><a href="#新格的构造" class="headerlink" title="新格的构造"></a>新格的构造</h4><p>令 (w = 2^{\ell-1})。通过以上两种优化，新格 (\Lambda) 的生成矩阵为：</p>
+<p>[<br>\begin{bmatrix}<br>n &amp; 0 &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; \cdots &amp; 0 &amp; 0 &amp; 0 \\<br>\vdots &amp; \vdots &amp; \ddots &amp; \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\<br>0 &amp; 0 &amp; 0 &amp; \cdots &amp; n &amp; 0 &amp; 0 \\<br>t_1’ &amp; t_2’ &amp; t_3’ &amp; \cdots &amp; t_{m-1}’ &amp; 1 &amp; 0 \\<br>a_1’ &amp; a_2’ &amp; a_3’ &amp; \cdots &amp; a_{m-1}’ &amp; 0 &amp; w<br>\end{bmatrix}<br>]</p>
+<p>目标向量为：</p>
+<p>[<br>v_t = (k_1 - w, k_2 - w, \dots, k_{m-1} - w, k_0 - w, w)<br>]</p>
+<p>矩阵中的值 (1) 和 (w) 是归一化值，确保最短向量的所有系数具有相同的长度。</p>
+<h4 id="不同大小的-k-i"><a href="#不同大小的-k-i" class="headerlink" title="不同大小的 (k_i)"></a><strong>不同大小的 (k_i)</strong></h4><p>我们可以通过在格的每一列乘以因子 (2^{l_{\max}} / 2^{\ell_i}) 来适应满足 (|k_i| &lt; 2^{\ell_i}) 的不同大小的 (k_i)。</p>
+<h2 id="3-The-“Lattice-Barrier”"><a href="#3-The-“Lattice-Barrier”" class="headerlink" title="3.The “Lattice Barrier”"></a>3.The “Lattice Barrier”</h2><p><strong>格障碍：</strong> 当目标向量长度不显著短于格中其他典型向量时，传统格算法通常失败。<br><strong>信息论极限</strong>： 当泄露的随机数位数太少时，传统认为攻击是不可行的。</p>
+<p>人们认为，对于隐藏数问题（HNP），当只知道随机数 (k) 的一小部分位时，格算法基本上变得不可用。特别是，对于仅泄漏1位随机数的情况，普遍认为格算法将以高概率失败，因为<strong>对应于秘密值的格向量不再显著短于格中的其他向量[13]</strong>。</p>
+<p>Aranha 等人在文献 [12] 中进一步详细讨论了这一点：“存在一个硬限制，限制了通过格约简所能实现的目标：由于 HNP 格的结构，攻击 (EC)DSA 中只泄漏1位随机数的场景是不可行的。在这种情况下，即使在高斯启发式的假设下，与 HNP 解对应的‘隐藏格点’也不会是最短向量，因此格技术无法奏效。” 类似的观点也出现在文献 [30, 73, 77] 中。例如，在 [77] 中估算，对于256位的椭圆曲线：</p>
+<ul>
+<li>3位随机数偏差是可能的，但并不容易；</li>
+<li>2位随机数偏差是不可行的。</li>
+</ul>
+<p>而对于384位曲线：</p>
+<ul>
+<li>5位或4位随机数偏差很难；</li>
+<li>3位随机数偏差是不可行的。</li>
+</ul>
+<p>为了理解为什么存在这种“格障碍”，我们需要注意格的体积（volume），定义为：</p>
+<p>[<br>\text{Vol}(\Lambda) = n^{m-1} \cdot w<br>]</p>
+<p>其中，格的维度为 (m+1)。根据高斯启发式，格中最短向量的长度预计为：</p>
+<p>[<br>\text{gh}(\Lambda) \approx \frac{\Gamma(1 + (m+1)/2)^{1/(m+1)}}{\sqrt{\pi}} \cdot \text{Vol}(\Lambda)^{1/(m+1)}<br>]</p>
+<p>简化后为：</p>
+<p>[<br>\text{gh}(\Lambda) \approx \sqrt{\frac{m+1}{2 \pi e}} \cdot \left(n^{m-1} \cdot w\right)^{1/(m+1)}.<br>]</p>
+<p>同时注意目标向量 (\mathbf{v}) 的范数满足：</p>
+<p>[<br>|\mathbf{v}| \leq \sqrt{m+1} \cdot w \tag{3}<br>]</p>
+<h3 id="3-1-BDD-求解器的成功条件"><a href="#3-1-BDD-求解器的成功条件" class="headerlink" title="3.1 BDD 求解器的成功条件"></a>3.1 <strong>BDD 求解器的成功条件</strong></h3><p>BDD 求解器在以下情况下能够成功恢复目标向量：</p>
+<p>[<br>|\mathbf{v}| &lt; \text{gh}(\Lambda)<br>]</p>
+<ol>
+<li>高斯启发式 $\text{gh}(\Lambda)$ 表示典型短向量的长度。</li>
+<li>如果目标向量 $|\mathbf{v}|$ 更短，它会在格算法中被优先找到。</li>
+<li>这是判断目标向量是否可以通过格算法有效恢复的一个重要判据。</li>
+</ol>
+<p>图2展示了高斯启发式 (\text{gh}(\Lambda)) 与目标向量上界（公式3）的比较，用于256位 ECDSA 密钥恢复问题的1位、2位和3位随机数偏差场景。对应格的维度解释了文献 [77] 中估算的难度。</p>
+<div align="center">
+<img src="pic1.png" width="100%">
+</div>
+
+<h3 id="3-2-两项关键观察"><a href="#3-2-两项关键观察" class="headerlink" title="3.2 两项关键观察"></a>3.2 <strong>两项关键观察</strong></h3><p>作者有两项关键观察：</p>
+<ol>
+<li><p><strong>目标向量的上界是一种保守估计：</strong></p>
+<ul>
+<li>上界是目标向量长度的保守估计。然而，根据启发式假设，我们的问题实例是随机采样的，因此我们使用<strong>均匀分布的向量的期望范数作为目标向量的期望范数</strong>。</li>
+<li>这一调整仅是上界的一个常数因子，却对临界点有显著影响。</li>
+</ul>
+<p><strong>优化后的目标向量的期望平方范数：</strong></p>
+</li>
+</ol>
+<p>[<br>\mathbb{E}[|\mathbf{v}|^2] = \mathbb{E}\left[\sum_{i=1}^m (k_i - w)^2 + w^2\right] = m \cdot \mathbb{E}[(k_i - w)^2] + w^2<br>]</p>
+<p>假设随机数偏差为 (k_i - w)，首先对其平方求期望：</p>
+<p>[<br>\mathbb{E}[(k_i - w)^2] = \frac{1}{2w} \sum_{i=0}^{2w-1} (i - w)^2<br>]</p>
+<p>[<br>\mathbb{E}[(k_i - w)^2] = \frac{1}{2w} \cdot \left( \sum_{i=0}^{2w-1} i^2 - 2w \sum_{i=0}^{2w-1} i + \sum_{i=0}^{2w-1} w^2 \right)<br>]</p>
+<ul>
+<li><p>(\sum_{i=0}^{2w-1} i^2 = \frac{(2w-1)(2w)(2w+1)}{6})</p>
+</li>
+<li><p>(\sum_{i=0}^{2w-1} i = \frac{(2w-1)(2w)}{2})</p>
+</li>
+<li><p>(\sum_{i=0}^{2w-1} w^2 = w^2 \cdot 2w)</p>
+</li>
+</ul>
+<p>[<br>\mathbb{E}[(k_i - w)^2] = w^2 / 3 + 1 / 6<br>]</p>
+<p>[<br>\mathbb{E}[|\mathbf{v}|^2] = \mathbb{E} \left[ \sum_{i=1}^m (k_i - w)^2 + w^2 \right]<br>]</p>
+<p>[<br>\mathbb{E}[|\mathbf{v}|^2] = m \cdot (w^2 / 3 + 1 / 6) + w^2<br>]</p>
+<p>[<br>\mathbb{E}[|\mathbf{v}|^2] = m \cdot w^2 / 3 + m / 6 + w^2 \tag{4}<br>]</p>
+<hr>
+<div align="center">
+<img src="pic2.png" width="100%">
+</div>
+
+<p><strong>图3.</strong> 对格算法可行性的新估算<br>我们绘制了目标向量的期望长度 (\mathbb{E}[|\mathbf{v}|]) 和高斯启发式 (\text{gh}(\Lambda)) 的对比曲线，随样本数量 (m) 的变化，其中 (\log(n) = 256)。与图2相比，这些临界点对应于更易处理的实例。</p>
+<hr>
+<p>通过这一条件，我们观察到，先前被认为通过格算法难以解决的 ECDSA 密钥恢复问题，现在变得可行，而那些被认为无法解决的问题，则仅仅变得代价昂贵。</p>
+<ol>
+<li><strong>信息论限制：</strong> 即使在目标向量的范数满足 (|\mathbf{v}| \geq \text{gh}(\Lambda)) 的情况下，格算法仍然可以应用。换句话说，即使“与秘密值对应的格向量不再显著短于格中的其他向量”这一条件（参见 [13]）被违反，我们也发现“格障碍”是<strong>软性的</strong>。</li>
+</ol>
+<p>这一观察表明，违背“格障碍”只是需要花费更多的计算时间。因此，我们可以在 <strong>图3</strong> 中的交叉点位置提高成功概率，并用比交叉点建议的样本量更少的样本成功解决问题实例。</p>
+<p>针对隐藏数问题（HNP），任何算法的适用性还受到另一个更强的限制：问题本身编码的关于秘密 (d) 的信息量。具体而言，对于每个样本（即一次签名），$k$ 是一个随机数，长度为 $\log(n)$位，如果随机数 $k$ 泄露了 $\ell $位信息，则剩余的未知信息为$\log(n) - \ell$.</p>
+<p>每个样本揭示了 (\log(n) - \ell) 位与秘密 (d) 相关的信息。</p>
+<p>因此，我们期望需要满足以下条件才能恢复 (d)：</p>
+<p>[<br>m \geq \frac{\log(n)}{\log(n) - \ell}<br>]</p>
+<p>从启发式上看，对于随机实例，低于这一点时，我们不期望格能够唯一地确定问题的解，无论使用何种算法解决它。</p>
+<h2 id="4-带谓词的有界距离解码"><a href="#4-带谓词的有界距离解码" class="headerlink" title="4. 带谓词的有界距离解码"></a>4. 带谓词的有界距离解码</h2><p><strong>定义5：带谓词的 (\alpha)-有界距离解码问题（BDD(_{\alpha, f(\cdot)})）</strong></p>
+<p>给定：</p>
+<ul>
+<li>一个格基 (B)，</li>
+<li>一个向量 (t)，</li>
+<li>一个谓词函数 (f(\cdot))，</li>
+<li>一个参数 (0 &lt; \alpha)，满足欧几里得距离 (\text{dist}(t, B) &lt; \alpha \cdot \lambda_1(B))。</li>
+</ul>
+<p>找到一个格向量 (\mathbf{v} \in \Lambda(B))，使得：</p>
+<ol>
+<li>(f(\mathbf{v} - t) = 1)，</li>
+<li>该向量是最接近 (t) 的向量。</li>
+</ol>
+<p>我们将使用 <strong>Kannan 嵌入技术</strong> 来求解 BDD(_{\alpha, f(\cdot)})。然而，注意我们构造的格不一定有唯一的最短向量。唯一性实际上是由于谓词 (f(\cdot)) 的加入而引入的。</p>
+<p><strong>定义6：带谓词的唯一最短向量问题（uSVP(_{f(\cdot)})）</strong></p>
+<p>给定：</p>
+<ul>
+<li>一个格 (\Lambda)，</li>
+<li>一个谓词函数 (f(\cdot))，</li>
+</ul>
+<p>找到格中的最短非零向量 (\mathbf{v} \in \Lambda)，满足 (f(\mathbf{v}) = 1)。</p>
+<hr>
+<h3 id="remark1"><a href="#remark1" class="headerlink" title="remark1"></a><strong>remark1</strong></h3><p>我们的命名——“BDD”和“uSVP”——可能会令人困惑，因为目标向量既不是特别接近格，也不是特别短。然而：</p>
+<ol>
+<li>向量到格的距离仍然受到限制。</li>
+<li>谓词 (f(\cdot)) 的存在确保了唯一性。</li>
+</ol>
+<p>因此，我们选择了这些名字来区别于传统的“CVP”（最近向量问题）和“SVP”（最短向量问题）。</p>
+<p>为了明确说明如何使用求解 uSVP(_{f(\cdot)}) 的 oracle 来解决 BDD(_{\alpha, f(\cdot)})，我们构造了以下格：</p>
+<p>[<br>L =<br>\begin{pmatrix}<br>B &amp; 0 \\<br>t &amp; \tau<br>\end{pmatrix}<br>]</p>
+<p>其中：</p>
+<ul>
+<li>(\tau \approx \mathbb{E}\left[|\mathbf{v} - t| / \sqrt{d}\right]) 是某种嵌入因子。</li>
+<li>如果 (\mathbf{v}) 是最接近 (t) 的向量，则格 (\Lambda(L)) 包含向量 ((t - \mathbf{v}, \tau))。</li>
+</ul>
+<p>此外，我们构造了谓词 (f’(\cdot))，由 (f(\cdot)) 给出，如 <strong>算法1</strong> 所示。</p>
+<div align="center">
+<img src="pic3.png" width="100%">
+</div>
+
+
+<h3 id="remark2"><a href="#remark2" class="headerlink" title="remark2"></a><strong>remark2</strong></h3><p>定义5和定义6比用于引入它们的场景更为通用。具体来说：</p>
+<ul>
+<li>这两个定义允许谓词在格中的多个向量上评估为真，并分别返回这些向量中最接近或最短的向量。</li>
+<li>在许多（但不是全部）应用中，我们还可以保证谓词只对一个向量评估为真。</li>
+</ul>
+<p>定义5和定义6还可以自然扩展到一种情况，即我们需要找到一个符合谓词的、范数不超过给定值的格向量列表。</p>
+<p><strong>谓词的意义：</strong></p>
+<pre><code>1.    限制解的范围： 谓词用于筛选出符合特定条件的格向量。
+2.    确保唯一性： 某些应用场景下，格中可能有多个最短向量或最近向量，谓词帮助我们锁定一个解。
+3.    结合嵌入技术： 在嵌入格的情况下，构造新的谓词 $f^&#123;\prime&#125;(\cdot)$ 是为了在高维格中正确应用原始条件。
+</code></pre><div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>BDD</strong></th>
+<th><strong>CVP</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>搜索范围</strong></td>
+<td>仅限于 (\alpha \cdot \lambda_1(B)) 范围内</td>
+<td>全局搜索</td>
+</tr>
+<tr>
+<td><strong>错误率</strong></td>
+<td>较低，限制了错误解的可能性</td>
+<td>较高，可能返回错误的最近解</td>
+</tr>
+<tr>
+<td><strong>计算效率</strong></td>
+<td>较高，限制范围后减少计算量</td>
+<td>较低，需要全局搜索</td>
+</tr>
+<tr>
+<td><strong>隐藏数问题的适应性</strong></td>
+<td>符合随机偏差较小的特点</td>
+<td>难以处理随机偏差大的情况</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id="5-算法"><a href="#5-算法" class="headerlink" title="5 算法"></a>5 算法</h2><p>我们提出了两种解决 <strong>uSVP(_{f(\cdot)})</strong> 的算法：</p>
+<ol>
+<li>基于<strong>枚举</strong>（enumeration）的算法——可以简单参数化以支持任意目标向量的范数。</li>
+<li>基于<strong>筛选</strong>（sieving）的算法——当目标向量的范数 (|\mathbf{v}| \leq \sqrt{4/3} \cdot \text{gh}(\Lambda)) 时可以求解 uSVP(_{f(\cdot)})。</li>
+</ol>
+<h3 id="5-1-Baseline"><a href="#5-1-Baseline" class="headerlink" title="5.1 Baseline"></a>5.1 Baseline</h3><p>当目标向量 (\mathbf{v}) 预计比格中任何其他向量短时，我们可以简单地使用 uSVP 求解器来恢复它。特别是，我们可以使用带块大小 (\beta) 的 <strong>BKZ 算法</strong>，满足公式（2）中的成功条件。</p>
+<p>根据块大小 (\beta) 的选择：</p>
+<ul>
+<li>当 (\beta &lt; 70) 时，可以使用枚举法（Enumeration）。</li>
+<li>当 (\beta \geq 70) 时，可以使用筛选法（Sieving）来调用 SVP 求解器。</li>
+</ul>
+<p>当 (\beta = d) 时，该算法会计算一个 <strong>HKZ 化简基</strong>（第一个向量是最短的），并特别关注基中最短的向量。文献中普遍认为，可以通过在化简基中搜索目标向量来解决问题。</p>
+<p>在后续对比算法时，我们也将采取这种方式。我们认为：</p>
+<ul>
+<li>如果目标向量包含在化简基中，则算法成功。</li>
+</ul>
+<p>我们将这类算法称为：</p>
+<ul>
+<li><strong>BKZ-Enum</strong>（基于枚举的 BKZ）。</li>
+<li><strong>BKZ-Sieve</strong>（基于筛选的 BKZ）。</li>
+</ul>
+<h3 id="5-2-枚举法"><a href="#5-2-枚举法" class="headerlink" title="5.2 枚举法"></a>5.2 枚举法</h3><p>我们的第一个算法是增强格点枚举（lattice-point enumeration）。这是一个穷举法，在给定半径的球体内搜索所有格点，同时使用谓词对结果进行筛选。具体来说：</p>
+<ol>
+<li>该算法会在球体内枚举所有点，找到满足给定谓词的解。</li>
+<li>如果谓词对某个解返回真值，则该解被接受并返回。</li>
+<li>如果谓词不成立，算法将继续搜索其他候选解。</li>
+</ol>
+<p>这一增强的枚举算法可以直接应用于解决目标向量的期望范数对应的半径 (R)。它的核心改动是，在传统枚举法的基础上，添加了一个谓词检查步骤，以筛选满足条件的解。</p>
+<p><strong>定理 1</strong>：设 (\Lambda \subseteq \mathbb{R}^d) 是一个包含向量 (\mathbf{v}) 的格，满足：</p>
+<ul>
+<li>(|\mathbf{v}| \leq R = \xi \cdot \text{gh}(\Lambda))，</li>
+<li>(f(\mathbf{v}) = 1)。</li>
+</ul>
+<p>在满足高斯启发式的情况下，带谓词的枚举算法能够以 (\xi^d \cdot d^{d/(2e) + o(d)}) 的复杂度找到满足条件的最短向量。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2024/10/21/LWEdual1021/">对偶格及LWE对偶攻击</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min
+		 <!-- visitor -->
+        	  
+ 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+		
+	</span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>
