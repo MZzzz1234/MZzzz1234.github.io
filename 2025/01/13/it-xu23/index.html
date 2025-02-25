@@ -287,12 +287,16 @@
 <p><strong>MIHNP 与 HNP 的关系</strong><br>MIHNP 与隐藏数问题（Hidden Number Problem, HNP）密切相关。HNP 是由 Boneh 和 Venkatesan 于 1996 年提出的，用于攻击在 $\mathbb{Z}_p$ 上的 Diffie-Hellman 协议密钥交换过程。<br>Shparlinski [44] 指出，研究 MIHNP 的核心目标是预测椭圆曲线 Diffie-Hellman 密钥交换的位安全性。Shani 在 PKC 2017 [43] 中使用了 [6] 和 [28] 的方法，首次为椭圆曲线 Diffie-Hellman 密钥交换的位安全性提供了严格的结果。</p>
 <p><strong>Eichenauer 和 Lehn</strong> 在 [16] 中提出了<strong>反向同余生成器（Inversive Congruential Generator, ICG）</strong>，这是非线性数论伪随机数生成器的重要一类。ICG 广泛应用于准蒙特卡罗模拟和公钥密码学领域。</p>
 <p><strong>定义 2：反向同余生成器（ICG）</strong>：对于给定的素数 $p$ 和 $x \in \mathbb{Z}_p$，定义：</p>
-<p>[<br>\bar{x} :=<br>\begin{cases}<br>x^{-1}, &amp; \text{若 } x \neq 0; \\<br>0, &amp; \text{若 } x = 0.<br>\end{cases}<br>]</p>
-<p>设 $F(x) = (a\bar{x} + b) \mod p$，其中 $a, b \in \mathbb{Z}_p$。输入一个秘密种子 $v_0$，通过递归关系：</p>
-<p>[<br>v_{i+1} = F(v_i), \quad 0 \leq i \leq n.<br>]</p>
-<p>生成一个伪随机序列：</p>
-<p>[<br>(MSB_\delta(v_1), MSB_\delta(v_2), \dots, MSB_\delta(v_{n+1})).<br>]</p>
-<p>在 ICG 中，参数 $a$ 和 $b$ 不一定需要已知。本文研究了$a$ 和 $b$ 是已知的情况，即已知函数 $F(x)$。该假设在 [9, 表 1] 中也被讨论过。</p>
+<script type="math/tex; mode=display">
+\bar{x} :=
+\begin{cases}
+x^{-1}, & \text{若 } x \neq 0; \\
+0, & \text{若 } x = 0.
+\end{cases}</script><p>设 $F(x) = (a\bar{x} + b) \mod p$，其中 $a, b \in \mathbb{Z}_p$。输入一个秘密种子 $v_0$，通过递归关系：</p>
+<script type="math/tex; mode=display">
+v_{i+1} = F(v_i), \quad 0 \leq i \leq n.</script><p>生成一个伪随机序列：</p>
+<script type="math/tex; mode=display">
+(MSB_\delta(v_1), MSB_\delta(v_2), \dots, MSB_\delta(v_{n+1})).</script><p>在 ICG 中，参数 $a$ 和 $b$ 不一定需要已知。本文研究了$a$ 和 $b$ 是已知的情况，即已知函数 $F(x)$。该假设在 [9, 表 1] 中也被讨论过。</p>
 <h3 id="A-密码分析-研究进展"><a href="#A-密码分析-研究进展" class="headerlink" title="A. 密码分析-研究进展"></a>A. 密码分析-研究进展</h3><p><strong>MIHNP进展：</strong></p>
 <p>Boneh、Halevi 和 Howgrave-Graham 在 2001 年的 Asiacrypt 上提出了两种基于启发式格的技术来求解 <strong>模逆隐藏数问题（MIHNP）</strong> [6]。<br>$ \delta $ 表示已知的最高有效位数量：</p>
 <ul>
