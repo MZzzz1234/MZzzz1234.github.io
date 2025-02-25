@@ -165,6 +165,71 @@
                 <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
 
     
     <article class="post-wrap">
@@ -180,12 +245,170 @@
                         </span>
                     
                     
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/lattice/">lattice</a>
+                            
+                        </span>
+                    
                 </div>
             
         </header>
 
         <div class="post-content">
-            
+            <p>参考文献：<a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/10089839">原文</a></p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p><strong>模块逆隐藏数问题（MIHNP）</strong> 由 Boneh、Halevi 和 Howgrave-Graham 在 Asiacrypt2001 提出，定义如下：<br>$ z $ 的前 $ \delta $ 个有效位记为 $ MSB_\delta(z) $。目标是通过大量样本<br>$ (t_i, MSB_\delta((\alpha + t_i)^{-1} \mod p)) $ 得到隐藏数 $ \alpha \in \mathbb{Z}_p $，其中随机选取$ t_i \in \mathbb{Z}_p $。<br>MIHNP 是隐藏数问题的一个重要子集。</p>
+<p><strong>反向同余生成器（ICG）</strong> 由 Eichenauer 和 Lehn 在 1986 年提出，其基本特性如下：<br>对于迭代关系 $ v_{i+1} = (a v_i^{-1} + b) \mod p $，其中 $ v_0 $ 是一个秘密种子，$ a, b \in \mathbb{Z}_p $，每次迭代生成 $ MSB_\delta(v_{i+1}) $， $ i \geq 0 $。ICG 是数论伪随机数生成器的一个重要子类。</p>
+<p><strong>Sakai-Kasahara 方案</strong> 是一种由 Sakai 和 Kasahara 提出的基于身份的加密（IBE）系统，是少数商业化实现的基于身份的加密方案之一。</p>
+<p>本文作者通过 <strong>Coppersmith 方法</strong> 求解一类模多项式方程，是由MIHNP和ICG问题推导而来。 </p>
+<!-- 我们取一个正整数 $ n = d^{3 + o(1)} $，其中 $ d $ 为正整数常数。本文提出了一种启发式方法，在 $ \delta / \log_2 p > \frac{1}{d+1} + o(\frac{1}{d}) $ 时，以接近 1 的概率恢复隐藏数 $ \alpha $ 或秘密种子 $ v_0 $。攻击的总时间复杂度为 $\cdot \log_2 p $。 -->
+<ol>
+<li><p>作者提出了一种启发式方法，在 $ \delta / \log_2 p &gt; \frac{1}{d+1} + o\left(\frac{1}{d}\right) $ 的情况下，以接近 1 的概率恢复隐藏秘密种子 $ v_0 $ 或隐藏数 $ \alpha $。  </p>
+<ul>
+<li><p>该攻击的总时间复杂度为 $ \log_2 p $ 的多项式阶数，其中包含 <strong>LLL 算法</strong>的复杂性，随着 $ d $ 的取值增加，攻击的复杂度呈现 $ d^{\mathcal{O}(d)} $ 增长，Gröbner Basis计算的复杂性为 $ d^{\mathcal{O}(n)} $。</p>
+</li>
+<li><p>当 $ d &gt; 2 $ 时，我们的渐近界 $ \delta / \log_2 p &gt; \frac{1}{d+1} $ 超越了 Boneh、Halevi 和 Howgrave-Graham 在 2001 年 Asiacrypt 提出的界限 $ \delta / \log_2 p &gt; \frac{1}{3} $。  </p>
+</li>
+<li><p>这是首次为求解 MIHNP 问题建立更加精确的约束条件，从而表明，当 $ \delta / \log_2 p &lt; \frac{1}{3} $ 时，MIHNP 的“困难性”主张是不成立的。</p>
+</li>
+</ul>
+</li>
+<li><p>作者提出了迄今为止针对 ICG 的最佳攻击方案，显著提高了攻击的效率。</p>
+</li>
+<li><p>作者基于 MIHNP 提出了一个新的格方法，用于恢复 <strong>Sakai-Kasahara 类型签名</strong>中最高位暴露时的签名者秘密密钥。 </p>
+</li>
+</ol>
+<p>相比现有的研究，我们的方法不仅提高了密钥恢复的准确性，还改进了这一方向的理论分析与实践性能。</p>
+<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1 引言"></a>1 引言</h2><p>Boneh、Halevi 和 Howgrave-Graham 提出了基于代数复杂性假设的<strong>模块逆隐藏数问题（MIHNP）</strong>，用于构造伪随机数生成器和消息认证码。</p>
+<p><strong>定义 1：模逆隐藏数问题</strong><br>对于给定的素数 $p$，考虑一个秘密 $\alpha \in \mathbb{Z}_p$ 和 $n+1$ 个元素 $t_0, t_1, \ldots, t_n \in \mathbb{Z}_p \setminus \{-\alpha\}$，这些元素是独立且均匀随机选择的。给定 $n+1$ 个样本：</p>
+<script type="math/tex; mode=display">
+\{ \left(t_i, MSB_\delta\left((\alpha + t_i)^{-1} \mod p\right)\right) \}_{i=0}^n</script><p>其中，$MSB_\delta(z)$ 表示 $z$ 的前 $\delta$ 个有效位，目标是恢复隐藏的数 $\alpha$。</p>
+<p><strong>MIHNP 与 HNP 的关系</strong><br>MIHNP 与隐藏数问题（Hidden Number Problem, HNP）密切相关。HNP 是由 Boneh 和 Venkatesan 于 1996 年提出的，用于攻击在 $\mathbb{Z}_p$ 上的 Diffie-Hellman 协议密钥交换过程。<br>Shparlinski [44] 指出，研究 MIHNP 的核心目标是预测椭圆曲线 Diffie-Hellman 密钥交换的位安全性。Shani 在 PKC 2017 [43] 中使用了 [6] 和 [28] 的方法，首次为椭圆曲线 Diffie-Hellman 密钥交换的位安全性提供了严格的结果。</p>
+<p><strong>Eichenauer 和 Lehn</strong> 在 [16] 中提出了<strong>反向同余生成器（Inversive Congruential Generator, ICG）</strong>，这是非线性数论伪随机数生成器的重要一类。ICG 广泛应用于准蒙特卡罗模拟和公钥密码学领域。</p>
+<p><strong>定义 2：反向同余生成器（ICG）</strong>：对于给定的素数 $p$ 和 $x \in \mathbb{Z}_p$，定义：</p>
+<p>[<br>\bar{x} :=<br>\begin{cases}<br>x^{-1}, &amp; \text{若 } x \neq 0; \\<br>0, &amp; \text{若 } x = 0.<br>\end{cases}<br>]</p>
+<p>设 $F(x) = (a\bar{x} + b) \mod p$，其中 $a, b \in \mathbb{Z}_p$。输入一个秘密种子 $v_0$，通过递归关系：</p>
+<p>[<br>v_{i+1} = F(v_i), \quad 0 \leq i \leq n.<br>]</p>
+<p>生成一个伪随机序列：</p>
+<p>[<br>(MSB_\delta(v_1), MSB_\delta(v_2), \dots, MSB_\delta(v_{n+1})).<br>]</p>
+<p>在 ICG 中，参数 $a$ 和 $b$ 不一定需要已知。本文研究了$a$ 和 $b$ 是已知的情况，即已知函数 $F(x)$。该假设在 [9, 表 1] 中也被讨论过。</p>
+<h3 id="A-密码分析-研究进展"><a href="#A-密码分析-研究进展" class="headerlink" title="A. 密码分析-研究进展"></a>A. 密码分析-研究进展</h3><p><strong>MIHNP进展：</strong></p>
+<p>Boneh、Halevi 和 Howgrave-Graham 在 2001 年的 Asiacrypt 上提出了两种基于启发式格的技术来求解 <strong>模逆隐藏数问题（MIHNP）</strong> [6]。<br>$ \delta $ 表示已知的最高有效位数量：</p>
+<ul>
+<li>如果 $ \delta &gt; \frac{2}{3} \log_2 p $，第一种方法有效。</li>
+<li>如果 $ \delta &gt; \frac{1}{3} \log_2 p $，第二种方法有效。</li>
+</ul>
+<p>此外，Boneh、Halevi 和 Howgrave-Graham [6] 假设，当 $ \delta &lt; \frac{1}{3} \log_2 p $ 时，MIHNP 是困难的。</p>
+<p>2012 年，Ling 等人提出了一种严谨的多项式时间算法来求解 MIHNP [28]，其渐近结果为 $ \delta &gt; \frac{2}{3} \log_2 p $，这一结果与 [6] 中的第一种方法一致。</p>
+<p>2014 年，Xu 等人 [55] 提出了一种基于 <strong>Coppersmith 技术</strong>的启发式格方法，当样本数量较小时具有一定的优势。然而，其相关的渐近结果为 $ \delta &gt; \frac{1}{2} \log_2 p $，这仍然弱于 [6] 中第二种方法的结果。在 [56] 中，Xu 等人通过显式构造了 [6] 中第二种方法的格，并达到了相同的渐近结果：$ \delta &gt; \frac{1}{3} \log_2 p $。</p>
+<p>MIHNP 还可以用于攻击 <strong>Sakai-Kasahara  pairing based签名</strong> [33]。Sakai-Kasahara 方案于 2012 年在 IETF 的 RFC 6508 中被标准化，作为 <strong>Secure Chorus Encrypted Voice over IP</strong> 标准的核心密钥交换算法。在 [14, Section 5] 中指出，<strong>BLMQ 签名方案</strong>（唯一被 IEEE 1363.3 标准化的签名方案）本质上是 Sakai-Kasahara 签名的变种 [45]。</p>
+<p><strong>ICG进展：</strong></p>
+<p>Blackburn 等人使用格方法和线性化方法研究了 <strong>ICG（反向同余生成器）</strong> 的安全性。他们证明，如果暴露了足够多的连续比特 $v_i$，ICG 的秘密种子可以在多项式时间内恢复。<br>Bauer 等人使用 <strong>Coppersmith 技术</strong>改进了 Blackburn 等人的工作，他们表明，如果 $ \delta &gt; \frac{1}{2} \log_2 p $ 且样本数量足够大，则 ICG 的秘密种子可以被恢复（其中 $ \delta $ 表示暴露的 $v_i$ 的最高有效位数量）。Bauer 等人的结果后来被 Benhamouda 等人进一步研究。</p>
+<h3 id="B-作者的贡献"><a href="#B-作者的贡献" class="headerlink" title="B. 作者的贡献"></a>B. 作者的贡献</h3><ol>
+<li><strong>Coppersmith 方法</strong>求解多变量模多项式方程组问题：</li>
+</ol>
+<script type="math/tex; mode=display">
+a_{0j} + b_{0j}x_0 + c_{0j}x_j + x_0x_j \equiv 0 \pmod{p}, \quad 1 \leq j \leq n,</script><p>其中，系数 $c_{01}, \cdots, c_{0n}$（即 $x_1, \cdots, x_n$ 的系数）在素数 $p$ 足够大时，互异的概率接近 1。上述方程组源于 MIHNP中的隐藏数恢复问题 [56]。</p>
+<p>作者引入了 [30] 和 [49] 中的 <strong>有益多项式（Helpful Polynomials）</strong> 的概念，将其用于 Coppersmith 格的多项式选择技术。在格基矩阵中，有益多项式的对角线元素小于模数，这一条件使得这些多项式有助于求解模多项式方程。我们证明了可以通过在格中添加更多线性无关的多项式来增强格。</p>
+<p><strong>Coppersmith 方法</strong>非常高效地搜索小根，而新增有益多项式的数量在所使用多项式的总数中占显著比例。如果提供了若干连续值 $(\alpha + t_i)^{-1}$ 的大部分最高有效位，则可以恢复隐藏数 $\alpha$。</p>
+<p>2.<strong>渐近结果</strong>：作者构造了一个子格。如果从三角格基矩阵中删除多项式的向量（其主项与 $x_0^d$ 相关，$1 \leq d \leq n-1$），子格的基矩阵仍然是三角形的。相比于原始格，子格在某些维度上有更好的界限：</p>
+<script type="math/tex; mode=display">
+X < p^{1 - d^{-\frac{1}{d+1}} + o\left(d^{-\frac{1}{d+1}}\right)},</script><p>并将维度从 $\sum_{s=0}^d \binom{n}{s}$ 降低。</p>
+<p>我们得到的渐近结果 $ \delta / \log_2 p \geq \frac{1}{d+1} + o\left(\frac{1}{d}\right) $ 与 [6] 和 [56] 的最好结果相同。当 $d &gt; 2$ 时，渐近界为 $\frac{1}{d+1} &lt; \frac{1}{3}$，这意味着我们的解优于 [6] 提出的第二种方法的界限。因此，我们对 Boneh、Halevi 和 Howgrave-Graham 在 [6] 中的假设进行了否定。</p>
+<p>对于任意正整数 $d$，考虑 $n = d^{3 + o(1)}$，给定一个足够大的素数 $p = 2^{\mathcal{w}(d^{3d})}$，在 MIHNP 中提供 $n+1$ 个样本，隐藏数可以以接近 1 的概率通过启发式方法恢复：</p>
+<script type="math/tex; mode=display">
+\prod_{k=1}^{n-1} \left(1 - \frac{k}{p}\right) \approx 1 - \frac{n^2 - n}{2p},</script><p>如果已知的 MSBs 数量满足：</p>
+<script type="math/tex; mode=display">
+\frac{\delta}{\log_2 p} \geq \frac{1}{d+1} + o\left(\frac{1}{d}\right).</script><p>对于任意常数 $d$，对应的时间复杂度为 $\log_2 p$ 的多项式，LLL 算法的复杂度为 $d^{\mathcal{O}(d)}$，Gröbner 基的复杂度为 $d^{\mathcal{O}(n)}$。</p>
+<p>我们可以在维度 $46441$ 的固定子格中获得 $0.333$ 的界限。这表明我们改进了现有结果 $0.333$，这是一个渐近界，意味着需要无限维度的格才能达到这一值。这表明我们的工作相较之前取得了进步。</p>
+<ol>
+<li><strong>应用于 ICG 和其他结果</strong></li>
+</ol>
+<p>作者在密码分析角度给出了全新的方法，无论参数如何设置，都可以完全破解 MIHNP。使用 Coppersmith 方法的其他密码分析结果只能在参数较小时工作，或者需要一些侧信道信息揭示部分密钥。</p>
+<p>对于 ICG（反向同余生成器）的情况，作者给出了以下归约，从恢复秘密种子 $v_0$ 到求解以下多变量模多项式方程组的问题：</p>
+<script type="math/tex; mode=display">
+a'_{0j} + b'_{0j}x_0 + c'_{0j}x_j + x_0x_j \equiv 0 \pmod{p}, \quad 1 \leq j \leq n,</script><p>当 ICG 中的 $a, b$ 已知时，系数 $a’_{0j}, b’_{0j}, c’_{0j}$ 也是已知的。</p>
+<p>$c’_{01}, c’_{02}, \dots, c’_{0n}$（即 $x_1, \dots, x_n$ 的系数）互异的概率：这一概率会影响所构造的格基矩阵的存在性。给定 ICG 的 $n+1$ 个输出，如果 $a, b$ 被设置为满足 $x^2 - bx - a$ 是有限域 $\mathbb{F}_p$ 上的本原多项式，则概率为 $1 - \frac{n}{p}$，当素数 $p$ 足够大时，这个概率接近 1。</p>
+<p>从 ICG 转换得到的多项式与 MIHNP 中得到的多项式形状完全相同。因此求解 MIHNP 的算法也可以应用于 ICG 的情况。研究结果表明，在每次迭代中输出的位数越少，ICG 的效率会显著下降。</p>
+<p>4.<strong>MIHNP 的改进方法</strong>：提出了一种基于格的 MIHNP 攻击方法，用于恢复 <strong>Sakai-Kasahara 签名</strong>中的签名者密钥，假设攻击者可以获得相应指数的最高（或最低）有效位。我们将 [33] 中的结果 $ \delta / \log_2 p &gt; \frac{1}{2} $ 改进为：</p>
+<script type="math/tex; mode=display">
+\delta / \log_2 p > \frac{1}{d+1},</script><p>其中 $d$ 为任意固定的正整数。</p>
+<p>5.<strong>实验验证</strong>：在维度少于 300 的格中启发式攻击是有效的。</p>
+<p>表 I 比较了 $\delta / \log_2 p$ 的新界限。新结果表明，MIHNP 可以在多项式时间内以启发式方法求解，适用于任意常数比例的 $\delta / \log_2 p$。$\delta / \log_2 p$ 的下界可以趋近于 0。然而在实际中，为了保证 $\delta / \log_2 p$ 接近 0，需要一个巨大的格维度：</p>
+<script type="math/tex; mode=display">
+\mathcal{O}\left(\frac{\log_2 p}{\delta}\right)^{\mathcal{O}\left(\frac{\log_2 p}{\delta}\right)},</script><div align="center">
+<img src="pic1.png" width="100%">
+</div>
+
+<h2 id="2-预备知识"><a href="#2-预备知识" class="headerlink" title="2 预备知识"></a>2 预备知识</h2><p><strong>引理 3</strong>：设 $\mathcal{L}$ 为$w$维的整数格。在 $\mathcal{L}$ 上应用 <strong>LLL 算法</strong>，可以在多项式时间内输出 $\mathcal{L}$ 的一个约化基 $\{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_w\}$，并满足：</p>
+<script type="math/tex; mode=display">
+\|\mathbf{v}_i\| \leq 2^{\frac{w(w-1)}{4(w+1-i)}} \cdot \text{det}(\mathcal{L})^{\frac{1}{w+1-i}}, \quad 1 \leq i \leq w.</script><h3 id="2-1-Coppersmith方法"><a href="#2-1-Coppersmith方法" class="headerlink" title="2.1 Coppersmith方法"></a>2.1 Coppersmith方法</h3><p>Coppersmith 在 1996 年提出了基于格的方法，用于寻找单变量模多项式方程和双变量整数多项式的小解。在Asiacrypt2006上May等人[24]描述了一种启发式算法，用于解决多变量模多项式方程。</p>
+<p>Coppersmith 技术已被广泛应用于密码分析领域，例如：</p>
+<ul>
+<li>攻击 RSA 及其变体（[30]和[26, 40, 51]）。</li>
+<li>分析伪随机数生成器。</li>
+<li>处理计算复杂的数学问题（[1, 9, 10, 20, 22, 23, 48, 56]）。</li>
+</ul>
+<p>以下是如何使用 Coppersmith 方法解决多变量模多项式方程的简要说明。</p>
+<p><strong>问题定义：</strong><br>设 $f_1(x_0, x_1, \dots, x_n), \dots, f_m(x_0, x_1, \dots, x_n)$ 是 $m$ 个不可约的多变量多项式，它们在整数域上定义并满足：</p>
+<script type="math/tex; mode=display">
+f_i(\tilde{x}_0, \tilde{x}_1, \dots, \tilde{x}_n) \equiv 0 \pmod{p}, \quad 1 \leq i \leq m,</script><p>其中 $p$ 是已知的正整数，且 $\tilde{x}_i &lt; X_i$，$0 \leq i \leq n$。目标是找到根 $(\tilde{x}_0, \tilde{x}_1, \dots, \tilde{x}_n)$，并保证其能在多项式时间内恢复。为此，分析需要建立边界 $X_i$。</p>
+<p><strong>Step 1: 多项式的收集</strong></p>
+<p>从多项式 $f_1, \dots, f_m$ 构造出一组新的多项式 $g_1(x_0, x_1, \dots, x_n), \dots, g_w(x_0, x_1, \dots, x_n)$，使得：</p>
+<script type="math/tex; mode=display">
+g_i(\tilde{x}_0, \tilde{x}_1, \dots, \tilde{x}_n) \equiv 0 \pmod{p^d}, \quad 1 \leq i \leq w,</script><p>这些多项式的构造形式为：</p>
+<script type="math/tex; mode=display">
+g_i(x_0, x_1, \dots, x_n) = p^{d-(\beta_1^i + \dots + \beta_m^i)}x_0^{\alpha_0^i}x_1^{\alpha_1^i}\cdots x_n^{\alpha_n^i}f_1^{\beta_1^i}\cdots f_m^{\beta_m^i},</script><p>其中：</p>
+<ul>
+<li>$d \in \mathbb{Z}^+$。</li>
+<li>$\alpha_0^i, \alpha_1^i, \dots, \alpha_n^i$ 和 $\beta_1^i, \dots, \beta_m^i$ 是非负整数。</li>
+<li>满足 $0 \leq \beta_1^i + \dots + \beta_m^i \leq d$。</li>
+</ul>
+<p>显然，对于每个 $i$，均有：</p>
+<script type="math/tex; mode=display">
+g_i(\tilde{x}_0, \tilde{x}_1, \dots, \tilde{x}_n) \equiv 0 \pmod{p^d}.</script><!-- 
+
+## Step 2: 构造格
+
+将多项式 $g_i(x_0, x_1, \dots, x_n)$ 的系数向量作为格的向量，生成格 $\mathcal{L}$。
+
+---
+
+## Step 3: 生成约化基
+
+通过 **LLL 算法**计算 $n+1$ 个约化基向量 $\mathbf{v}_1, \dots, \mathbf{v}_{n+1}$，其对应的多项式为 $h_1(x_0, x_1, \dots, x_n), \dots, h_{n+1}(x_0, x_1, \dots, x_n)$，满足：
+
+1. $h_i(\tilde{x}_0, \tilde{x}_1, \dots, \tilde{x}_n) \equiv 0 \pmod{p^d}$，对所有 $1 \leq i \leq n$。
+2. $h_i(x_0, x_1, \dots, x_n)$ 是 $g_1(x_0, x_1, \dots, x_n), \dots, g_w(x_0, x_1, \dots, x_n)$ 的线性组合。
+
+---
+
+## 边界条件与引理 4
+
+从 **引理 4** 可得，为了确保 $h_i(x_0, x_1, \dots, x_n)$ 的性质，需要满足以下条件：
+
+$$
+2^{\frac{w(w-1)}{4(w-n)}} \cdot (\det(\mathcal{L}))^{\frac{1}{w-n}} < \frac{p^d}{\sqrt{w}},
+$$
+
+其中 $w = \text{dim}(\mathcal{L})$。
+
+---
+
+## Step 4: 恢复所需根
+
+通过 Gröbner 基计算或消元技术，解决得到的多项式方程组即可恢复根 $(\tilde{x}_0, \tilde{x}_1, \dots, \tilde{x}_n)$。
+
+### 假设 1：
+如果多项式 $h_1, \dots, h_{n+1}$ 定义了一个零维代数簇，则可以通过这些技术恢复所需的根。
+
+---
+
+## 有益多项式（Helpful Polynomials）
+
+主项小于 $p^d$ 的多项式被称为 **有益多项式**。这些多项式对格的行列式有显著贡献，能有效改善求解模多项式方程的边界。因此，应尽可能多地包含有益多项式。 -->
+
         </div>
 
         
@@ -202,6 +425,10 @@
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/HNP/"># HNP</a>
+                    
+                        
                 </span>
             </div>
             <div>
@@ -239,6 +466,21 @@
 </footer>
 
     </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 
 </html>

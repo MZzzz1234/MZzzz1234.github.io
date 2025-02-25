@@ -262,10 +262,22 @@
 <p>参考文献：<a target="_blank" rel="noopener" href="https://link.springer.com/content/pdf/10.1007/978-3-030-77870-5_19.pdf">EUROCRYPT2021-AH21</a></p>
 <h2 id="1-ECDSA与HNP"><a href="#1-ECDSA与HNP" class="headerlink" title="1 ECDSA与HNP"></a>1 ECDSA与HNP</h2><p>ECDSA 是一种基于椭圆曲线密码学的数字签名算法。它被广泛应用于现代密码系统中，例如比特币、以太坊等区块链系统，以及其他需要安全通信的场景（如TLS证书）。</p>
 <p>ECDSA 的核心思想是利用椭圆曲线上的数学性质实现签名生成和验证，同时相比传统签名算法（如 RSA）提供更高的安全性和更短的密钥长度。</p>
+<h3 id="1-0-椭圆曲线理论"><a href="#1-0-椭圆曲线理论" class="headerlink" title="1.0 椭圆曲线理论"></a>1.0 椭圆曲线理论</h3><p>椭圆曲线，可以理解为一个三次曲线的解的集合。将其描绘到射影平面上，是一条光滑的曲线，在拓扑结构上等价于圆环。其通用的三次曲线方程可以表达为：</p>
+<p>[<br>E: y^2 + a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6<br>]</p>
+<p>上式为 Weierstrass 方程。同时，为避免出现不可微、不平滑的奇异点，还需要约束条件 ( \Delta \neq 0 )，其中：</p>
+<p>[<br>\Delta =<br>\begin{cases}<br>    \Delta = -d_2^2 d_8 - 8d_4^3 - 27d_6^2 + 9d_2 d_4 d_6 \\<br>    d_2 = a_1^2 + 4a_2 \\<br>    d_4 = 2a_4 + a_1 a_3 \\<br>    d_6 = a_3^2 + 4a_6 \\<br>    d_8 = a_1^2 a_6 + 4a_2 a_6 + a_1 a_3 a_4 + a_2 a_3^2 - a_4^2<br>\end{cases}<br>]</p>
+<p>在素数域中，Weierstrass 方程可以进行简化。为满足单位元的需求，需引入一个无穷远点，作为单位元。于是有素数域 ( GF(p) ) 上椭圆曲线 ( E ) 的方程为：</p>
+<p>[<br>E(GF(p)) = \{(x, y) \in GF(p) \mid y^2 = x^3 + ax + b\} \cup \{O\}<br>\tag{2-3}<br>]<br>及其约束条件为: $4a^3+27b^2 \neq 0$.</p>
+<ul>
+<li>注意：weierstass曲线在素数域下的形式是“化简”得到的。通过线性变换：$y = y{\prime} - \frac{c_1}{2} x - \frac{c_3}{2}, x = x{\prime} - \frac{c_2}{3}$</li>
+</ul>
 <h3 id="1-1-ECDSA-签名机制"><a href="#1-1-ECDSA-签名机制" class="headerlink" title="1.1 ECDSA 签名机制"></a>1.1 ECDSA 签名机制</h3><p>ECDSA 签名的全局参数包括：</p>
 <ul>
 <li>一个椭圆曲线 $E(F_p) $，</li>
-<li>$ E $ 上的一个阶为 $ n $ 的生成点 $ G $。</li>
+<li>$ E $ 上的一个阶为 $ n $ 的生成点 $ G $。<ul>
+<li>(椭圆曲线上的每个点也有一个阶，这是指最小的正整数$n$，使得$nP = O$，其中$O$是无穷远点，也就是椭圆曲线群的单位元。一个点的阶可以看作是该点生成子群大小的度量。在选择椭圆曲线进行加密操作时，通常会选择一个基点$G$，其阶$n$是一个大素数，这样可以确保相关的离散对数问题足够困难，从而保证系统的安全性)</li>
+</ul>
+</li>
 </ul>
 <p>签名密钥是一个满足 $ 0 \leq d &lt; n $ 的整数，而公钥是点 $ dG $。（已知$dG$和G想要得到$d$是困难的）为了对消息摘要 $ h $ 生成 ECDSA 签名，签名者需要：</p>
 <ol>
@@ -274,21 +286,30 @@
 <li>再计算 $ s = k^{-1} \cdot (h + d \cdot r) \mod n $。</li>
 </ol>
 <p>最终签名为 <strong>(r, s)</strong>。</p>
+<p><strong>验证签名</strong><br>根据签名公开结果 ( r ) 与 ( s )，有：</p>
+<p>[<br>s = k^{-1}(h + rd) \pmod{n} \tag{a}<br>]</p>
+<p>将式 (a) 两边同时乘以 ( ks^{-1} )，有：</p>
+<p>[<br>k = s^{-1}(h + rd) \pmod{n} \tag{b}<br>]</p>
+<p>将式 (b) 的指数展开，发现 ( zs^{-1} = u_1 )，( rd s^{-1} = u_2 )，于是有：</p>
+<p>[<br>k = u_1 + d u_2 \pmod{n} \tag{c}<br>]</p>
+<p>又 ( Q = d G )，于是得到：</p>
+<p>[<br>kG = (u_1 + d u_2)G \pmod{n}<br>]</p>
+<p>[<br>= u_1 G + u_2 Q \pmod{n} \tag{d}<br>]</p>
+<p>如此，若满足等式 ( kG = u_1 G + u_2 Q \pmod{n} )，就可以认为签名是正确的。式 (d) 也是椭圆曲线验签步骤中的计算结果。</p>
 <h3 id="1-2-隐藏数问题"><a href="#1-2-隐藏数问题" class="headerlink" title="1.2 隐藏数问题"></a>1.2 隐藏数问题</h3><p>在<strong>隐藏数问题（HNP）</strong> 中：一个秘密整数 $\alpha$ 和一个公开的模数 $n$。</p>
 <ul>
 <li>关于 $\alpha$ 的信息：sample。</li>
-<li>隐藏数问题可以被视为一维的LWE问题。</li>
 </ul>
-<h4 id="1-sample生成过程"><a href="#1-sample生成过程" class="headerlink" title="(1) sample生成过程"></a>(1) sample生成过程</h4><ol>
+<h4 id="1-sample生成过程（-sample-i-可以得到pair-t-i-a-i-）"><a href="#1-sample生成过程（-sample-i-可以得到pair-t-i-a-i-）" class="headerlink" title="(1) sample生成过程（$sample_i$可以得到pair$(t_i, a_i)$）"></a>(1) sample生成过程（$sample_i$可以得到pair$(t_i, a_i)$）</h4><ol>
 <li>一个oracle随机选择一个整数 $t_i$，满足 $0 &lt; t_i &lt; n$。</li>
 <li>计算 $ t_i \cdot \alpha \equiv s_i\mod n$，其中 $0 \leq s_i &lt; n$。</li>
 <li>oracle会揭示 $s_i$ 的某些<strong>最高有效位</strong>（most significant bits）以及对应的 $t_i$。</li>
 </ol>
-<h4 id="2-数学表示"><a href="#2-数学表示" class="headerlink" title="(2) 数学表示"></a>(2) 数学表示</h4><p>该问题可以形式化为：$<br>a_i + k_i = t_i \cdot \alpha \mod n<br>$, 其中 $k_i &lt; 2^\ell$，$\ell \in \mathbb{Z}$ 是问题的一个参数。</p>
+<h4 id="2-数学表示"><a href="#2-数学表示" class="headerlink" title="(2) 数学表示"></a>(2) 数学表示</h4><p>该问题可以形式化为：$<br>a_i + k_i = t_i \cdot \alpha \mod n<br>$, 其中 $k_i &lt; 2^\ell$，$\ell \in \mathbb{Z}$ 是问题的一个参数（未知比特数）。</p>
 <ul>
 <li>攻击者已知: $(t_i, a_i)$。</li>
 </ul>
-<h3 id="1-3-ECDSA-作为-HNP-问题"><a href="#1-3-ECDSA-作为-HNP-问题" class="headerlink" title="1.3 ECDSA 作为 HNP 问题"></a>1.3 ECDSA 作为 HNP 问题</h3><p>在对 ECDSA 的侧信道攻击中，对手可能会获知签名随机数 $ k $ 的一些最高有效位, 假设这些位均为 0。然后重新整理 ECDSA 签名公式 $ s $，可以得到：</p>
+<h3 id="1-3-ECDSA-作为-HNP-问题"><a href="#1-3-ECDSA-作为-HNP-问题" class="headerlink" title="1.3 ECDSA 作为 HNP 问题"></a>1.3 ECDSA 作为 HNP 问题</h3><p>在对 ECDSA 的侧信道攻击中，对手可能会获知签名随机数 $ k $ 的一些最高有效位, 假设这些位均为 0。然后重新整理 ECDSA 签名公式 $ s = k^{-1} \cdot (h + d \cdot r) \mod n $，可以得到：</p>
 <script type="math/tex; mode=display">
 -s^{-1} \cdot h + k \equiv s^{-1} \cdot r \cdot d \pmod{n}</script><p>因此得到了一个 HNP 实例，其中：</p>
 <ul>
@@ -296,29 +317,59 @@
 <li>$ t_i = s^{-1} \cdot r $,</li>
 <li>$ \alpha = d $。</li>
 </ul>
-<p>目标：根据泄露的$k$计算出私钥$d$。</p>
-<h3 id="1-4-从随机数比特破解ECDSA"><a href="#1-4-从随机数比特破解ECDSA" class="headerlink" title="1.4 从随机数比特破解ECDSA"></a>1.4 从随机数比特破解ECDSA</h3><p>许多文献利用 ECDSA（或更广泛的 EC-DSA）随机数的侧信道信息，通过解决 <strong>隐藏数问题（HNP）</strong> 来攻击 ECDSA，例如 [12,19,44,53,61,63,68,69,73,78]。这一研究领域始于 Bleichenbacher [18] 和 Howgrave-Graham 与 Smart [43] 的开创性工作。</p>
+<p>目标：根据泄露的$k$的比特信息计算出私钥$d$。</p>
+<blockquote>
 <ul>
-<li><strong>Howgrave-Graham 与 Smart 的研究</strong>：利用格约化（lattice reduction）方法来解决 HNP。</li>
+<li>在模 $n$ 的意义下，整数 $a$ 的 <strong>模逆元</strong> 是指一个整数 $x$，使得满足同余关系：<script type="math/tex">a \cdot x \equiv 1 \pmod{n}.</script>根据 <strong>Bézout 定理</strong>，对于任意整数 $a$ 和 $n$，若它们的最大公因数满足：[<br>\gcd(a, n) = 1<br>]那么必然存在整数 $x$ 和 $k$，使得：[<br>a \cdot x + n \cdot k = 1<br>]这表明同余方程：$a \cdot x \equiv 1 \pmod{n}$<strong>一定存在整数解 $x$，即 $a$ 存在模逆元。</strong></li>
+<li>如果 $\gcd(a, n) \neq 1$，若 $\gcd(a, n) = d \neq 1$，则 Bézout 定理表明：[<br>a \cdot x + n \cdot k = d<br>]由于右侧为 $d$ 的倍数，而等式右侧等于 1，因此：$<br>d \mid 1$<br>显然只有 $d = 1$ 时该等式才可能成立。否则，当 $d \neq 1$ 时，方程$a \cdot x \equiv 1 \pmod{n}$无整数解，即：<strong>在此情况下，$a$ 不存在模 $n$ 的逆元。</strong></li>
+</ul>
+</blockquote>
+<h3 id="1-4-从随机数比特破解ECDSA"><a href="#1-4-从随机数比特破解ECDSA" class="headerlink" title="1.4 从随机数比特破解ECDSA"></a>1.4 从随机数比特破解ECDSA</h3><p>许多文献利用 ECDSA随机数的侧信道信息，通过解决 <strong>隐藏数问题（HNP）</strong> 来攻击 ECDSA，例如 [12,19,44,53,61,63,68,69,73,78]。这一研究领域始于 Bleichenbacher [18] 和 Howgrave-Graham 与 Smart [43] 的开创性工作。</p>
+<ul>
 <li><strong>Bleichenbacher 的研究</strong>：采用了一种可以视为 BKW 算法 [3,20,39,47] 变体的组合算法。</li>
+<li><strong>Howgrave-Graham 与 Smart 的研究</strong>：利用格基约化方法来解决 HNP。</li>
 </ul>
 <p>最新的相关研究成果是 [13]，该工作利用 Bleichenbacher 的算法在随机数比特少于 1 位的情况下成功恢复密钥。更近期的研究 [54] 则首次发现了一个 <strong>实际可行的攻击场景</strong>，能够利用 Boneh 和 Venkatesan [21] 提出的 HNP 原始应用，即针对素域 Diffie-Hellman 密钥交换的攻击。</p>
 <h3 id="1-5-侧信道攻击"><a href="#1-5-侧信道攻击" class="headerlink" title="1.5 侧信道攻击"></a>1.5 侧信道攻击</h3><p>针对 ECDSA 的实际侧信道攻击通常分为两个阶段：</p>
 <ol>
 <li>攻击者通过侧信道测量收集大量签名数据。</li>
-<li>然后，攻击者在一个精心选择的轨迹子集上运行密钥恢复算法。</li>
+<li>然后，攻击者在一个精心选择的签名数据子集上运行密钥恢复算法。</li>
 </ol>
 <p>根据测量的鲁棒性，数据收集阶段可能会非常昂贵。例如：</p>
 <ul>
-<li>在 [60] 中，研究人员报告需要重复攻击 <strong>10,000 到 20,000 次</strong> 才能获得 <strong>1 字节信息</strong>。</li>
+<li>在 [60] 中，研究人员报告需要重复攻击 <strong>10,000 到 20,000 次</strong> 才能获得 <strong>1 字节信息</strong>（RSA）。</li>
 <li>在 [37] 中，研究人员测量了 <strong>5,000 次签名操作</strong>（每次操作耗时 0.1 秒），从中提取了 <strong>114 条可用轨迹</strong>。</li>
 <li>在 [61] 中，研究人员描述了生成 <strong>40,000 个签名</strong>（耗时 80 分钟），以获取 <strong>35 条适用轨迹</strong>来完成攻击。</li>
 </ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">“Examining the denoised trace, we can now attempt to extract the DA-sequence. For this purpose, we turn to the time-frequency domain. The middle of Figure 6 depicts the spectrogram of a denoised trace, where the frequency band containing most of the energy of addition operations becomes especially clear.” ￼.</span><br><span class="line"></span><br><span class="line">trace 是对签名操作期间采集到的信号数据的记录，经过去噪处理后，可用于提取特定的计算序列，例如椭圆曲线加法和倍加运算。</span><br><span class="line"></span><br><span class="line">“After performing signal denoising, we apply correlation-based detection to identify all instances where this distinct pattern occurs. We thus obtain the end points for most signing operations. We ignored some traces that ended in distorted patterns that did not correlate well.” ￼.</span><br><span class="line"></span><br><span class="line">这说明”trace”不仅仅是采集的数据，还需通过信号处理方法进一步提取特征，以识别特定操作的时间位置。</span><br></pre></td></tr></table></figure>
 <p>因此，在侧信道攻击的研究中，<strong>减少成功攻击所需的数据量</strong> 通常是一个重要的衡量指标 [44,68]。利用本文所述方法，可以实现更高效的整体攻击。</p>
-<h3 id="1-6-困难问题"><a href="#1-6-困难问题" class="headerlink" title="1.6 困难问题"></a>1.6 困难问题</h3><p><strong>定义 2: 最短向量问题 (SVP)</strong>：给定一个格基 $B$，找到格 $\Lambda(B)$ 中的最短非零向量。</p>
+<h3 id="1-6-基础知识"><a href="#1-6-基础知识" class="headerlink" title="1.6 基础知识"></a>1.6 基础知识</h3><h4 id="定义-1-高斯启发式-GH-："><a href="#定义-1-高斯启发式-GH-：" class="headerlink" title="定义 1: 高斯启发式(GH)："></a><strong>定义 1: 高斯启发式(GH)</strong>：</h4><p>我们使用符号 (\text{gh}(\Lambda)) 表示根据高斯启发式估计的格 (\Lambda) 中<strong>最短非零向量的长度</strong>。</p>
+<p>在 $d-$维空间中，格点的分布可以近似视为均匀分布,在一个半径为 $r$ 的 $d-$维球中，如果大约可以找到一个格点，那么$r$可以用来估计最短非零向量的长度。</p>
+<p>一个 (d)-维球的体积公式为：<br>[<br>\text{Vol}(\mathcal{B}_d(r)) = \text{Vol}(\mathcal{B}_d(1)) \cdot r^d,<br>]<br>其中：</p>
+<ul>
+<li>(\text{Vol}(\mathcal{B}_d(r)))：半径为 (r) 的 (d)-维球的体积；</li>
+<li>(\text{Vol}(\mathcal{B}_d(1)))：单位球的体积（半径为 1 的球）。</li>
+</ul>
+<p>将球的体积与格的体积相等，即：<br>[<br>\text{Vol}(\mathcal{B}_d(r)) = \text{Vol}(\Lambda),<br>]</p>
+<p>[<br>\text{Vol}(\mathcal{B}_d(1)) \cdot r^d = \text{Vol}(\Lambda).<br>]</p>
+<p>整理得：<br>[<br>r^d = \frac{\text{Vol}(\Lambda)}{\text{Vol}(\mathcal{B}_d(1))}.<br>]</p>
+<p><strong>定义</strong>：<br>对于一个满秩格(\Lambda \subset \mathbb{R}^d)，其高斯启发式定义为：<br>[<br>\text{gh}(\Lambda) = \left(\frac{\text{Vol}(\Lambda)}{\text{Vol}(\mathcal{B}_d(1))}\right)^{1/d},<br>]<br>其中：</p>
+<ul>
+<li>(\text{Vol}(\Lambda))：格的体积，由格基向量的行列式确定；</li>
+<li>(\text{Vol}(\mathcal{B}_d(1)))：单位半径的 (d)-维欧几里得球的体积。</li>
+</ul>
+<p>单位半径 (d)-维球的体积公式为：<br>[<br>\text{Vol}(\mathcal{B}_d(1)) = \frac{\pi^{d/2}}{\Gamma(d/2 + 1)},<br>]<br>其中 (\Gamma) 是伽马函数。</p>
+<p>因此，高斯启发式可表示为：<br>[<br>\text{gh}(\Lambda) = \frac{\Gamma(1 + d/2)^{1/d}}{\sqrt{\pi}} \cdot \text{Vol}(\Lambda)^{1/d}.<br>]</p>
+<p>在高维格中（当 (d) 很大时），可以进一步近似为：<br>[<br>\text{gh}(\Lambda) \approx \sqrt{\frac{d}{2\pi e}} \cdot \text{Vol}(\Lambda)^{1/d}.<br>]</p>
+<ul>
+<li>(\Lambda)：一个 (d)-维格；</li>
+<li>(\mathcal{B}_d(R))：半径为 (R) 的 (d)-维欧几里得球；</li>
+<li>(\text{Vol}(\Lambda))：格的体积；</li>
+<li>(\text{Vol}(\mathcal{B}_d(1)))：单位半径球的体积。</li>
+</ul>
+<h4 id="定义-2-最短向量问题-SVP-："><a href="#定义-2-最短向量问题-SVP-：" class="headerlink" title="定义 2: 最短向量问题 (SVP)："></a><strong>定义 2: 最短向量问题 (SVP)</strong>：</h4><p>给定一个格基 $B$，找到格 $\Lambda(B)$ 中的最短非零向量。</p>
 <p>在许多应用中，我们更感兴趣的是找到离目标向量最近的格向量。在这种情况下，如果目标向量距离格不是太远，我们称之为<strong>有界距离解码</strong>。</p>
-<p><strong>定义 3: $\alpha$-有界距离解码问题 (BDD$_\alpha$)</strong></p>
-<p>给定：</p>
+<h4 id="定义-3-alpha-有界距离解码问题-BDD-alpha"><a href="#定义-3-alpha-有界距离解码问题-BDD-alpha" class="headerlink" title="定义 3: $\alpha$-有界距离解码问题 (BDD$_\alpha$)"></a><strong>定义 3: $\alpha$-有界距离解码问题 (BDD$_\alpha$)</strong></h4><p>给定：</p>
 <ul>
 <li>一个格基 $B$，</li>
 <li>一个目标向量 $t$，</li>
@@ -330,14 +381,13 @@
 <ul>
 <li>在渐近意义下，对于任意多项式有界的 $\gamma \geq 1$，可以通过从 BDD$_{1/(\sqrt{2}\gamma)}$ 到 uSVP$_\gamma$ 的归约解决问题。</li>
 </ul>
-<p><strong>定义 4: $\gamma$-唯一最短向量问题 (uSVP$_\gamma$)</strong></p>
-<p>给定一个格 $\Lambda$，假设满足：</p>
+<h4 id="定义-4-gamma-唯一最短向量问题-uSVP-gamma"><a href="#定义-4-gamma-唯一最短向量问题-uSVP-gamma" class="headerlink" title="定义 4: $\gamma$-唯一最短向量问题 (uSVP$_\gamma$)"></a><strong>定义 4: $\gamma$-唯一最短向量问题 (uSVP$_\gamma$)</strong></h4><p>给定一个格 $\Lambda$，假设满足：</p>
 <ul>
 <li>第二短向量的长度 $\lambda_2(\Lambda)$ 满足：<script type="math/tex; mode=display">
 \lambda_2(\Lambda) > \gamma \cdot \lambda_1(\Lambda),</script></li>
 </ul>
 <p>找到格中满足长度为 $\lambda_1(\Lambda)$ 的非零向量。</p>
-<h3 id="1-7-从-BDD-到-uSVP-的归约"><a href="#1-7-从-BDD-到-uSVP-的归约" class="headerlink" title="1.7 从 BDD 到 uSVP 的归约"></a>1.7 <strong>从 BDD 到 uSVP 的归约</strong></h3><p>基于Kannan嵌入：<strong>嵌入矩阵 $L$ 的构造：</strong></p>
+<h4 id="从-BDD-到-uSVP-的归约"><a href="#从-BDD-到-uSVP-的归约" class="headerlink" title="从 BDD 到 uSVP 的归约"></a><strong>从 BDD 到 uSVP 的归约</strong></h4><p>基于Kannan嵌入：<strong>嵌入矩阵 $L$ 的构造：</strong></p>
 <script type="math/tex; mode=display">
 L =
 \begin{pmatrix}
@@ -345,12 +395,62 @@ B & 0 \\
 t & \tau
 \end{pmatrix}</script><p>其中：</p>
 <ul>
-<li>$\tau$ 是嵌入因子，通常可以认为：<script type="math/tex; mode=display">
-\tau = \mathbb{E}\left[\|t - \mathbf{v}\| / \sqrt{d}\right],</script>这是目标向量 $t$ 与格向量最近点 $\mathbf{v}$ 之间的预期距离。</li>
+<li>$\tau$ 是嵌入因子，通常可以认为：$  \tau = \mathbb{E}\left[|t - \mathbf{v}| / \sqrt{d}\right]$，这是目标向量 $t$ 与格向量最近点 $\mathbf{v}$ 之间的预期距离。</li>
 </ul>
 <p><strong>解释</strong>：如果 $\mathbf{v}$ 是目标向量 $t$ 的最近向量，则新格 $\Lambda(L)$ 将包含向量：</p>
 <script type="math/tex; mode=display">
 (t - \mathbf{v}, \tau),</script><p>这个向量是一个较短的向量，便于通过算法找到。</p>
+<h3 id="1-7-枚举"><a href="#1-7-枚举" class="headerlink" title="1.7 枚举"></a>1.7 枚举</h3><p><strong>问题描述：</strong></p>
+<p>给定一个矩阵 (B) 和一个范围 (R)，目标是找到满足以下条件的向量 (\mathbf{v})：<br>[<br>\mathbf{v} = \sum_{i=0}^{d-1} u_i \cdot \mathbf{b}_i, \quad u_i \in \mathbb{Z},<br>]<br>其中至少一个 (u_i \neq 0)，并且：<br>[<br>|\mathbf{v}|^2 \leq R^2.<br>]</p>
+<p>枚举算法使用以下公式表示向量 (\mathbf{v})：<br>[<br>\mathbf{v} = \sum_{i=0}^{d-1} u_i \cdot \mathbf{b}_i = \sum_{i=0}^{d-1} u_i \cdot \left( \mathbf{b}_i^<em> + \sum_{j=0}^{i-1} \mu_{i,j} \cdot \mathbf{b}_j^</em> \right) = \sum_{j=0}^{d-1} \left( u_j + \sum_{i=j+1}^{d-1} u_i \cdot \mu_{i,j} \right) \cdot \mathbf{b}_j^*.<br>]</p>
+<p>因此，向量 (\mathbf{v}) 的投影长度 (|\pi_k(\mathbf{v})|^2) 表示为：<br>[<br>|\pi_k(\mathbf{v})|^2 = \left( \sum_{j=k}^{d-1} \left( u_j + \sum_{i=j+1}^{d-1} u_i \cdot \mu_{i,j} \right) \cdot \mathbf{b}_j^* \right)^2.<br>]</p>
+<p>[<br>= \sum_{j=k}^{d-1} \left( u_j + \sum_{i=j+1}^{d-1} u_i \cdot \mu_{i,j} \right)^2 \cdot |\mathbf{b}_j^*|^2.<br>]</p>
+<p>格点枚举是一种<strong>深度优先搜索（depth-first search）</strong>，其基本流程如下：</p>
+<ol>
+<li>依次为 (u_{d-1}, u_{d-2}, \dots) 选择候选值。</li>
+<li>检查当前子树中的节点是否满足约束条件 (|\mathbf{v}|^2 \leq R^2)：<ul>
+<li>如果不满足，则回溯并选择下一个分支。</li>
+<li>如果满足，则继续枚举更低的分支。</li>
+</ul>
+</li>
+<li>当遍历完所有分支后，返回找到的最短向量。</li>
+</ol>
+<p><strong>枚举算法的复杂度可以通过节点数量来估计：</strong></p>
+<p>第$k$层：在 $d-k$ 维空间中，满足约束的节点实际上是格点的集合： $d-k$ 维球体积/每个格点的体积/2$\approx$满足约束的格点数。<br>[<br>H_k = \frac{1}{2} \cdot \frac{\text{Vol}(\mathcal{B}_{d-k}(R))}{\prod_{i=k}^{d-1} |\mathbf{b}_i^*|},<br>]<br>其中：</p>
+<ul>
+<li>(\text{Vol}(\mathcal{B}_{d-k}(R)))：半径为 (R) 的 (d-k) 维球的体积；</li>
+<li>(|\mathbf{b}_i^*|)：第 (i) 个正交基向量的长度。</li>
+</ul>
+<p>枚举算法的总节点数为：$\sum_{k=0}^{d-1} H_k.$</p>
+<h3 id="1-8-筛法"><a href="#1-8-筛法" class="headerlink" title="1.8 筛法"></a>1.8 筛法</h3><p>筛选算法从格点集合中选取一系列格点$L \subseteq \Lambda$ ，并搜索这些点的整数组合，目的是找到较短的向量。如果初始集合 (L) 足够大，则可以递归执行该过程来求解SVP。集合中的每个点可以以 (d) 的多项式复杂度进行采样。因此，初始列表的采样成本为 (|L|^{1+o(1)})。</p>
+<ul>
+<li>将 (k) 个点组合在一起的筛选算法被称为 (k)-筛选（(k)-sieves）。</li>
+<li>2-筛选算法采用形式为 (\mathbf{u} \pm \mathbf{v}) 的整数组合，其中 (\mathbf{u}, \mathbf{v} \in L) 且 (\mathbf{u} \neq \pm \mathbf{v})。 </li>
+</ul>
+<p><strong>假设：</strong></p>
+<ul>
+<li>筛选算法基于以下假设分析：集合 (L) 中的点在一个“薄球壳”上独立且均匀分布。这个启发式假设由 Nguyen 和 Vidick 在文献【65】中提出。</li>
+</ul>
+<p>进一步的简化假设包括：</p>
+<ol>
+<li>壳层非常薄并且归一化，使得 (L) 是单位球上的子集；</li>
+<li>对于一对向量 ((\mathbf{u}, \mathbf{v}))，只有当它们的夹角满足 (\theta(\mathbf{u}, \mathbf{v}) &lt; \pi / 3) 时，这对向量才可化简，即：<br>[<br>\theta(\mathbf{u}, \mathbf{v}) = \arccos \left( \frac{\langle \mathbf{u}, \mathbf{v} \rangle}{|\mathbf{u}| \cdot |\mathbf{v}|} \right), \quad \arccos(x) \in [0, \pi].<br>]</li>
+</ol>
+<p><strong>碰撞和列表大小</strong></p>
+<ul>
+<li>在这些假设下，为了观察到足够多的“碰撞”（即化简），需要满足：<br>[<br>|L| \approx \sqrt{4/3}^{d},<br>]</li>
+</ul>
+<ul>
+<li>格筛选算法预计会输出一个包含 (\sqrt{4/3}^{d/2+o(d)}) 个短格向量的列表[5, 32]。</li>
+<li><p><strong>理论最优筛选算法</strong>的启发式运行时间为：<br>[<br>2^{0.292d + o(d)}.<br>]</p>
+</li>
+<li><p>本文使用了 G6K 中的高性能格筛选实现[5, 76]，包括了 BGJ1[16]和 3-Sieve[41]的变种。</p>
+<ul>
+<li><strong>BGJ1：</strong> 启发式运行时间为 (2^{0.349d+o(d)})，内存消耗为 (2^{0.205d+o(d)})。</li>
+<li><strong>3-Sieve：</strong> 启发式运行时间为 (2^{0.372d+o(d)})，内存消耗为 (2^{0.189d+o(d)})。</li>
+</ul>
+</li>
+</ul>
 <h2 id="2-使用格方法求解-HNP"><a href="#2-使用格方法求解-HNP" class="headerlink" title="2 使用格方法求解 HNP"></a>2 使用格方法求解 HNP</h2><h3 id="2-1-Boneh-和-Venkatesan"><a href="#2-1-Boneh-和-Venkatesan" class="headerlink" title="2.1 Boneh 和 Venkatesan"></a>2.1 <strong>Boneh 和 Venkatesan</strong></h3><p>提出了以下的格，通过 BDD oracle 求解隐藏数问题（HNP）：</p>
 <script type="math/tex; mode=display">
 \begin{bmatrix}
@@ -362,7 +462,7 @@ t_0 & t_1 & t_2 & \cdots & t_{m-1} & 1/n
 \end{bmatrix}</script><ul>
 <li>目标向量为$(a_0, \dots, a_{m-1}, 0)$， 如果可以找到距离目标向量最近的格向量<script type="math/tex">(t_0 \cdot \alpha \bmod n, \dots, t_{m-1} \cdot \alpha \bmod n, \alpha / n),</script>就可以确定$\alpha$。</li>
 </ul>
-<p>根据$<br>a_i + k_i \equiv t_i \cdot \alpha \mod n<br>$左乘$(\alpha,\cdots,\alpha)$可以得到格向量：<br>$<br>(t_0 \cdot \alpha \bmod n, \dots, t_{m-1} \cdot \alpha \bmod n, \alpha / n)<br>$，在 $|k_i| &lt; 2^\ell$ 时，与目标向量的距离在 $\sqrt{m+1} \cdot 2^\ell$ 范围内。</p>
+<p>根据$<br>a_i + k_i \equiv t_i \cdot \alpha \mod n<br>$乘$\alpha$可以得到格向量：<br>$<br>(t_0 \cdot \alpha \bmod n, \dots, t_{m-1} \cdot \alpha \bmod n, \alpha / n)<br>$，在 $|k_i| &lt; 2^\ell$ 时，与目标向量的距离在 $\sqrt{m+1} \cdot 2^\ell$ 范围内。</p>
 <h3 id="2-2-Kannan嵌入方法"><a href="#2-2-Kannan嵌入方法" class="headerlink" title="2.2 Kannan嵌入方法"></a>2.2 Kannan嵌入方法</h3><p>大多数研究通过 Kannan 的嵌入方法解决此 BDD 问题，即构造以下的格并求解SVP：</p>
 <script type="math/tex; mode=display">
 \begin{bmatrix}
@@ -372,7 +472,7 @@ n & 0 & 0 & \cdots & 0 & 0 & 0 \\
 0 & 0 & 0 & \cdots & n & 0 & 0 \\
 t_0 & t_1 & t_2 & \cdots & t_{m-1} & 2^\ell / n & 0 \\
 a_0 & a_1 & a_2 & \cdots & a_{m-1} & 0 & 2^\ell
-\end{bmatrix}</script><p>通过左乘$(0,0,\cdots, \alpha,1)$得到格向量：$<br>(k_0, k_1, \dots, k_{m-1}, 2^\ell \cdot \alpha / n, 2^\ell)<br>$，其范数约为 $\sqrt{m + 2} \cdot 2^\ell$。该格子还包含向量 $(0, 0, \dots, 0, 2^\ell, 0)$，因此目标向量通常不是最短向量，可以对该格进行多种改进。</p>
+\end{bmatrix}</script><p>通过左乘$(0,0,\cdots, \alpha,-1)$得到格向量：$<br>(k_0, k_1, \dots, k_{m-1}, 2^\ell \cdot \alpha / n, -2^\ell)<br>$，其范数约为 $\sqrt{m + 2} \cdot 2^\ell$。该格子还包含向量 $(0, 0, \dots, 0, 2^\ell, 0)$，因此目标向量通常不是最短向量，可以对该格进行多种改进。</p>
 <h3 id="2-3-作者的进一步改进"><a href="#2-3-作者的进一步改进" class="headerlink" title="2.3 作者的进一步改进"></a>2.3 作者的进一步改进</h3><h4 id="减小-k-的大小"><a href="#减小-k-的大小" class="headerlink" title="减小 $k$ 的大小"></a><strong>减小 $k$ 的大小</strong></h4><p>在 ECDSA 的输入中，$k$ 通常是正数，因此有 $0 \leq k_i &lt; 2^\ell$。<br>格允许在 $k$ 为正数或者负数，可以通过 $k_i’ = k_i - 2^{\ell-1}$ 来减少 $k$ 的位长一位。<br>[63]在实践中提供了显著的改进，但通常并未广泛应用于实际场景。</p>
 <h4 id="消除变量-alpha"><a href="#消除变量-alpha" class="headerlink" title="消除变量 $\alpha$"></a><strong>消除变量 $\alpha$</strong></h4><p>给定以下输入方程组：</p>
 <script type="math/tex; mode=display">
@@ -389,7 +489,7 @@ a_i - t_i \cdot t_0^{-1} \cdot a_0 + k_i \equiv t_i \cdot t_0^{-1} \cdot k_0 \mo
 <script type="math/tex; mode=display">
 a_i' = a_i - t_i \cdot t_0^{-1} \cdot a_0, \quad t_i' = t_i \cdot t_0^{-1}</script><ol>
 <li><strong>减少格维度</strong>：维度从 $m+1$ 减少到 $m$。</li>
-<li><strong>移除特定的归一化向量</strong>：$(0, 0, \dots, 0, 2^\ell, 0)$ 不再属于新的格。新目标向量 $(k_1, k_2, \dots, k_{m-1}, k_0, 2^\ell)$ 成为格中的唯一最短向量。</li>
+<li><strong>移除特定的归一化向量</strong>：$(0, 0, \dots, 0, 2^\ell, 0)$ 不再属于新的格。新目标向量成为格中的唯一最短向量。</li>
 </ol>
 <h4 id="新格的构造"><a href="#新格的构造" class="headerlink" title="新格的构造"></a>新格的构造</h4><p>令 $w = 2^{\ell-1}$。通过以上两种优化，新格 $\Lambda$ 的生成矩阵为：</p>
 <script type="math/tex; mode=display">
@@ -404,7 +504,7 @@ a_1' & a_2' & a_3' & \cdots & a_{m-1}' & 0 & w
 <script type="math/tex; mode=display">
 v_t = (k_1 - w, k_2 - w, \dots, k_{m-1} - w, k_0 - w, w)</script><p>矩阵中的值 $1$ 和 $w$ 是归一化值，确保最短向量的所有系数具有相同的长度。</p>
 <h4 id="不同大小的-k-i"><a href="#不同大小的-k-i" class="headerlink" title="不同大小的 $k_i$"></a><strong>不同大小的 $k_i$</strong></h4><p>我们可以通过在格的每一列乘以因子 $2^{l_{\max}} / 2^{\ell_i}$ 来适应满足 $|k_i| &lt; 2^{\ell_i}$ 的不同大小的 $k_i$。</p>
-<h2 id="3-The-“Lattice-Barrier”"><a href="#3-The-“Lattice-Barrier”" class="headerlink" title="3.The “Lattice Barrier”"></a>3.The “Lattice Barrier”</h2><p><strong>格障碍：</strong> 当目标向量长度不显著短于格中其他典型向量时，传统格算法通常失败。<br><strong>信息论极限</strong>： 当泄露的随机数位数太少时，传统认为攻击是不可行的。</p>
+<h2 id="3-The-“Lattice-Barrier”"><a href="#3-The-“Lattice-Barrier”" class="headerlink" title="3.The “Lattice Barrier”"></a>3.The “Lattice Barrier”</h2><p><strong>格障碍：</strong> 当目标向量长度不显著短于格中其他典型向量时，传统格算法通常失败。（泄露比特比较少，样本少）<br><strong>信息论极限</strong>： 当泄露的随机数位数太少时，传统认为攻击是不可行的。</p>
 <p>人们认为，对于隐藏数问题（HNP），当只知道随机数 $k$ 的一小部分位时，格算法基本上变得不可用。特别是，对于仅泄漏1位随机数的情况，普遍认为格算法将以高概率失败，因为<strong>对应于秘密值的格向量不再显著短于格中的其他向量[13]</strong>。</p>
 <p>Aranha 等人在文献 [12] 中进一步详细讨论了这一点：“存在一个硬限制，限制了通过格约简所能实现的目标：由于 HNP 格的结构，攻击 (EC)DSA 中只泄漏1位随机数的场景是不可行的。在这种情况下，即使在高斯启发式的假设下，与 HNP 解对应的‘隐藏格点’也不会是最短向量，因此格技术无法奏效。” 类似的观点也出现在文献 [30, 73, 77] 中。例如，在 [77] 中估算，对于256位的椭圆曲线：</p>
 <ul>
@@ -618,26 +718,85 @@ t & \tau
 <li>在满足假设的情况下，筛选算法在 $2^{0.292d + o(d)}$ 步中找到满足谓词 $f(v) = 1$ 的目标向量。</li>
 <li>计算谓词 $f(\cdot)$ 的调用次数为 $(4/3)^{d/2 + o(d)}$。</li>
 </ul>
-<h2 id="6-ECDSA-密钥恢复的应用"><a href="#6-ECDSA-密钥恢复的应用" class="headerlink" title="6 ECDSA 密钥恢复的应用"></a>6 ECDSA 密钥恢复的应用</h2><h3 id="样本数量-m-的变化"><a href="#样本数量-m-的变化" class="headerlink" title="样本数量 $m$ 的变化"></a><strong>样本数量 $m$ 的变化</strong></h3><p>我们在常见椭圆曲线长度和从签名随机数中泄露的最高有效位数的场景下，进行了实验，评估不同算法的成功率。通过调整样本数量 $m$，实验展示了目标向量的期望长度与格中最短向量的长度比值对成功率的影响。</p>
-<h3 id="理论预测"><a href="#理论预测" class="headerlink" title="理论预测"></a><strong>理论预测</strong></h3><ul>
+<p><strong>与D4F的冲突</strong>：</p>
+<p>筛选算法在实践中受益于文献【32】中提出的“free dimensions”技术（简称 D4F 技术）。该技术启发了本文的算法，筛选算法会输出模长 (\sqrt{4/3} \cdot \text{gh}(\Lambda)) 的所有向量。</p>
+<p>这一观察被用于在维度 (d’) 中解决最短向量问题（SVP），其中：<br>[<br>d’ = d - \Theta(d / \log d).<br>]</p>
+<p>文献【32】中对 (d’) 的“乐观”预测如下：<br>[<br>d’ = d - \frac{d \log(4/3)}{\log(d / (2\pi e))}.<br>]<br>具体而言：</p>
+<ul>
+<li>如果最短向量 (\mathbf{v}) 的投影 (\pi_{d-d’}(\mathbf{v})) 满足：$  |\pi_{d-d’}(\mathbf{v})| \leq \sqrt{4/3} \cdot \text{gh}(\Lambda_{d-d’})$, 其中 (\Lambda_{d-d’}) 是通过正交投影到前 (d-d’) 个基向量获得的格，那么可以通过 Babai 提升找到 (\mathbf{v})。</li>
+</ul>
+<p>然而，在我们的设置中，目标向量本身的模长被假定为大于 (\text{gh}(\Lambda))，因此该优化可能无法适用。</p>
+<p>在需要构造一个 uSVP 格或一个较低维度的 uSVP 格时，应比较较小维度格的筛选维度 (d’) 与原始全维格的性能。</p>
+<p>在 G6K 实现中，通过“on the fly” 的提升技术【5】，可以“免费”获得额外的几个维度。</p>
+<h2 id="6-ECDSA-密钥恢复的应用"><a href="#6-ECDSA-密钥恢复的应用" class="headerlink" title="6 ECDSA 密钥恢复的应用"></a>6 ECDSA 密钥恢复的应用</h2><h3 id="6-1-调整样本数量-m-的实验分析"><a href="#6-1-调整样本数量-m-的实验分析" class="headerlink" title="6.1 调整样本数量$m$的实验分析"></a><strong>6.1 调整样本数量$m$的实验分析</strong></h3><p>我们在常见椭圆曲线长度和从签名随机数中泄露的最高有效位数的场景下，进行了实验，评估不同算法的成功率。通过调整样本数量 $m$，实验展示了目标向量的期望长度与格中最短向量的长度比值对成功率的影响。</p>
+<h4 id="理论预测"><a href="#理论预测" class="headerlink" title="理论预测"></a><strong>理论预测</strong></h4><ul>
 <li><strong>最短向量技术的局限性：</strong><ul>
 <li>当目标向量的期望长度超过高斯启发式预测值时，传统的最短向量技术通常失败。</li>
 <li>随着目标向量长度相对于格中最短向量的长度减小，成功率逐渐提高。</li>
 </ul>
 </li>
-<li><strong>实验结果：</strong><ul>
+<li><p><strong>实验结果：</strong></p>
+<ul>
 <li>当目标向量的长度超过高斯启发式预测值时，筛选算法和枚举算法仍然在一定成功率下工作。</li>
 <li>这表明论文的方法突破了“格障碍”（lattice barrier）。</li>
 </ul>
 </li>
+<li><p><strong>成功率分析</strong></p>
+<ul>
+<li>图 4 展示了对于不同的样本数量下，每种算法的成功率。</li>
+<li>每个数据点对应：<ul>
+<li>较小实例的 32 次实验；</li>
+<li>较大实例的 8 次实验。</li>
 </ul>
+</li>
+<li>我们对枚举算法中的谓词参数进行了设置，使其成功率为 50%。</li>
+<li>对于更高维度的格，枚举算法在某些参数下变得不可行，因此我们未报告相关结果</li>
+</ul>
+</li>
+</ul>
+<div align="center">
+<img src="pic4.png" width="100%">
+</div>
+
+
+<h3 id="6-2-固定样本数量-m"><a href="#6-2-固定样本数量-m" class="headerlink" title="6.2 固定样本数量$m$"></a>6.2 固定样本数量$m$</h3><p>在某些攻击场景中，攻击者可能在样本数量上有严格的限制。通过使用带谓词的枚举和筛选算法，可以增加攻击成功的概率，并扩大参数范围，使得在这些限制下仍然有可能实现可行的攻击。</p>
+<p><strong>案例场景</strong><br>这种情况出现在文献【22】中，作者通过将格攻击应用于从公共数据源（如加密货币区块链和互联网协议扫描）中收集的 ECDSA 签名，寻找有缺陷的 ECDSA 实现。这些协议包括 TLS 和 SSH。在这种情况下，攻击者可以访问由给定公钥生成的固定数量的签名样本，并希望在已知随机数位数尽可能少的情况下，对这些固定样本执行成功攻击的概率最大化。</p>
+<p><strong>文献【22】中的结果</strong></p>
+<ul>
+<li>文献【22】报告使用小维度的 BKZ 算法，成功恢复了 287 个不同的密钥。这些密钥使用了随机数$k$长度分别为 160、128、110、64 和少于 32 位的 ECDSA 签名（针对 256 位 secp256k1 椭圆曲线，用于比特币）。  </li>
+<li>在 128 位随机数长度的两次签名中，他们成功恢复了 2 个不同的密钥。</li>
+</ul>
+<p><strong>实验结果对比</strong></p>
+<div align="center">
+<img src="pic5.png" width="100%">
+</div>
+
+<p>nonce bits = 256<br><strong>BKZ方法的实验结果</strong>：</p>
+<ul>
+<li>对于两次签名样本，BKZ 算法仅有 70% 的成功率能够恢复 128 位随机数的私钥。</li>
+<li>随着未知随机数比特数量的增加，成功率会迅速下降。</li>
+</ul>
+<p><strong>筛选算法的实验结果：</strong></p>
+<ul>
+<li>筛选算法带谓词可以在随机数未知位数高达约 132 位时，保持 100% 的成功率。</li>
+</ul>
+<p><strong>对比分析：</strong></p>
+<ul>
+<li>图5 对比了两种算法在固定签名数量和不同未知随机数比特数量时的成功率。</li>
+</ul>
+<p><strong>假设与验证</strong><br>我们假设文献【22】的失败率可能导致某些脆弱密钥未被发现。为了验证这一点，我们将带谓词的筛选算法应用于 2018 年 9 月从比特币区块链快照中提取的数据：</p>
+<ul>
+<li>目标：仅针对 128 位随机数，使用两组签名对。</li>
+<li>数据：快照中包含 569,396,463 个签名，这些签名由私钥生成，其中每个私钥生成了两次或更多签名。</li>
+</ul>
+<p>对于生成的 (m) 组签名集合，我们对每个签名对应用带谓词的筛选算法，将问题转换为处理 (2m) 对签名的实例。然后检查长度小于 128 位的随机数，成功恢复了 9 个不同的私钥。</p>
+<h3 id="6-3-处理错误"><a href="#6-3-处理错误" class="headerlink" title="6.3 处理错误"></a>6.3 处理错误</h3><div align="center">
+<img src="pic6.png" width="100%">
+</div>
+
 <h3 id="实验总结"><a href="#实验总结" class="headerlink" title="实验总结"></a><strong>实验总结</strong></h3><ul>
 <li>在样本数量不足以提供足够信息以恢复私钥的场景下，带谓词的筛选和枚举算法成功解决了隐藏数问题。</li>
 <li>通过引入谓词，目标向量被唯一确定，使得传统“信息论极限”成为可突破的界限。</li>
-</ul>
-<h3 id="具体改进"><a href="#具体改进" class="headerlink" title="具体改进"></a><strong>具体改进</strong></h3><ul>
-<li>为常见的 ECDSA 密钥大小（如 256 位）提供了恢复所需样本数的估计。</li>
-<li>利用该方法，我们还通过检查长度小于 128 位的随机数，成功恢复了 9 个不同的私钥。</li>
 </ul>
 
         </div>
@@ -699,6 +858,21 @@ t & \tau
 </footer>
 
     </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 
 </html>
