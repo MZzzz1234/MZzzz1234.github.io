@@ -263,11 +263,20 @@
 <h2 id="1-ECDSA与HNP"><a href="#1-ECDSA与HNP" class="headerlink" title="1 ECDSA与HNP"></a>1 ECDSA与HNP</h2><p>ECDSA 是一种基于椭圆曲线密码学的数字签名算法。它被广泛应用于现代密码系统中，例如比特币、以太坊等区块链系统，以及其他需要安全通信的场景（如TLS证书）。</p>
 <p>ECDSA 的核心思想是利用椭圆曲线上的数学性质实现签名生成和验证，同时相比传统签名算法（如 RSA）提供更高的安全性和更短的密钥长度。</p>
 <h3 id="1-0-椭圆曲线理论"><a href="#1-0-椭圆曲线理论" class="headerlink" title="1.0 椭圆曲线理论"></a>1.0 椭圆曲线理论</h3><p>椭圆曲线，可以理解为一个三次曲线的解的集合。将其描绘到射影平面上，是一条光滑的曲线，在拓扑结构上等价于圆环。其通用的三次曲线方程可以表达为：</p>
-<p>[<br>E: y^2 + a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6<br>]</p>
-<p>上式为 Weierstrass 方程。同时，为避免出现不可微、不平滑的奇异点，还需要约束条件 ( \Delta \neq 0 )，其中：</p>
-<p>[<br>\Delta =<br>\begin{cases}<br>    \Delta = -d_2^2 d_8 - 8d_4^3 - 27d_6^2 + 9d_2 d_4 d_6 \\<br>    d_2 = a_1^2 + 4a_2 \\<br>    d_4 = 2a_4 + a_1 a_3 \\<br>    d_6 = a_3^2 + 4a_6 \\<br>    d_8 = a_1^2 a_6 + 4a_2 a_6 + a_1 a_3 a_4 + a_2 a_3^2 - a_4^2<br>\end{cases}<br>]</p>
-<p>在素数域中，Weierstrass 方程可以进行简化。为满足单位元的需求，需引入一个无穷远点，作为单位元。于是有素数域 ( GF(p) ) 上椭圆曲线 ( E ) 的方程为：</p>
-<p>[<br>E(GF(p)) = \{(x, y) \in GF(p) \mid y^2 = x^3 + ax + b\} \cup \{O\}<br>\tag{2-3}<br>]<br>及其约束条件为: $4a^3+27b^2 \neq 0$.</p>
+<script type="math/tex; mode=display">
+E: y^2 + a_1xy + a_3y = x^3 + a_2x^2 + a_4x + a_6</script><p>上式为 Weierstrass 方程。同时，为避免出现不可微、不平滑的奇异点，还需要约束条件 ( \Delta \neq 0 )，其中：</p>
+<script type="math/tex; mode=display">
+\Delta =
+\begin{cases}
+    \Delta = -d_2^2 d_8 - 8d_4^3 - 27d_6^2 + 9d_2 d_4 d_6 \\
+    d_2 = a_1^2 + 4a_2 \\
+    d_4 = 2a_4 + a_1 a_3 \\
+    d_6 = a_3^2 + 4a_6 \\
+    d_8 = a_1^2 a_6 + 4a_2 a_6 + a_1 a_3 a_4 + a_2 a_3^2 - a_4^2
+\end{cases}</script><p>在素数域中，Weierstrass 方程可以进行简化。为满足单位元的需求，需引入一个无穷远点，作为单位元。于是有素数域 ( GF(p) ) 上椭圆曲线 ( E ) 的方程为：</p>
+<script type="math/tex; mode=display">
+E(GF(p)) = \{(x, y) \in GF(p) \mid y^2 = x^3 + ax + b\} \cup \{O\}
+\tag{2-3}</script><p>及其约束条件为: $4a^3+27b^2 \neq 0$.</p>
 <ul>
 <li>注意：weierstass曲线在素数域下的形式是“化简”得到的。通过线性变换：$y = y{\prime} - \frac{c_1}{2} x - \frac{c_3}{2}, x = x{\prime} - \frac{c_2}{3}$</li>
 </ul>
@@ -287,15 +296,15 @@
 </ol>
 <p>最终签名为 <strong>(r, s)</strong>。</p>
 <p><strong>验证签名</strong><br>根据签名公开结果 ( r ) 与 ( s )，有：</p>
-<p>[<br>s = k^{-1}(h + rd) \pmod{n} \tag{a}<br>]</p>
-<p>将式 (a) 两边同时乘以 ( ks^{-1} )，有：</p>
-<p>[<br>k = s^{-1}(h + rd) \pmod{n} \tag{b}<br>]</p>
-<p>将式 (b) 的指数展开，发现 ( zs^{-1} = u_1 )，( rd s^{-1} = u_2 )，于是有：</p>
-<p>[<br>k = u_1 + d u_2 \pmod{n} \tag{c}<br>]</p>
-<p>又 ( Q = d G )，于是得到：</p>
-<p>[<br>kG = (u_1 + d u_2)G \pmod{n}<br>]</p>
-<p>[<br>= u_1 G + u_2 Q \pmod{n} \tag{d}<br>]</p>
-<p>如此，若满足等式 ( kG = u_1 G + u_2 Q \pmod{n} )，就可以认为签名是正确的。式 (d) 也是椭圆曲线验签步骤中的计算结果。</p>
+<script type="math/tex; mode=display">
+s = k^{-1}(h + rd) \pmod{n} \tag{a}</script><p>将式 (a) 两边同时乘以 ( ks^{-1} )，有：</p>
+<script type="math/tex; mode=display">
+k = s^{-1}(h + rd) \pmod{n} \tag{b}</script><p>将式 (b) 的指数展开，发现 ( zs^{-1} = u_1 )，( rd s^{-1} = u_2 )，于是有：</p>
+<script type="math/tex; mode=display">
+k = u_1 + d u_2 \pmod{n} \tag{c}</script><p>又 ( Q = d G )，于是得到：</p>
+<script type="math/tex; mode=display">
+kG = (u_1 + d u_2)G \pmod{n}</script><script type="math/tex; mode=display">
+= u_1 G + u_2 Q \pmod{n} \tag{d}</script><p>如此，若满足等式 ( kG = u_1 G + u_2 Q \pmod{n} )，就可以认为签名是正确的。式 (d) 也是椭圆曲线验签步骤中的计算结果。</p>
 <h3 id="1-2-隐藏数问题"><a href="#1-2-隐藏数问题" class="headerlink" title="1.2 隐藏数问题"></a>1.2 隐藏数问题</h3><p>在<strong>隐藏数问题（HNP）</strong> 中：一个秘密整数 $\alpha$ 和一个公开的模数 $n$。</p>
 <ul>
 <li>关于 $\alpha$ 的信息：sample。</li>
@@ -320,8 +329,8 @@
 <p>目标：根据泄露的$k$的比特信息计算出私钥$d$。</p>
 <blockquote>
 <ul>
-<li>在模 $n$ 的意义下，整数 $a$ 的 <strong>模逆元</strong> 是指一个整数 $x$，使得满足同余关系：<script type="math/tex">a \cdot x \equiv 1 \pmod{n}.</script>根据 <strong>Bézout 定理</strong>，对于任意整数 $a$ 和 $n$，若它们的最大公因数满足：[<br>\gcd(a, n) = 1<br>]那么必然存在整数 $x$ 和 $k$，使得：[<br>a \cdot x + n \cdot k = 1<br>]这表明同余方程：$a \cdot x \equiv 1 \pmod{n}$<strong>一定存在整数解 $x$，即 $a$ 存在模逆元。</strong></li>
-<li>如果 $\gcd(a, n) \neq 1$，若 $\gcd(a, n) = d \neq 1$，则 Bézout 定理表明：[<br>a \cdot x + n \cdot k = d<br>]由于右侧为 $d$ 的倍数，而等式右侧等于 1，因此：$<br>d \mid 1$<br>显然只有 $d = 1$ 时该等式才可能成立。否则，当 $d \neq 1$ 时，方程$a \cdot x \equiv 1 \pmod{n}$无整数解，即：<strong>在此情况下，$a$ 不存在模 $n$ 的逆元。</strong></li>
+<li>在模 $n$ 的意义下，整数 $a$ 的 <strong>模逆元</strong> 是指一个整数 $x$，使得满足同余关系：<script type="math/tex">a \cdot x \equiv 1 \pmod{n}.</script>根据 <strong>Bézout 定理</strong>，对于任意整数 $a$ 和 $n$，若它们的最大公因数满足：$$<br>\gcd(a, n) = 1<script type="math/tex; mode=display">那么必然存在整数 $x$ 和 $k$，使得：</script>a \cdot x + n \cdot k = 1<br>$$这表明同余方程：$a \cdot x \equiv 1 \pmod{n}$<strong>一定存在整数解 $x$，即 $a$ 存在模逆元。</strong></li>
+<li>如果 $\gcd(a, n) \neq 1$，若 $\gcd(a, n) = d \neq 1$，则 Bézout 定理表明：<script type="math/tex">a \cdot x + n \cdot k = d</script>由于右侧为 $d$ 的倍数，而等式右侧等于 1，因此：$<br>d \mid 1$<br>显然只有 $d = 1$ 时该等式才可能成立。否则，当 $d \neq 1$ 时，方程$a \cdot x \equiv 1 \pmod{n}$无整数解，即：<strong>在此情况下，$a$ 不存在模 $n$ 的逆元。</strong></li>
 </ul>
 </blockquote>
 <h3 id="1-4-从随机数比特破解ECDSA"><a href="#1-4-从随机数比特破解ECDSA" class="headerlink" title="1.4 从随机数比特破解ECDSA"></a>1.4 从随机数比特破解ECDSA</h3><p>许多文献利用 ECDSA随机数的侧信道信息，通过解决 <strong>隐藏数问题（HNP）</strong> 来攻击 ECDSA，例如 [12,19,44,53,61,63,68,69,73,78]。这一研究领域始于 Bleichenbacher [18] 和 Howgrave-Graham 与 Smart [43] 的开创性工作。</p>
@@ -345,23 +354,33 @@
 <p>因此，在侧信道攻击的研究中，<strong>减少成功攻击所需的数据量</strong> 通常是一个重要的衡量指标 [44,68]。利用本文所述方法，可以实现更高效的整体攻击。</p>
 <h3 id="1-6-基础知识"><a href="#1-6-基础知识" class="headerlink" title="1.6 基础知识"></a>1.6 基础知识</h3><h4 id="定义-1-高斯启发式-GH-："><a href="#定义-1-高斯启发式-GH-：" class="headerlink" title="定义 1: 高斯启发式(GH)："></a><strong>定义 1: 高斯启发式(GH)</strong>：</h4><p>我们使用符号 (\text{gh}(\Lambda)) 表示根据高斯启发式估计的格 (\Lambda) 中<strong>最短非零向量的长度</strong>。</p>
 <p>在 $d-$维空间中，格点的分布可以近似视为均匀分布,在一个半径为 $r$ 的 $d-$维球中，如果大约可以找到一个格点，那么$r$可以用来估计最短非零向量的长度。</p>
-<p>一个 (d)-维球的体积公式为：<br>[<br>\text{Vol}(\mathcal{B}_d(r)) = \text{Vol}(\mathcal{B}_d(1)) \cdot r^d,<br>]<br>其中：</p>
+<p>一个 (d)-维球的体积公式为：</p>
+<script type="math/tex; mode=display">
+\text{Vol}(\mathcal{B}_d(r)) = \text{Vol}(\mathcal{B}_d(1)) \cdot r^d,</script><p>其中：</p>
 <ul>
 <li>(\text{Vol}(\mathcal{B}_d(r)))：半径为 (r) 的 (d)-维球的体积；</li>
 <li>(\text{Vol}(\mathcal{B}_d(1)))：单位球的体积（半径为 1 的球）。</li>
 </ul>
-<p>将球的体积与格的体积相等，即：<br>[<br>\text{Vol}(\mathcal{B}_d(r)) = \text{Vol}(\Lambda),<br>]</p>
-<p>[<br>\text{Vol}(\mathcal{B}_d(1)) \cdot r^d = \text{Vol}(\Lambda).<br>]</p>
-<p>整理得：<br>[<br>r^d = \frac{\text{Vol}(\Lambda)}{\text{Vol}(\mathcal{B}_d(1))}.<br>]</p>
-<p><strong>定义</strong>：<br>对于一个满秩格(\Lambda \subset \mathbb{R}^d)，其高斯启发式定义为：<br>[<br>\text{gh}(\Lambda) = \left(\frac{\text{Vol}(\Lambda)}{\text{Vol}(\mathcal{B}_d(1))}\right)^{1/d},<br>]<br>其中：</p>
+<p>将球的体积与格的体积相等，即：</p>
+<script type="math/tex; mode=display">
+\text{Vol}(\mathcal{B}_d(r)) = \text{Vol}(\Lambda),</script><script type="math/tex; mode=display">
+\text{Vol}(\mathcal{B}_d(1)) \cdot r^d = \text{Vol}(\Lambda).</script><p>整理得：</p>
+<script type="math/tex; mode=display">
+r^d = \frac{\text{Vol}(\Lambda)}{\text{Vol}(\mathcal{B}_d(1))}.</script><p><strong>定义</strong>：<br>对于一个满秩格(\Lambda \subset \mathbb{R}^d)，其高斯启发式定义为：</p>
+<script type="math/tex; mode=display">
+\text{gh}(\Lambda) = \left(\frac{\text{Vol}(\Lambda)}{\text{Vol}(\mathcal{B}_d(1))}\right)^{1/d},</script><p>其中：</p>
 <ul>
 <li>(\text{Vol}(\Lambda))：格的体积，由格基向量的行列式确定；</li>
 <li>(\text{Vol}(\mathcal{B}_d(1)))：单位半径的 (d)-维欧几里得球的体积。</li>
 </ul>
-<p>单位半径 (d)-维球的体积公式为：<br>[<br>\text{Vol}(\mathcal{B}_d(1)) = \frac{\pi^{d/2}}{\Gamma(d/2 + 1)},<br>]<br>其中 (\Gamma) 是伽马函数。</p>
-<p>因此，高斯启发式可表示为：<br>[<br>\text{gh}(\Lambda) = \frac{\Gamma(1 + d/2)^{1/d}}{\sqrt{\pi}} \cdot \text{Vol}(\Lambda)^{1/d}.<br>]</p>
-<p>在高维格中（当 (d) 很大时），可以进一步近似为：<br>[<br>\text{gh}(\Lambda) \approx \sqrt{\frac{d}{2\pi e}} \cdot \text{Vol}(\Lambda)^{1/d}.<br>]</p>
-<ul>
+<p>单位半径 (d)-维球的体积公式为：</p>
+<script type="math/tex; mode=display">
+\text{Vol}(\mathcal{B}_d(1)) = \frac{\pi^{d/2}}{\Gamma(d/2 + 1)},</script><p>其中 (\Gamma) 是伽马函数。</p>
+<p>因此，高斯启发式可表示为：</p>
+<script type="math/tex; mode=display">
+\text{gh}(\Lambda) = \frac{\Gamma(1 + d/2)^{1/d}}{\sqrt{\pi}} \cdot \text{Vol}(\Lambda)^{1/d}.</script><p>在高维格中（当 (d) 很大时），可以进一步近似为：</p>
+<script type="math/tex; mode=display">
+\text{gh}(\Lambda) \approx \sqrt{\frac{d}{2\pi e}} \cdot \text{Vol}(\Lambda)^{1/d}.</script><ul>
 <li>(\Lambda)：一个 (d)-维格；</li>
 <li>(\mathcal{B}_d(R))：半径为 (R) 的 (d)-维欧几里得球；</li>
 <li>(\text{Vol}(\Lambda))：格的体积；</li>
@@ -401,11 +420,16 @@ t & \tau
 <script type="math/tex; mode=display">
 (t - \mathbf{v}, \tau),</script><p>这个向量是一个较短的向量，便于通过算法找到。</p>
 <h3 id="1-7-枚举"><a href="#1-7-枚举" class="headerlink" title="1.7 枚举"></a>1.7 枚举</h3><p><strong>问题描述：</strong></p>
-<p>给定一个矩阵 (B) 和一个范围 (R)，目标是找到满足以下条件的向量 (\mathbf{v})：<br>[<br>\mathbf{v} = \sum_{i=0}^{d-1} u_i \cdot \mathbf{b}_i, \quad u_i \in \mathbb{Z},<br>]<br>其中至少一个 (u_i \neq 0)，并且：<br>[<br>|\mathbf{v}|^2 \leq R^2.<br>]</p>
-<p>枚举算法使用以下公式表示向量 (\mathbf{v})：<br>[<br>\mathbf{v} = \sum_{i=0}^{d-1} u_i \cdot \mathbf{b}_i = \sum_{i=0}^{d-1} u_i \cdot \left( \mathbf{b}_i^<em> + \sum_{j=0}^{i-1} \mu_{i,j} \cdot \mathbf{b}_j^</em> \right) = \sum_{j=0}^{d-1} \left( u_j + \sum_{i=j+1}^{d-1} u_i \cdot \mu_{i,j} \right) \cdot \mathbf{b}_j^*.<br>]</p>
-<p>因此，向量 (\mathbf{v}) 的投影长度 (|\pi_k(\mathbf{v})|^2) 表示为：<br>[<br>|\pi_k(\mathbf{v})|^2 = \left( \sum_{j=k}^{d-1} \left( u_j + \sum_{i=j+1}^{d-1} u_i \cdot \mu_{i,j} \right) \cdot \mathbf{b}_j^* \right)^2.<br>]</p>
-<p>[<br>= \sum_{j=k}^{d-1} \left( u_j + \sum_{i=j+1}^{d-1} u_i \cdot \mu_{i,j} \right)^2 \cdot |\mathbf{b}_j^*|^2.<br>]</p>
-<p>格点枚举是一种<strong>深度优先搜索（depth-first search）</strong>，其基本流程如下：</p>
+<p>给定一个矩阵 (B) 和一个范围 (R)，目标是找到满足以下条件的向量 (\mathbf{v})：</p>
+<script type="math/tex; mode=display">
+\mathbf{v} = \sum_{i=0}^{d-1} u_i \cdot \mathbf{b}_i, \quad u_i \in \mathbb{Z},</script><p>其中至少一个 (u_i \neq 0)，并且：</p>
+<script type="math/tex; mode=display">
+\|\mathbf{v}\|^2 \leq R^2.</script><p>枚举算法使用以下公式表示向量 (\mathbf{v})：</p>
+<script type="math/tex; mode=display">
+\mathbf{v} = \sum_{i=0}^{d-1} u_i \cdot \mathbf{b}_i = \sum_{i=0}^{d-1} u_i \cdot \left( \mathbf{b}_i^* + \sum_{j=0}^{i-1} \mu_{i,j} \cdot \mathbf{b}_j^* \right) = \sum_{j=0}^{d-1} \left( u_j + \sum_{i=j+1}^{d-1} u_i \cdot \mu_{i,j} \right) \cdot \mathbf{b}_j^*.</script><p>因此，向量 (\mathbf{v}) 的投影长度 (|\pi_k(\mathbf{v})|^2) 表示为：</p>
+<script type="math/tex; mode=display">
+\|\pi_k(\mathbf{v})\|^2 = \left( \sum_{j=k}^{d-1} \left( u_j + \sum_{i=j+1}^{d-1} u_i \cdot \mu_{i,j} \right) \cdot \mathbf{b}_j^* \right)^2.</script><script type="math/tex; mode=display">
+= \sum_{j=k}^{d-1} \left( u_j + \sum_{i=j+1}^{d-1} u_i \cdot \mu_{i,j} \right)^2 \cdot \|\mathbf{b}_j^*\|^2.</script><p>格点枚举是一种<strong>深度优先搜索（depth-first search）</strong>，其基本流程如下：</p>
 <ol>
 <li>依次为 (u_{d-1}, u_{d-2}, \dots) 选择候选值。</li>
 <li>检查当前子树中的节点是否满足约束条件 (|\mathbf{v}|^2 \leq R^2)：<ul>
@@ -416,7 +440,9 @@ t & \tau
 <li>当遍历完所有分支后，返回找到的最短向量。</li>
 </ol>
 <p><strong>枚举算法的复杂度可以通过节点数量来估计：</strong></p>
-<p>第$k$层：在 $d-k$ 维空间中，满足约束的节点实际上是格点的集合： $d-k$ 维球体积/每个格点的体积/2$\approx$满足约束的格点数。<br>[<br>H_k = \frac{1}{2} \cdot \frac{\text{Vol}(\mathcal{B}_{d-k}(R))}{\prod_{i=k}^{d-1} |\mathbf{b}_i^*|},<br>]<br>其中：</p>
+<p>第$k$层：在 $d-k$ 维空间中，满足约束的节点实际上是格点的集合： $d-k$ 维球体积/每个格点的体积/2$\approx$满足约束的格点数。</p>
+<script type="math/tex; mode=display">
+H_k = \frac{1}{2} \cdot \frac{\text{Vol}(\mathcal{B}_{d-k}(R))}{\prod_{i=k}^{d-1} \|\mathbf{b}_i^*\|},</script><p>其中：</p>
 <ul>
 <li>(\text{Vol}(\mathcal{B}_{d-k}(R)))：半径为 (R) 的 (d-k) 维球的体积；</li>
 <li>(|\mathbf{b}_i^*|)：第 (i) 个正交基向量的长度。</li>
@@ -434,16 +460,19 @@ t & \tau
 <p>进一步的简化假设包括：</p>
 <ol>
 <li>壳层非常薄并且归一化，使得 (L) 是单位球上的子集；</li>
-<li>对于一对向量 ((\mathbf{u}, \mathbf{v}))，只有当它们的夹角满足 (\theta(\mathbf{u}, \mathbf{v}) &lt; \pi / 3) 时，这对向量才可化简，即：<br>[<br>\theta(\mathbf{u}, \mathbf{v}) = \arccos \left( \frac{\langle \mathbf{u}, \mathbf{v} \rangle}{|\mathbf{u}| \cdot |\mathbf{v}|} \right), \quad \arccos(x) \in [0, \pi].<br>]</li>
+<li>对于一对向量 ((\mathbf{u}, \mathbf{v}))，只有当它们的夹角满足 (\theta(\mathbf{u}, \mathbf{v}) &lt; \pi / 3) 时，这对向量才可化简，即：<script type="math/tex; mode=display">
+\theta(\mathbf{u}, \mathbf{v}) = \arccos \left( \frac{\langle \mathbf{u}, \mathbf{v} \rangle}{\|\mathbf{u}\| \cdot \|\mathbf{v}\|} \right), \quad \arccos(x) \in [0, \pi].</script></li>
 </ol>
 <p><strong>碰撞和列表大小</strong></p>
 <ul>
-<li>在这些假设下，为了观察到足够多的“碰撞”（即化简），需要满足：<br>[<br>|L| \approx \sqrt{4/3}^{d},<br>]</li>
+<li>在这些假设下，为了观察到足够多的“碰撞”（即化简），需要满足：<script type="math/tex; mode=display">
+|L| \approx \sqrt{4/3}^{d},</script></li>
 </ul>
 <ul>
 <li>格筛选算法预计会输出一个包含 (\sqrt{4/3}^{d/2+o(d)}) 个短格向量的列表[5, 32]。</li>
-<li><p><strong>理论最优筛选算法</strong>的启发式运行时间为：<br>[<br>2^{0.292d + o(d)}.<br>]</p>
-</li>
+<li><p><strong>理论最优筛选算法</strong>的启发式运行时间为：</p>
+<script type="math/tex; mode=display">
+2^{0.292d + o(d)}.</script></li>
 <li><p>本文使用了 G6K 中的高性能格筛选实现[5, 76]，包括了 BGJ1[16]和 3-Sieve[41]的变种。</p>
 <ul>
 <li><strong>BGJ1：</strong> 启发式运行时间为 (2^{0.349d+o(d)})，内存消耗为 (2^{0.205d+o(d)})。</li>
@@ -720,8 +749,11 @@ t & \tau
 </ul>
 <p><strong>与D4F的冲突</strong>：</p>
 <p>筛选算法在实践中受益于文献【32】中提出的“free dimensions”技术（简称 D4F 技术）。该技术启发了本文的算法，筛选算法会输出模长 (\sqrt{4/3} \cdot \text{gh}(\Lambda)) 的所有向量。</p>
-<p>这一观察被用于在维度 (d’) 中解决最短向量问题（SVP），其中：<br>[<br>d’ = d - \Theta(d / \log d).<br>]</p>
-<p>文献【32】中对 (d’) 的“乐观”预测如下：<br>[<br>d’ = d - \frac{d \log(4/3)}{\log(d / (2\pi e))}.<br>]<br>具体而言：</p>
+<p>这一观察被用于在维度 (d’) 中解决最短向量问题（SVP），其中：</p>
+<script type="math/tex; mode=display">
+d' = d - \Theta(d / \log d).</script><p>文献【32】中对 (d’) 的“乐观”预测如下：</p>
+<script type="math/tex; mode=display">
+d' = d - \frac{d \log(4/3)}{\log(d / (2\pi e))}.</script><p>具体而言：</p>
 <ul>
 <li>如果最短向量 (\mathbf{v}) 的投影 (\pi_{d-d’}(\mathbf{v})) 满足：$  |\pi_{d-d’}(\mathbf{v})| \leq \sqrt{4/3} \cdot \text{gh}(\Lambda_{d-d’})$, 其中 (\Lambda_{d-d’}) 是通过正交投影到前 (d-d’) 个基向量获得的格，那么可以通过 Babai 提升找到 (\mathbf{v})。</li>
 </ul>
@@ -858,21 +890,6 @@ t & \tau
 </footer>
 
     </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 
 </html>
