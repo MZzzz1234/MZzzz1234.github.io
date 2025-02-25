@@ -330,7 +330,7 @@ kG = (u_1 + d u_2)G \pmod{n}</script><script type="math/tex; mode=display">
 <blockquote>
 <ul>
 <li>在模 $n$ 的意义下，整数 $a$ 的 <strong>模逆元</strong> 是指一个整数 $x$，使得满足同余关系：<script type="math/tex">a \cdot x \equiv 1 \pmod{n}.</script><br>根据 <strong>$B\acute{e}zout$ 定理</strong>，对于任意整数 $a$ 和 $n$，若它们的最大公因数满足：<script type="math/tex; mode=display">\gcd(a, n) = 1</script>那么必然存在整数 $x$ 和 $k$，使得：<script type="math/tex; mode=display">a \cdot x + n \cdot k = 1</script>这表明同余方程：$a \cdot x \equiv 1 \pmod{n}$ 一定存在整数解 $x$，即 $a$ 存在模逆元。</li>
-<li>如果 $\gcd(a, n) \neq 1$，若 $\gcd(a, n) = d \neq 1$，则 $B\’{e}zout$ 定理表明：<script type="math/tex; mode=display">a \cdot x + n \cdot k = d</script>由于右侧为 $d$ 的倍数，而等式右侧等于 1，因此：$d \mid 1$<br>显然只有 $d = 1$ 时该等式才可能成立。否则，当 $d \neq 1$ 时，方程$a \cdot x \equiv 1 \pmod{n}$ 无整数解，即：<strong>在此情况下，$a$ 不存在模 $n$ 的逆元。</strong></li>
+<li>如果 $\gcd(a, n) \neq 1$，若 $\gcd(a, n) = d \neq 1$，则 $B\acute{e}zout$ 定理表明：<script type="math/tex; mode=display">a \cdot x + n \cdot k = d</script>由于右侧为 $d$ 的倍数，而等式右侧等于 1，因此：$d \mid 1$<br>显然只有 $d = 1$ 时该等式才可能成立。否则，当 $d \neq 1$ 时，方程$a \cdot x \equiv 1 \pmod{n}$ 无整数解，即：<strong>在此情况下，$a$ 不存在模 $n$ 的逆元。</strong></li>
 </ul>
 </blockquote>
 <h3 id="1-4-从随机数比特破解ECDSA"><a href="#1-4-从随机数比特破解ECDSA" class="headerlink" title="1.4 从随机数比特破解ECDSA"></a>1.4 从随机数比特破解ECDSA</h3><p>许多文献利用 ECDSA随机数的侧信道信息，通过解决 <strong>隐藏数问题（HNP）</strong> 来攻击 ECDSA，例如 [12,19,44,53,61,63,68,69,73,78]。这一研究领域始于 Bleichenbacher [18] 和 Howgrave-Graham 与 Smart [43] 的开创性工作。</p>
@@ -890,6 +890,21 @@ d' = d - \frac{d \log(4/3)}{\log(d / (2\pi e))}.</script><p>具体而言：</p>
 </footer>
 
     </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 
 </html>
