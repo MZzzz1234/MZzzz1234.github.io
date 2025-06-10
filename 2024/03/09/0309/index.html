@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -260,7 +261,7 @@
             <h2 id="Improved-Graph-Based-Model-for-Recovering-Superpoly-on-Trivium"><a href="#Improved-Graph-Based-Model-for-Recovering-Superpoly-on-Trivium" class="headerlink" title="Improved Graph-Based Model for Recovering Superpoly on Trivium"></a>Improved Graph-Based Model for Recovering Superpoly on Trivium</h2><p>Cheng junjie,Qiao kexin等人发表在CT-RSA 2023：<a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-031-30872-7_9">原文</a></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在cube攻击中，恢复超多项式是一个关键步骤，通常通过建立MILP模型并枚举所有可行解，来得到超多项式中包含的所有单项式。在建模过程中，为了提高求解效率，可以考虑减小模型规模或减少模型的可行解数量。作者观察到，一些子图如果具有相同的输入和输出点，但具有不同的边的指向，则可以考虑在模型中加约束来去掉该剪枝模式。因此本文提出了一种自动搜索2层剪枝模式的算法，通过穷举3个输入点的情况，发现了12种新的剪枝模式，部分剪枝模式可以添加较少的约束来去除大量的可行解。最终作者基于图模型，结合胡凯等人提出的分解策略，可以准确恢复Trivium 843轮的超多项式并减少了模型可行解的数量。然而我认为使用新剪枝模式时，计算结果是否正确需要进一步研究。对于模型规模减小而声称带来的求解效率的提高，文中没有明确的对比说明。</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x7a;&#104;&#x61;&#x6e;&#x67;&#109;&#105;&#110;&#50;&#x30;&#50;&#50;&#64;&#x69;&#105;&#101;&#46;&#97;&#99;&#x2e;&#99;&#x6e;">&#x7a;&#104;&#x61;&#x6e;&#x67;&#109;&#105;&#110;&#50;&#x30;&#50;&#50;&#64;&#x69;&#105;&#101;&#46;&#97;&#99;&#x2e;&#99;&#x6e;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#x3a;&#x7a;&#104;&#x61;&#x6e;&#x67;&#109;&#105;&#x6e;&#x32;&#x30;&#x32;&#50;&#64;&#105;&#105;&#x65;&#46;&#x61;&#99;&#46;&#x63;&#110;">&#x7a;&#104;&#x61;&#x6e;&#x67;&#109;&#105;&#x6e;&#x32;&#x30;&#x32;&#50;&#64;&#105;&#105;&#x65;&#46;&#x61;&#99;&#46;&#x63;&#110;</a>.</p>
 
         </div>
 

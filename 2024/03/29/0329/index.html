@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -290,7 +291,7 @@ p(k_0,k_1,\cdots,k_{n-1})=\bigg(\bigoplus_{0 \leq i \leq m} k_i \cdot p_i(J) \bi
 </ol>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在cube攻击中，如果我们可以恢复项数非常多的超多项式，并利用大规模超多项式进行攻击，那么将有可能改进攻击的结果。我们使用现有的方法恢复大规模超多项式时，计算所需的时间比较久。因此作者通过嵌套使用单项式预测方法，基于分治策略和并行技术提出了一种恢复大规模超多项式的新框架，并将该框架应用到了Trivium（843轮、844轮和845轮）、Grain-128AEAD（191轮）和Kreyvium（894轮）的超多项式恢复过程中。同时作者针对包含了所有秘密变量的超多项式，提出了不交集方法来进行密钥恢复攻击。我认为即使作者提出了一种将大规模超多项式用于密钥恢复攻击的方法，但攻击的总体复杂度还是比较高的，而且不交集方法占用的内存也比较大。综合来看，作者提出的新方法可能没有穷举攻击的方法好。</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#122;&#104;&#x61;&#x6e;&#x67;&#x6d;&#105;&#110;&#50;&#48;&#x32;&#50;&#x40;&#105;&#105;&#x65;&#x2e;&#97;&#x63;&#46;&#99;&#x6e;">&#122;&#104;&#x61;&#x6e;&#x67;&#x6d;&#105;&#110;&#50;&#48;&#x32;&#50;&#x40;&#105;&#105;&#x65;&#x2e;&#97;&#x63;&#46;&#99;&#x6e;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#58;&#122;&#104;&#x61;&#110;&#x67;&#109;&#105;&#110;&#x32;&#x30;&#x32;&#50;&#64;&#x69;&#x69;&#101;&#46;&#97;&#99;&#x2e;&#99;&#x6e;">&#122;&#104;&#x61;&#110;&#x67;&#109;&#105;&#110;&#x32;&#x30;&#x32;&#50;&#64;&#x69;&#x69;&#101;&#46;&#97;&#99;&#x2e;&#99;&#x6e;</a>.</p>
 
         </div>
 

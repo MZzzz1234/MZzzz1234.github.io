@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -312,7 +313,7 @@
 </ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>在基于可分性的cube攻击中，选择超多项式次数低的cube是非常关键的。因为随机的选择cube是低效的，所以搜索cube的方法很重要。作者发现目前没有特别好的方法来得到一些理想的cube，因此提出了一种cube筛选算法，可以根据给定的cube，得到一个超多项式次数较低的候选子cube集合。算法的核心思想是通过将一个大cube重复划分为两个不相交的子cube，来估计超多项式中高次项出现的频率，从而判断超多项式是否容易恢复。最终作者实现了Trivium-815轮的理论攻击，攻击复杂度为2^72.46。我认为作者主要通过cube拆分来解决次数估计时M𝑜 ̈bius变换对轮数的限制问题，作者提出的方法更像是Trivium-805轮搜索cube的方法的改进。</p>
 <hr>
-<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#122;&#104;&#97;&#110;&#x67;&#109;&#x69;&#110;&#50;&#x30;&#50;&#50;&#64;&#x69;&#x69;&#x65;&#46;&#97;&#99;&#46;&#99;&#x6e;">&#122;&#104;&#97;&#110;&#x67;&#109;&#x69;&#110;&#50;&#x30;&#50;&#50;&#64;&#x69;&#x69;&#x65;&#46;&#97;&#99;&#46;&#99;&#x6e;</a>.</p>
+<p>上述内容仅用于非领域人员快速了解，具体实现逻辑及细节不做展示<br>Welcome to MinZhang’s space! If you have any questions about the following issues, you can contact me on <a target="_blank" rel="noopener" href="https://github.com/MZzzz1234">GitHub</a> or email- <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x7a;&#x68;&#x61;&#110;&#x67;&#109;&#105;&#110;&#x32;&#48;&#x32;&#x32;&#64;&#105;&#x69;&#101;&#x2e;&#x61;&#x63;&#x2e;&#99;&#110;">&#x7a;&#x68;&#x61;&#110;&#x67;&#109;&#105;&#110;&#x32;&#48;&#x32;&#x32;&#64;&#105;&#x69;&#101;&#x2e;&#x61;&#x63;&#x2e;&#99;&#110;</a>.</p>
 
         </div>
 
