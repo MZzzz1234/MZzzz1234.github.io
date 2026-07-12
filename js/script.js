@@ -85,3 +85,29 @@ document.ready(
         // ready function.
     }
 );
+
+document.ready(() => {
+    const clock = document.getElementById('aoe-clock-time');
+    if (!clock) return;
+
+    const pad = (value) => String(value).padStart(2, '0');
+    const updateAoeClock = () => {
+        const aoeTime = new Date(Date.now() - 12 * 60 * 60 * 1000);
+        const date = [
+            aoeTime.getUTCFullYear(),
+            pad(aoeTime.getUTCMonth() + 1),
+            pad(aoeTime.getUTCDate())
+        ].join('-');
+        const time = [
+            pad(aoeTime.getUTCHours()),
+            pad(aoeTime.getUTCMinutes()),
+            pad(aoeTime.getUTCSeconds())
+        ].join(':');
+
+        clock.dateTime = `${date}T${time}-12:00`;
+        clock.textContent = `${date} ${time}`;
+    };
+
+    updateAoeClock();
+    window.setInterval(updateAoeClock, 1000);
+});

@@ -491,6 +491,23 @@ header label {
   position: relative;
   -webkit-transform: translateY(0.1em) translateX(0.5em);
 }
+.aoe-clock {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-variant-numeric: tabular-nums;
+}
+.aoe-clock-label {
+  font-size: 0.9em;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+.aoe-clock-time {
+  font-family: Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
 .copyright {
   font-size: 14px;
 }
