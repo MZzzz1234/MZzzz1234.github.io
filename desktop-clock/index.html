@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Desktop Clock</title>
+  <style>
+    :root {
+      --clock-right: clamp(30px, 4vw, 72px);
+      --clock-bottom: clamp(100px, 12vh, 150px);
+      --clock-width: clamp(470px, 43vw, 720px);
+      --clock-blue: #8edcff;
+      --clock-purple: #c3a6ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    .clock {
+      position: fixed;
+      right: var(--clock-right);
+      bottom: var(--clock-bottom);
+      width: var(--clock-width);
+      user-select: none;
+    }
+
+    .clock-display {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      color: #a9c5ff;
+      filter:
+        drop-shadow(0 2px 4px rgba(0, 0, 0, 0.88))
+        drop-shadow(0 0 7px rgba(119, 125, 225, 0.34));
+    }
+
+    .digit-segment {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 10.5;
+      stroke-linecap: square;
+      vector-effect: non-scaling-stroke;
+      opacity: 0.78;
+    }
+
+    .digit-segment--inactive {
+      opacity: 0.09;
+      stroke-width: 4;
+    }
+
+    .digit-segment--highlight {
+      stroke: #e4eaff;
+      stroke-width: 1.7;
+      opacity: 0.52;
+      filter: none;
+    }
+
+    .separator-dot {
+      fill: currentColor;
+    }
+
+    @media (max-width: 700px) {
+      :root {
+        --clock-right: 20px;
+        --clock-bottom: 88px;
+        --clock-width: calc(100vw - 40px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="clock">
+    <svg id="clock-display" class="clock-display" viewbox="0 0 930 74" role="img" aria-label="Current date and time"/>
+  </main>
+
+  <script>
+    (() => {
+      const svg = document.getElementById('clock-display');
+      const namespace = 'http://www.w3.org/2000/svg';
+      const segmentPaths = {
+        a: 'M8 5 H38',
+        b: 'M42 9 V32',
+        c: 'M42 42 V65',
+        d: 'M38 69 H8',
+        e: 'M4 65 V42',
+        f: 'M4 32 V9',
+        g: 'M8 37 H38'
+      };
+      const digits = {
+        0: 'abcdef',
+        1: 'bc',
+        2: 'abged',
+        3: 'abgcd',
+        4: 'fgbc',
+        5: 'afgcd',
+        6: 'afgecd',
+        7: 'abc',
+        8: 'abcdefg',
+        9: 'abfgcd'
+      };
+      const digitAdvance = 58;
+      const separatorAdvance = 22;
+      const pad = (value) => String(value).padStart(2, '0');
+      const gradientStart = [3, 3, 4];
+      const gradientDark = [13, 18, 34];
+      const gradientMiddle = [31, 36, 57];
+      const gradientEnd = [245, 137, 59];
+
+      const colorAt = (progress) => {
+        const firstStop = 0.1;
+        const secondStop = 0.25;
+        let start;
+        let end;
+        let localProgress;
+
+        if (progress <= firstStop) {
+          start = gradientStart;
+          end = gradientDark;
+          localProgress = progress / firstStop;
+        } else if (progress <= secondStop) {
+          start = gradientDark;
+          end = gradientMiddle;
+          localProgress = (progress - firstStop) / (secondStop - firstStop);
+        } else {
+          start = gradientMiddle;
+          end = gradientEnd;
+          localProgress = (progress - secondStop) / (1 - secondStop);
+        }
+        const channels = start.map((channel, index) =>
+          Math.round(channel + (end[index] - channel) * localProgress)
+        );
+        return `rgb(${channels.join(',')})`;
+      };
+
+      const measure = (value) => {
+        let width = 0;
+        for (const character of value) {
+          width += character === '.' || character === ':' ? separatorAdvance : digitAdvance;
+        }
+        return width;
+      };
+
+      const createSegment = (name) => {
+        const path = document.createElementNS(namespace, 'path');
+        path.setAttribute('class', 'digit-segment');
+        path.setAttribute('d', segmentPaths[name]);
+        return path;
+      };
+
+      const render = (value) => {
+        svg.replaceChildren();
+
+        let x = 0;
+        const totalWidth = measure(value);
+        for (const character of value) {
+          const color = colorAt(Math.min(x / totalWidth, 1));
+          if (character === '.' || character === ':') {
+            const ys = character === ':' ? [25, 49] : [64];
+            for (const y of ys) {
+              const dot = document.createElementNS(namespace, 'rect');
+              dot.setAttribute('class', 'separator-dot');
+              dot.setAttribute('x', x + 5.5);
+              dot.setAttribute('y', y);
+              dot.setAttribute('width', 7);
+              dot.setAttribute('height', 7);
+              dot.style.color = color;
+              svg.appendChild(dot);
+            }
+            x += separatorAdvance;
+            continue;
+          }
+
+          const group = document.createElementNS(namespace, 'g');
+          group.setAttribute('transform', `translate(${x} 0)`);
+          group.style.color = color;
+          for (const segment of Object.keys(segmentPaths)) {
+            const inactive = createSegment(segment);
+            inactive.classList.add('digit-segment--inactive');
+            group.appendChild(inactive);
+          }
+          for (const segment of digits[character]) {
+            group.appendChild(createSegment(segment));
+            const highlight = createSegment(segment);
+            highlight.classList.add('digit-segment--highlight');
+            group.appendChild(highlight);
+          }
+          svg.appendChild(group);
+          x += digitAdvance;
+        }
+
+        svg.setAttribute('viewBox', `0 0 ${x - 8} 74`);
+        svg.setAttribute('aria-label', value);
+      };
+
+      const updateClock = () => {
+        const now = new Date();
+        const date = [
+          pad(now.getFullYear() % 100),
+          pad(now.getMonth() + 1),
+          pad(now.getDate())
+        ].join('.');
+        const time = [
+          pad(now.getHours()),
+          pad(now.getMinutes()),
+          pad(now.getSeconds())
+        ].join(':');
+        render(`${date}.${time}`);
+      };
+
+      updateClock();
+      window.setInterval(updateClock, 1000);
+    })();
+  </script>
+</body>
+</html>
