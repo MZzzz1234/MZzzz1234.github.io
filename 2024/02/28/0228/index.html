@@ -115,7 +115,9 @@
                 
                     <a class="menu-item" href="/category">Categories</a>
                 
-                    <a class="menu-item" href="/tag">Tags</a>
+                    <a class="menu-item" href="/ppt">PPT</a>
+                
+                    <a class="menu-item" href="/shelf">Shelf</a>
                 
                     <a class="menu-item" href="/about">About</a>
                 
@@ -140,7 +142,9 @@
                 
                     <a class="menu-item" href="/category">Categories</a>
                 
-                    <a class="menu-item" href="/tag">Tags</a>
+                    <a class="menu-item" href="/ppt">PPT</a>
+                
+                    <a class="menu-item" href="/shelf">Shelf</a>
                 
                     <a class="menu-item" href="/about">About</a>
                 
@@ -246,6 +250,13 @@
                         </span>
                     
                     
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Computing-Tools/">Computing & Tools</a>
+                            
+                        </span>
+                    
                 </div>
             
         </header>
@@ -270,6 +281,7 @@
 <h4 id="镜像传输至服务器并运行"><a href="#镜像传输至服务器并运行" class="headerlink" title="镜像传输至服务器并运行"></a>镜像传输至服务器并运行</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run --gpus all your_image_name</span><br><span class="line">docker run --gpus all your_image_name /bin/bash</span><br></pre></td></tr></table></figure>
 <p>若服务器无法联网：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 在本地保存镜像为一个tar文件</span><br><span class="line">docker save -o your_image.tar your_image_name</span><br><span class="line"></span><br><span class="line"># 将该tar文件复制到服务器上</span><br><span class="line">scp your_image.tar user@server_ip:/path/to/destination</span><br><span class="line"></span><br><span class="line"># 在服务器上加载镜像</span><br><span class="line">ssh user@server_ip</span><br><span class="line">docker load -i /path/to/destination/your_image.tar</span><br></pre></td></tr></table></figure></p>
 <h4 id="常见指令"><a href="#常见指令" class="headerlink" title="常见指令"></a>常见指令</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker ps -a 列出所有容器</span><br><span class="line">docker images 列出所有镜像</span><br><span class="line">docker rm container_id 删除容器</span><br><span class="line">docker rm -f container_id_or_name 强制删除容器</span><br><span class="line">docker rmi image_id 删除镜像</span><br><span class="line">docker commit container_id new_image_name 基于已修改的容器创建新镜像</span><br><span class="line">docker cp /local/path/to/your/file_or_directory container_id:/app/ 本地文件挂载到容器中</span><br></pre></td></tr></table></figure>
+
         </div>
 
         

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Arcane Season 2</title>
+  <desc id="desc">A dark blue and violet typographic cover for Arcane Season 2.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="0.52" stop-color="#312e81"/>
+      <stop offset="1" stop-color="#7e22ce"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="55%">
+      <stop offset="0" stop-color="#67e8f9" stop-opacity=".42"/>
+      <stop offset="1" stop-color="#67e8f9" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="22"/></filter>
+  </defs>
+  <rect width="600" height="900" fill="url(#bg)"/>
+  <rect width="600" height="900" fill="url(#glow)"/>
+  <circle cx="120" cy="180" r="96" fill="#ec4899" opacity=".16" filter="url(#soft)"/>
+  <circle cx="500" cy="650" r="135" fill="#22d3ee" opacity=".14" filter="url(#soft)"/>
+  <path d="M72 690C180 566 242 604 302 470c58-129 139-186 230-238" fill="none" stroke="#a5f3fc" stroke-opacity=".25" stroke-width="3"/>
+  <path d="M52 725C182 628 267 668 337 524c56-116 123-159 211-217" fill="none" stroke="#f0abfc" stroke-opacity=".22" stroke-width="2"/>
+  <text x="300" y="395" fill="#f8fafc" font-family="Georgia, serif" font-size="78" letter-spacing="12" text-anchor="middle">ARCANE</text>
+  <line x1="128" y1="430" x2="472" y2="430" stroke="#e0e7ff" stroke-opacity=".65"/>
+  <text x="300" y="485" fill="#c4b5fd" font-family="Arial, sans-serif" font-size="24" letter-spacing="9" text-anchor="middle">LEAGUE OF LEGENDS</text>
+  <text x="300" y="785" fill="#f5d0fe" font-family="Arial, sans-serif" font-size="22" letter-spacing="7" text-anchor="middle">SEASON TWO</text>
+  <text x="300" y="826" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="15" letter-spacing="5" text-anchor="middle" opacity=".75">2024</text>
+</svg>

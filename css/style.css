@@ -632,6 +632,17 @@ header label {
 .links .iconfont {
   font-size: 2em;
 }
+.ppt-link-icon,
+.shelf-link-icon {
+  width: 2em;
+  height: 2em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: top;
+}
 .post-wrap {
   position: relative;
   width: 100%;
@@ -732,6 +743,195 @@ header label {
 .page .post-content {
   margin: 0;
   padding-top: 0;
+}
+.page-intro {
+  max-width: 720px;
+  margin: 0 auto 36px;
+  text-align: center;
+  font-size: 0.96em;
+  line-height: 1.75;
+  opacity: 0.72;
+}
+.ppt-preview {
+  display: block;
+  width: 80%;
+  height: 55vh;
+  min-height: 400px;
+  margin: 18px auto 12px;
+  border: 1px solid rgba(127,127,127,0.25);
+  border-radius: 6px;
+}
+@media screen and (max-width: 600px) {
+  .ppt-preview {
+    width: 100%;
+    height: 50vh;
+    min-height: 320px;
+  }
+}
+.about-intro {
+  max-width: 760px;
+  margin: 0 auto 48px;
+  font-size: 1.04em;
+  line-height: 1.85;
+}
+.about-intro p {
+  margin: 0 0 16px;
+}
+.about-signoff {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.about-links {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.about-link-group {
+  margin-top: 36px;
+}
+.about-link-group h2 {
+  margin: 0 0 14px;
+  font-size: 1.15em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.about-link-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.about-link-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 68px;
+  padding: 13px 36px 13px 14px;
+  border: 1px solid rgba(127,127,127,0.22);
+  border-radius: 8px;
+  color: inherit;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.about-link-card:hover {
+  background-color: transparent;
+  border-color: rgba(127,127,127,0.5);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+  transform: translateY(-2px);
+}
+.about-link-title {
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.about-link-description {
+  font-size: 0.82em;
+  line-height: 1.4;
+  opacity: 0.68;
+}
+.about-link-arrow {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-size: 1em;
+  opacity: 0.55;
+}
+@media screen and (max-width: 600px) {
+  .about-intro {
+    margin-bottom: 36px;
+  }
+  .about-link-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.shelf-intro {
+  max-width: 720px;
+  margin: 0 auto 42px;
+  text-align: center;
+  line-height: 1.8;
+  opacity: 0.78;
+}
+.shelf-section {
+  max-width: 900px;
+  margin: 0 auto 48px;
+}
+.shelf-section h2 {
+  margin: 0 0 18px;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+.shelf-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px 18px;
+}
+.shelf-card {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+}
+.shelf-card:hover {
+  background-color: transparent;
+}
+.shelf-card:hover .shelf-cover {
+  transform: scale(1.025);
+}
+.shelf-card:hover .shelf-card-title {
+  opacity: 0.65;
+}
+.shelf-cover-wrap {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 2/3;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  background: rgba(127,127,127,0.1);
+  box-shadow: 0 5px 18px rgba(0,0,0,0.1);
+}
+.shelf-cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+.shelf-cover-wrap--arcane {
+  background: #101318;
+}
+.shelf-cover--contain {
+  object-fit: contain;
+  padding: 18px;
+}
+.shelf-card-title {
+  font-size: 0.92em;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: opacity 0.2s ease;
+}
+.shelf-card-meta {
+  margin-top: 3px;
+  font-size: 0.78em;
+  line-height: 1.4;
+  opacity: 0.58;
+}
+.shelf-empty {
+  max-width: 720px;
+  margin: 72px auto;
+  text-align: center;
+  opacity: 0.5;
+}
+.shelf-empty p {
+  margin-top: 10px;
+}
+.shelf-empty-icon {
+  font-size: 2em;
+}
+@media screen and (max-width: 800px) {
+  .shelf-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media screen and (max-width: 480px) {
+  .shelf-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px 14px;
+  }
 }
 .post-wrap p {
   font-size: 1em;

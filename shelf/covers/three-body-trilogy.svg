@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-labelledby="title desc">
+  <title id="title">三体全集</title>
+  <desc id="desc">A cosmic typographic cover for Liu Cixin's Three-Body trilogy.</desc>
+  <defs>
+    <linearGradient id="space" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#050816"/>
+      <stop offset=".58" stop-color="#111b3f"/>
+      <stop offset="1" stop-color="#3b1125"/>
+    </linearGradient>
+    <radialGradient id="sun">
+      <stop offset="0" stop-color="#fff7c2"/>
+      <stop offset=".25" stop-color="#fbbf24"/>
+      <stop offset="1" stop-color="#f97316" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="900" fill="url(#space)"/>
+  <g fill="#fff" opacity=".68">
+    <circle cx="75" cy="96" r="1.4"/><circle cx="164" cy="154" r="1"/><circle cx="517" cy="117" r="1.5"/>
+    <circle cx="448" cy="222" r="1"/><circle cx="91" cy="310" r="1.2"/><circle cx="548" cy="390" r="1.1"/>
+    <circle cx="202" cy="252" r=".8"/><circle cx="363" cy="96" r=".9"/><circle cx="39" cy="520" r="1.3"/>
+  </g>
+  <circle cx="300" cy="345" r="190" fill="url(#sun)" opacity=".9"/>
+  <circle cx="300" cy="345" r="63" fill="#111827"/>
+  <ellipse cx="300" cy="345" rx="170" ry="54" fill="none" stroke="#fdba74" stroke-width="2" opacity=".58" transform="rotate(-18 300 345)"/>
+  <circle cx="155" cy="292" r="17" fill="#fb7185"/>
+  <circle cx="431" cy="398" r="11" fill="#67e8f9"/>
+  <text x="300" y="610" fill="#fff7ed" font-family="PingFang SC, Noto Sans CJK SC, sans-serif" font-size="92" font-weight="600" letter-spacing="18" text-anchor="middle">三体</text>
+  <text x="300" y="674" fill="#fdba74" font-family="PingFang SC, Noto Sans CJK SC, sans-serif" font-size="28" letter-spacing="14" text-anchor="middle">全集</text>
+  <line x1="122" y1="715" x2="478" y2="715" stroke="#fed7aa" stroke-opacity=".55"/>
+  <text x="300" y="765" fill="#e2e8f0" font-family="PingFang SC, Noto Sans CJK SC, sans-serif" font-size="22" letter-spacing="7" text-anchor="middle">地球往事三部曲</text>
+  <text x="300" y="820" fill="#cbd5e1" font-family="PingFang SC, Noto Sans CJK SC, sans-serif" font-size="19" letter-spacing="8" text-anchor="middle">刘慈欣</text>
+</svg>

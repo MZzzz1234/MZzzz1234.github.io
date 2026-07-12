@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="ZhangMin">
+
+
+
+
+
+<title>Shelf | ZhangMin</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Zhang&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/ppt">PPT</a>
+                
+                    <a class="menu-item" href="/shelf">Shelf</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Zhang&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/ppt">PPT</a>
+                
+                    <a class="menu-item" href="/shelf">Shelf</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    <article class="post-wrap page">
+        
+        <h2 class="post-title">Shelf</h2>
+        
+        <section class="post-content">
+            <div class="shelf-intro">
+  <p>A collection of books, films, and music that I enjoy and return to.</p>
+</div>
+
+<section class="shelf-section">
+  <h2>Books</h2>
+  <div class="shelf-grid">
+    <a class="shelf-card" href="https://link.springer.com/book/10.1007/978-3-319-16721-3" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap">
+        <img class="shelf-cover" src="covers/ideals-varieties-algorithms.png" alt="Ideals, Varieties, and Algorithms cover" loading="lazy">
+      </span>
+      <span class="shelf-card-title">Ideals, Varieties, and Algorithms</span>
+      <span class="shelf-card-meta">Cox, Little &amp; O'Shea · 4th ed.</span>
+    </a>
+    <a class="shelf-card" href="https://zh.wikipedia.org/wiki/三体系列" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap">
+        <img class="shelf-cover" src="covers/three-body-trilogy.svg" alt="三体全集封面" loading="lazy">
+      </span>
+      <span class="shelf-card-title">三体全集</span>
+      <span class="shelf-card-meta">刘慈欣 · 地球往事三部曲</span>
+    </a>
+  </div>
+</section>
+
+<section class="shelf-section">
+  <h2>Films &amp; Series</h2>
+  <div class="shelf-grid">
+    <a class="shelf-card" href="https://en.wikipedia.org/wiki/Spider-Man:_Across_the_Spider-Verse" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap"><img class="shelf-cover" src="https://upload.wikimedia.org/wikipedia/en/thumb/b/b4/Spider-Man-_Across_the_Spider-Verse_poster.jpg/250px-Spider-Man-_Across_the_Spider-Verse_poster.jpg" alt="Spider-Man: Across the Spider-Verse poster" loading="lazy"></span>
+      <span class="shelf-card-title">Spider-Man: Across the Spider-Verse</span>
+      <span class="shelf-card-meta">Film · 2023</span>
+    </a>
+    <a class="shelf-card" href="https://en.wikipedia.org/wiki/The_Prestige" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap"><img class="shelf-cover" src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d2/Prestige_poster.jpg/250px-Prestige_poster.jpg" alt="The Prestige poster" loading="lazy"></span>
+      <span class="shelf-card-title">The Prestige</span>
+      <span class="shelf-card-meta">Film · 2006</span>
+    </a>
+    <a class="shelf-card" href="https://en.wikipedia.org/wiki/True_Detective_season_1" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap"><img class="shelf-cover" src="https://upload.wikimedia.org/wikipedia/en/thumb/3/37/True_Detective_season_1.png/250px-True_Detective_season_1.png" alt="True Detective season 1 cover" loading="lazy"></span>
+      <span class="shelf-card-title">True Detective</span>
+      <span class="shelf-card-meta">Season 1 · 2014</span>
+    </a>
+    <a class="shelf-card" href="https://en.wikipedia.org/wiki/Person_of_Interest_season_5" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap"><img class="shelf-cover" src="https://upload.wikimedia.org/wikipedia/en/5/50/Person_of_Interest_Season_5.jpg" alt="Person of Interest season 5 cover" loading="lazy"></span>
+      <span class="shelf-card-title">Person of Interest</span>
+      <span class="shelf-card-meta">Season 5 · 2016</span>
+    </a>
+    <a class="shelf-card" href="https://en.wikipedia.org/wiki/La_La_Land" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap"><img class="shelf-cover" src="https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/La_La_Land_%28film%29.png/250px-La_La_Land_%28film%29.png" alt="La La Land poster" loading="lazy"></span>
+      <span class="shelf-card-title">La La Land</span>
+      <span class="shelf-card-meta">Film · 2016</span>
+    </a>
+    <a class="shelf-card" href="https://www.netflix.com/title/81435684" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap shelf-cover-wrap--arcane"><img class="shelf-cover" src="covers/arcane-season-2.svg" alt="Arcane season 2 cover" loading="lazy"></span>
+      <span class="shelf-card-title">Arcane</span>
+      <span class="shelf-card-meta">Season 2 · 2024</span>
+    </a>
+    <a class="shelf-card" href="https://en.wikipedia.org/wiki/Better_Call_Saul_season_1" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap"><img class="shelf-cover" src="https://upload.wikimedia.org/wikipedia/en/1/1c/Better_Call_Saul_season_1.jpg" alt="Better Call Saul season 1 cover" loading="lazy"></span>
+      <span class="shelf-card-title">Better Call Saul</span>
+      <span class="shelf-card-meta">Season 1 · 2015</span>
+    </a>
+    <a class="shelf-card" href="https://en.wikipedia.org/wiki/Green_Book_(film)" target="_blank" rel="noopener noreferrer">
+      <span class="shelf-cover-wrap"><img class="shelf-cover" src="https://upload.wikimedia.org/wikipedia/en/5/5b/Green_Book_%282018_poster%29.png" alt="Green Book poster" loading="lazy"></span>
+      <span class="shelf-card-title">Green Book</span>
+      <span class="shelf-card-meta">Film · 2018</span>
+    </a>
+  </div>
+</section>
+
+        </section>
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    
+    <div class="copyright">
+        <span>Copyright © 2024 Zhang Min
+		 <!-- visitor -->
+        	  
+ 		<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+		
+	</span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>
